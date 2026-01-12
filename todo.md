@@ -134,7 +134,7 @@
 - [ ] Criar usuário administrador padrão
 
 ## Alteração de Título
-- [ ] Alterar título do sistema para "Romaneio ALUMINC" na interface
+- [x] Alterar título do sistema para "Romaneio ALUMINC" na interface
 
 ## Sistema de Autenticação e Gerenciamento de Usuários
 - [x] Criar tabela de usuários customizada no banco de dados
@@ -150,3 +150,8 @@
 - [ ] Aplicar controle de permissões no backend
 - [ ] Ocultar/desabilitar botões de exclusão para usuários padrão
 - [ ] Testar sistema completo de autenticação
+
+
+## Configuração de Domínio Customizado
+- [ ] Configurar domínio customizado "romaneioaluminc" no painel Manus
+- [ ] Testar acesso pelo novo domínio
