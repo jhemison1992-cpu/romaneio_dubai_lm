@@ -26,7 +26,7 @@ export default function ProjectEnvironments() {
   const [uploadingPlanta, setUploadingPlanta] = useState(false);
 
   const { data: project } = trpc.projects.get.useQuery({ id: projectId });
-  const { data: environments, isLoading, refetch } = trpc.projects.getEnvironments.useQuery({ projectId });
+  const { data: environments, isLoading, refetch } = trpc.environments.list.useQuery({ projectId });
 
   const createEnvironment = trpc.environments.create.useMutation({
     onSuccess: () => {
@@ -95,8 +95,7 @@ export default function ProjectEnvironments() {
     createEnvironment.mutate({
       projectId,
       ...formData,
-      plantaFileKey,
-      plantaFileUrl,
+      technicalDrawingUrl: plantaFileUrl,
     });
   };
 
@@ -231,7 +230,7 @@ export default function ProjectEnvironments() {
         </Card>
       ) : (
         <div className="space-y-4">
-          {environments.map((env) => (
+          {environments?.map((env: any) => (
             <Card key={env.id}>
               <CardHeader>
                 <div className="flex items-start justify-between">

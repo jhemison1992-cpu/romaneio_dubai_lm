@@ -59,7 +59,7 @@ export default function InspectionDetail() {
     { enabled: inspectionId > 0 }
   );
   // Buscar ambientes da obra vinculada à vistoria
-  const { data: environments, isLoading: environmentsLoading } = trpc.projects.getEnvironments.useQuery(
+  const { data: environments, isLoading: environmentsLoading } = trpc.environments.list.useQuery(
     { projectId: inspection?.projectId || 0 },
     { enabled: !!inspection?.projectId }
   );
@@ -116,7 +116,7 @@ export default function InspectionDetail() {
     
     upsertMutation.mutate({
       ...data,
-      releaseDate: data.releaseDate ? format(data.releaseDate, "yyyy-MM-dd") : null,
+      releaseDate: data.releaseDate ? format(data.releaseDate, "yyyy-MM-dd") : undefined,
       inspectionId,
     });
   };
@@ -194,7 +194,7 @@ export default function InspectionDetail() {
 
       <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
         <TabsList className="grid grid-cols-3 lg:grid-cols-6 gap-2 h-auto bg-muted/50 p-2">
-          {environments.map((env, index) => (
+                  {environments?.map((env: any, index: number) => (
             <TabsTrigger 
               key={env.id} 
               value={index.toString()}
@@ -205,7 +205,7 @@ export default function InspectionDetail() {
           ))}
         </TabsList>
 
-        {environments.map((env, index) => {
+        {environments?.map((env: any, index: number) => {
           const data = formData[env.id];
           if (!data) return null;
           
