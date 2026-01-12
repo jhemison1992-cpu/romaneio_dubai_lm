@@ -8,10 +8,11 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
 import { trpc } from "@/lib/trpc";
 import { format } from "date-fns";
-import { ArrowLeft, Download, Save, FileText } from "lucide-react";
+import { ArrowLeft, Download, Save, FileText, Plus } from "lucide-react";
 import { getPlantaUrl } from "@/lib/plantasMapping";
 import { MediaUpload } from "@/components/MediaUpload";
 import { SignaturePad } from "@/components/SignaturePad";
+import { NewEnvironmentDialog } from "@/components/NewEnvironmentDialog";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { Link, useParams } from "wouter";
@@ -63,6 +64,11 @@ export default function InspectionDetail() {
     { projectId: inspection?.projectId || 0 },
     { enabled: !!inspection?.projectId }
   );
+  // Buscar ambientes adicionados diretamente na vistoria
+  const { data: inspectionEnvs, refetch: refetchInspectionEnvs } = trpc.inspectionEnvironments.list.useQuery(
+    { inspectionId },
+    { enabled: inspectionId > 0 }
+  );
   const { data: items, refetch: refetchItems } = trpc.inspectionItems.list.useQuery(
     { inspectionId },
     { enabled: inspectionId > 0 }
@@ -70,6 +76,14 @@ export default function InspectionDetail() {
   
   const [formData, setFormData] = useState<Record<number, InspectionItemData>>({});
   const [activeTab, setActiveTab] = useState<string>("0");
+  
+  // Estados para dialog de novo ambiente
+  const [openNewEnv, setOpenNewEnv] = useState(false);
+  const [newEnvName, setNewEnvName] = useState("");
+  const [newEnvCode, setNewEnvCode] = useState("");
+  const [newEnvType, setNewEnvType] = useState("");
+  const [newEnvQty, setNewEnvQty] = useState(1);
+  const [newEnvPlantaFile, setNewEnvPlantaFile] = useState<File | null>(null);
   
   const utils = trpc.useUtils();
   
@@ -90,10 +104,32 @@ export default function InspectionDetail() {
     },
   });
   
+  const createEnvMutation = trpc.inspectionEnvironments.create.useMutation({
+    onSuccess: () => {
+      toast.success("Ambiente adicionado com sucesso!");
+      refetchInspectionEnvs();
+      setOpenNewEnv(false);
+      setNewEnvName("");
+      setNewEnvCode("");
+      setNewEnvType("");
+      setNewEnvQty(1);
+      setNewEnvPlantaFile(null);
+    },
+    onError: (error) => {
+      toast.error("Erro ao adicionar ambiente: " + error.message);
+    },
+  });
+  
+  // Mesclar ambientes da obra + ambientes da vistoria
+  const allEnvironments = [
+    ...(environments || []),
+    ...(inspectionEnvs || []),
+  ];
+  
   useEffect(() => {
-    if (environments && items) {
+    if (allEnvironments.length > 0 && items) {
       const initialData: Record<number, InspectionItemData> = {};
-      environments.forEach((env) => {
+      allEnvironments.forEach((env) => {
         const existingItem = items.find((item) => item.environmentId === env.id);
         initialData[env.id] = {
           id: existingItem?.id,
@@ -108,7 +144,7 @@ export default function InspectionDetail() {
       });
       setFormData(initialData);
     }
-  }, [environments, items]);
+  }, [allEnvironments.length, items]);
   
   const handleSave = (environmentId: number) => {
     const data = formData[environmentId];
@@ -133,6 +169,51 @@ export default function InspectionDetail() {
   
   const handleStatusChange = (status: "draft" | "in_progress" | "completed") => {
     updateStatusMutation.mutate({ id: inspectionId, status });
+  };
+  
+  const handleCreateEnv = async () => {
+    if (!newEnvName.trim() || !newEnvCode.trim() || !newEnvType.trim()) {
+      toast.error("Preencha todos os campos obrigatórios");
+      return;
+    }
+    
+    let plantaFileKey: string | undefined;
+    let plantaFileUrl: string | undefined;
+    
+    // Upload da planta se fornecida
+    if (newEnvPlantaFile) {
+      try {
+        const reader = new FileReader();
+        const fileData = await new Promise<string>((resolve, reject) => {
+          reader.onload = () => resolve(reader.result as string);
+          reader.onerror = reject;
+          reader.readAsDataURL(newEnvPlantaFile);
+        });
+        
+        const base64Data = fileData.split(',')[1];
+        const uploadResult = await utils.client.environments.uploadDrawing.mutate({
+          fileData: base64Data,
+          fileName: newEnvPlantaFile.name,
+          mimeType: newEnvPlantaFile.type,
+        });
+        
+        plantaFileKey = uploadResult.fileKey;
+        plantaFileUrl = uploadResult.url;
+      } catch (error) {
+        toast.error("Erro ao fazer upload da planta");
+        return;
+      }
+    }
+    
+    createEnvMutation.mutate({
+      inspectionId,
+      name: newEnvName,
+      caixilhoCode: newEnvCode,
+      caixilhoType: newEnvType,
+      quantity: newEnvQty,
+      plantaFileKey,
+      plantaFileUrl,
+    });
   };
 
   if (inspectionError) {
@@ -177,6 +258,10 @@ export default function InspectionDetail() {
             </p>
           </div>
           <div className="flex gap-2">
+            <Button onClick={() => setOpenNewEnv(true)} variant="outline" className="gap-2">
+              <Plus className="h-4 w-4" />
+              Adicionar Ambiente
+            </Button>
             <Select value={inspection.status} onValueChange={(value) => handleStatusChange(value as any)}>
               <SelectTrigger className="w-[180px]">
                 <SelectValue />
@@ -194,7 +279,7 @@ export default function InspectionDetail() {
 
       <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
         <TabsList className="grid grid-cols-3 lg:grid-cols-6 gap-2 h-auto bg-muted/50 p-2">
-                  {environments?.map((env: any, index: number) => (
+                  {allEnvironments.map((env: any, index: number) => (
             <TabsTrigger 
               key={env.id} 
               value={index.toString()}
@@ -205,7 +290,7 @@ export default function InspectionDetail() {
           ))}
         </TabsList>
 
-        {environments?.map((env: any, index: number) => {
+        {allEnvironments.map((env: any, index: number) => {
           const data = formData[env.id];
           if (!data) return null;
           
@@ -224,12 +309,12 @@ export default function InspectionDetail() {
                         </div>
                       </CardDescription>
                     </div>
-                    {getPlantaUrl(env.caixilhoCode) && (
+                    {(env.plantaFileUrl || getPlantaUrl(env.caixilhoCode)) && (
                       <Button
                         variant="outline"
                         size="sm"
                         className="gap-2"
-                        onClick={() => window.open(getPlantaUrl(env.caixilhoCode)!, '_blank')}
+                        onClick={() => window.open(env.plantaFileUrl || getPlantaUrl(env.caixilhoCode)!, '_blank')}
                       >
                         <FileText className="h-4 w-4" />
                         Ver Planta
@@ -316,6 +401,23 @@ export default function InspectionDetail() {
           );
         })}
       </Tabs>
+      
+      <NewEnvironmentDialog
+        open={openNewEnv}
+        onOpenChange={setOpenNewEnv}
+        name={newEnvName}
+        onNameChange={setNewEnvName}
+        code={newEnvCode}
+        onCodeChange={setNewEnvCode}
+        type={newEnvType}
+        onTypeChange={setNewEnvType}
+        quantity={newEnvQty}
+        onQuantityChange={setNewEnvQty}
+        plantaFile={newEnvPlantaFile}
+        onPlantaFileChange={setNewEnvPlantaFile}
+        onSubmit={handleCreateEnv}
+        isSubmitting={createEnvMutation.isPending}
+      />
     </div>
   );
 }

@@ -349,7 +349,7 @@ export const appRouter = router({
         
         const { url } = await storagePut(fileKey, buffer, input.mimeType);
         
-        return { url };
+        return { url, fileKey };
       }),
     delete: publicProcedure
       .input((val: unknown) => z.object({ id: z.number() }).parse(val))
@@ -383,6 +383,53 @@ export const appRouter = router({
       .mutation(async ({ input }) => {
         const { deleteUser } = await import("./db");
         await deleteUser(input.id);
+        return { success: true };
+      }),
+  }),
+
+  inspectionEnvironments: router({
+    list: publicProcedure
+      .input((val: unknown) => z.object({ inspectionId: z.number() }).parse(val))
+      .query(async ({ input }) => {
+        const { getInspectionEnvironments } = await import("./db");
+        return await getInspectionEnvironments(input.inspectionId);
+      }),
+    create: publicProcedure
+      .input((val: unknown) => z.object({
+        inspectionId: z.number(),
+        name: z.string(),
+        caixilhoCode: z.string(),
+        caixilhoType: z.string(),
+        quantity: z.number(),
+        plantaFileKey: z.string().optional(),
+        plantaFileUrl: z.string().optional(),
+      }).parse(val))
+      .mutation(async ({ input }) => {
+        const { createInspectionEnvironment } = await import("./db");
+        const id = await createInspectionEnvironment(input);
+        return { id };
+      }),
+    update: publicProcedure
+      .input((val: unknown) => z.object({
+        id: z.number(),
+        name: z.string().optional(),
+        caixilhoCode: z.string().optional(),
+        caixilhoType: z.string().optional(),
+        quantity: z.number().optional(),
+        plantaFileKey: z.string().optional(),
+        plantaFileUrl: z.string().optional(),
+      }).parse(val))
+      .mutation(async ({ input }) => {
+        const { updateInspectionEnvironment } = await import("./db");
+        const { id, ...data } = input;
+        await updateInspectionEnvironment(id, data);
+        return { success: true };
+      }),
+    delete: publicProcedure
+      .input((val: unknown) => z.object({ id: z.number() }).parse(val))
+      .mutation(async ({ input }) => {
+        const { deleteInspectionEnvironment } = await import("./db");
+        await deleteInspectionEnvironment(input.id);
         return { success: true };
       }),
   }),

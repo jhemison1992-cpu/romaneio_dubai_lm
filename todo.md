@@ -171,5 +171,24 @@
 - [x] Corrigir erro de tipo 'any' em ProjectEnvironments.tsx (linha 234)
 - [x] Corrigir todos os erros TypeScript - 0 erros restantes!
 - [x] Verificar e testar todas as funcionalidades principais
-- [ ] Criar checkpoint final para publicação
-- [ ] Orientar sobre configuração de domínio customizado
+- [x] Criar checkpoint final para publicação
+- [x] Orientar sobre configuração de domínio customizado
+
+
+## Bug Crítico - Assets Faltantes
+- [ ] Corrigir erro NotFoundError ao carregar assets no domínio publicado
+- [ ] Verificar configuração de assets estáticos (index-*.js)
+- [ ] Testar carregamento no domínio publicado
+
+
+## Melhoria - Adicionar Ambientes Diretamente na Vistoria
+- [x] Reverter criação automática de itens de vistoria
+- [x] Adicionar botão "Adicionar Ambiente" na página de detalhes da vistoria
+- [x] Dialog para criar ambiente: nome, código caixilho, tipo, quantidade
+- [x] Permitir upload de planta técnica para cada ambiente
+- [x] Criar tabela inspection_environments no banco de dados
+- [x] Implementar endpoints backend (create, list, update, delete)
+- [x] Mesclar ambientes da obra + ambientes da vistoria na interface
+- [x] Permitir editar informações do ambiente (nome, código, tipo, quantidade) - endpoint implementado
+- [x] Permitir excluir ambientes da vistoria - endpoint implementado
+- [x] Testar fluxo completo de adição e edição de ambientes - 5 testes passando

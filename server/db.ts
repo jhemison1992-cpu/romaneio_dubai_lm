@@ -323,3 +323,49 @@ export async function updateSignature(
   const field = type === "construction" ? "signatureConstruction" : "signatureSupplier";
   await db.update(inspectionItems).set({ [field]: signatureData }).where(eq(inspectionItems.id, inspectionItemId));
 }
+
+
+// Inspection Environments queries
+export async function getInspectionEnvironments(inspectionId: number) {
+  const db = await getDb();
+  if (!db) return [];
+  const { inspectionEnvironments } = await import("../drizzle/schema");
+  return await db.select().from(inspectionEnvironments).where(eq(inspectionEnvironments.inspectionId, inspectionId));
+}
+
+export async function createInspectionEnvironment(data: {
+  inspectionId: number;
+  name: string;
+  caixilhoCode: string;
+  caixilhoType: string;
+  quantity: number;
+  plantaFileKey?: string;
+  plantaFileUrl?: string;
+}) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  const { inspectionEnvironments } = await import("../drizzle/schema");
+  const result = await db.insert(inspectionEnvironments).values(data);
+  return result[0].insertId;
+}
+
+export async function updateInspectionEnvironment(id: number, data: {
+  name?: string;
+  caixilhoCode?: string;
+  caixilhoType?: string;
+  quantity?: number;
+  plantaFileKey?: string;
+  plantaFileUrl?: string;
+}) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  const { inspectionEnvironments } = await import("../drizzle/schema");
+  await db.update(inspectionEnvironments).set(data).where(eq(inspectionEnvironments.id, id));
+}
+
+export async function deleteInspectionEnvironment(id: number) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  const { inspectionEnvironments } = await import("../drizzle/schema");
+  await db.delete(inspectionEnvironments).where(eq(inspectionEnvironments.id, id));
+}

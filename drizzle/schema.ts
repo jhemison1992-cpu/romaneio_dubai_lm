@@ -131,3 +131,21 @@ export const mediaFiles = mysqlTable("media_files", {
 
 export type MediaFile = typeof mediaFiles.$inferSelect;
 export type InsertMediaFile = typeof mediaFiles.$inferInsert;
+
+/**
+ * Ambientes adicionados diretamente na vistoria (independente de obra)
+ */
+export const inspectionEnvironments = mysqlTable("inspection_environments", {
+  id: int("id").autoincrement().primaryKey(),
+  inspectionId: int("inspection_id").notNull().references(() => inspections.id, { onDelete: "cascade" }),
+  name: varchar("name", { length: 255 }).notNull(),
+  caixilhoCode: varchar("caixilho_code", { length: 50 }).notNull(),
+  caixilhoType: text("caixilho_type").notNull(),
+  quantity: int("quantity").notNull().default(1),
+  plantaFileKey: varchar("planta_file_key", { length: 500 }), // Chave do arquivo da planta no S3
+  plantaFileUrl: varchar("planta_file_url", { length: 1000 }), // URL da planta
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export type InspectionEnvironment = typeof inspectionEnvironments.$inferSelect;
+export type InsertInspectionEnvironment = typeof inspectionEnvironments.$inferInsert;
