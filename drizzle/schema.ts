@@ -106,6 +106,7 @@ export const mediaFiles = mysqlTable("media_files", {
   mimeType: varchar("mime_type", { length: 100 }).notNull(),
   fileSize: int("file_size").notNull(),
   mediaType: mysqlEnum("media_type", ["photo", "video"]).notNull(),
+  comment: text("comment"), // Comentário sobre a foto/vídeo
   createdAt: timestamp("createdAt").defaultNow().notNull(),
 });
 

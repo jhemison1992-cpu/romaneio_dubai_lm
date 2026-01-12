@@ -7,7 +7,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { trpc } from "@/lib/trpc";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
-import { ClipboardList, Plus, Trash2 } from "lucide-react";
+import { ClipboardList, Edit2, Plus, Trash2 } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 import { Link } from "wouter";
@@ -16,6 +16,8 @@ export default function Inspections() {
   const [open, setOpen] = useState(false);
   const [title, setTitle] = useState("");
   const [selectedProjectId, setSelectedProjectId] = useState<string>("");
+  const [editingId, setEditingId] = useState<number | null>(null);
+  const [editTitle, setEditTitle] = useState("");
   
   const utils = trpc.useUtils();
   const { data: inspections, isLoading } = trpc.inspections.list.useQuery();
@@ -44,6 +46,17 @@ export default function Inspections() {
     },
   });
   
+  const updateTitleMutation = trpc.inspections.updateTitle.useMutation({
+    onSuccess: () => {
+      utils.inspections.list.invalidate();
+      toast.success("Título atualizado com sucesso!");
+      setEditingId(null);
+    },
+    onError: (error) => {
+      toast.error("Erro ao atualizar título: " + error.message);
+    },
+  });
+  
   const handleCreate = () => {
     if (!title.trim()) {
       toast.error("Por favor, informe um título para a vistoria");
@@ -63,6 +76,16 @@ export default function Inspections() {
     if (confirm("Tem certeza que deseja excluir esta vistoria?")) {
       deleteMutation.mutate({ id });
     }
+  };
+  
+  const handleEditTitle = (inspection: any) => {
+    setEditingId(inspection.id);
+    setEditTitle(inspection.title);
+  };
+  
+  const handleSaveTitle = () => {
+    if (!editTitle.trim() || !editingId) return;
+    updateTitleMutation.mutate({ id: editingId, title: editTitle });
   };
   
   const getStatusLabel = (status: string) => {
@@ -175,19 +198,46 @@ export default function Inspections() {
               <CardHeader>
                 <div className="flex items-start justify-between">
                   <div className="flex-1">
-                    <CardTitle className="text-xl mb-2">{inspection.title}</CardTitle>
+                    {editingId === inspection.id ? (
+                      <div className="flex gap-2 mb-2">
+                        <Input
+                          value={editTitle}
+                          onChange={(e) => setEditTitle(e.target.value)}
+                          onKeyDown={(e) => e.key === "Enter" && handleSaveTitle()}
+                          className="text-xl font-semibold"
+                        />
+                        <Button size="sm" onClick={handleSaveTitle}>
+                          Salvar
+                        </Button>
+                        <Button size="sm" variant="outline" onClick={() => setEditingId(null)}>
+                          Cancelar
+                        </Button>
+                      </div>
+                    ) : (
+                      <CardTitle className="text-xl mb-2">{inspection.title}</CardTitle>
+                    )}
                     <CardDescription>
                       Criada em {format(new Date(inspection.createdAt), "dd 'de' MMMM 'de' yyyy", { locale: ptBR })}
                     </CardDescription>
                   </div>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    onClick={() => handleDelete(inspection.id)}
-                    className="text-destructive hover:text-destructive"
-                  >
-                    <Trash2 className="h-4 w-4" />
-                  </Button>
+                  <div className="flex gap-1">
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={() => handleEditTitle(inspection)}
+                      className="text-muted-foreground hover:text-foreground"
+                    >
+                      <Edit2 className="h-4 w-4" />
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={() => handleDelete(inspection.id)}
+                      className="text-destructive hover:text-destructive"
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </Button>
+                  </div>
                 </div>
               </CardHeader>
               <CardContent>

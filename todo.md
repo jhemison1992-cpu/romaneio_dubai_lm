@@ -110,3 +110,25 @@
 
 ## Bugs Reportados - Novo
 - [x] Botão "Abrir Vistoria" não está funcionando
+
+## Melhorias de Mídia
+- [ ] Adicionar campo de comentário para cada foto/vídeo
+- [ ] Adicionar botão de excluir fotos e vídeos
+- [ ] Corrigir botão "Tirar Foto" que não está funcionando
+- [ ] Corrigir botão "Gravar Vídeo" que não está funcionando
+
+## Edição de Vistorias
+- [x] Renomear vistoria existente para "Romaneio ALUMINC - Obra DUBAI LM"
+- [x] Adicionar funcionalidade de editar nome das vistorias
+
+## Upload de Plantas por Ambiente
+- [ ] Adicionar campo para upload de PDF da planta ao criar novo ambiente
+- [ ] Salvar arquivo da planta no S3
+- [ ] Vincular planta ao ambiente no banco de dados
+
+## Sistema de Autenticação
+- [ ] Criar tela de login com usuário e senha
+- [ ] Implementar autenticação no backend
+- [ ] Criar tabela de usuários com níveis (padrão e administrador)
+- [ ] Proteger rotas que requerem autenticação
+- [ ] Criar usuário administrador padrão

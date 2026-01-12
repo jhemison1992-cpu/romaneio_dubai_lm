@@ -61,6 +61,20 @@ export const appRouter = router({
         return { success: true };
       }),
     
+    updateTitle: publicProcedure
+      .input((val: unknown) => {
+
+        return z.object({ 
+          id: z.number(), 
+          title: z.string() 
+        }).parse(val);
+      })
+      .mutation(async ({ input }) => {
+        const { updateInspectionTitle } = await import("./db");
+        await updateInspectionTitle(input.id, input.title);
+        return { success: true };
+      }),
+    
     delete: publicProcedure
       .input((val: unknown) => {
 
@@ -117,6 +131,7 @@ export const appRouter = router({
           fileName: z.string(),
           mimeType: z.string(),
           mediaType: z.enum(["photo", "video"]),
+          comment: z.string().optional(),
         }).parse(val);
       })
       .mutation(async ({ input }) => {
@@ -136,6 +151,7 @@ export const appRouter = router({
           mimeType: input.mimeType,
           fileSize: buffer.length,
           mediaType: input.mediaType,
+          comment: input.comment || null,
         });
         
         return { id, url };

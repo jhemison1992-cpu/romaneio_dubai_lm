@@ -161,6 +161,13 @@ export async function updateInspectionStatus(id: number, status: "draft" | "in_p
   await db.update(inspections).set({ status }).where(eq(inspections.id, id));
 }
 
+export async function updateInspectionTitle(id: number, title: string) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  const { inspections } = await import("../drizzle/schema");
+  await db.update(inspections).set({ title }).where(eq(inspections.id, id));
+}
+
 export async function deleteInspection(id: number) {
   const db = await getDb();
   if (!db) throw new Error("Database not available");
@@ -233,6 +240,7 @@ export async function createMediaFile(data: {
   mimeType: string;
   fileSize: number;
   mediaType: "photo" | "video";
+  comment?: string | null;
 }) {
   const db = await getDb();
   if (!db) throw new Error("Database not available");
