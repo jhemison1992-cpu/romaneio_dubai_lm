@@ -7,7 +7,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { trpc } from "@/lib/trpc";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
-import { ClipboardList, Edit2, Plus, Trash2 } from "lucide-react";
+import { ClipboardList, Edit2, Plus, Trash2, X } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 import { Link } from "wouter";
@@ -20,7 +20,7 @@ export default function Inspections() {
   const [editTitle, setEditTitle] = useState("");
   
   const utils = trpc.useUtils();
-  const { data: inspections, isLoading } = trpc.inspections.list.useQuery();
+  const { data: inspections, isLoading, error, refetch } = trpc.inspections.list.useQuery();
   const { data: projects } = trpc.projects.list.useQuery();
   
   const createMutation = trpc.inspections.create.useMutation({
@@ -110,7 +110,40 @@ export default function Inspections() {
     return (
       <div className="container py-8">
         <div className="flex items-center justify-center min-h-[400px]">
-          <p className="text-muted-foreground">Carregando vistorias...</p>
+          <div className="text-center space-y-2">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto"></div>
+            <p className="text-muted-foreground">Carregando vistorias...</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="container py-8">
+        <div className="flex items-center justify-center min-h-[400px]">
+          <Card className="max-w-md w-full p-6">
+            <div className="text-center space-y-4">
+              <div className="mx-auto w-12 h-12 rounded-full bg-destructive/10 flex items-center justify-center">
+                <X className="h-6 w-6 text-destructive" />
+              </div>
+              <div className="space-y-2">
+                <h3 className="font-semibold text-lg">Erro ao Carregar Vistorias</h3>
+                <p className="text-sm text-muted-foreground">
+                  {error.message || "Ocorreu um erro ao buscar as vistorias. Por favor, tente novamente."}
+                </p>
+              </div>
+              <div className="flex gap-2 justify-center">
+                <Button onClick={() => refetch()} variant="default">
+                  Tentar Novamente
+                </Button>
+                <Button onClick={() => window.location.reload()} variant="outline">
+                  Recarregar Página
+                </Button>
+              </div>
+            </div>
+          </Card>
         </div>
       </div>
     );

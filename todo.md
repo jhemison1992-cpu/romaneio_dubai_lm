@@ -155,3 +155,8 @@
 ## Configuração de Domínio Customizado
 - [ ] Configurar domínio customizado "romaneioaluminc" no painel Manus
 - [ ] Testar acesso pelo novo domínio
+
+
+## Bugs Reportados - Carregamento
+- [x] Página de Vistorias não está carregando - mostra "1 error" e fica em loading infinito
+- [x] Adicionar tratamento de erro robusto com mensagem específica e botão de retry
