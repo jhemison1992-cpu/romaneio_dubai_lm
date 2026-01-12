@@ -99,3 +99,6 @@
 - [x] Atualizar fluxo de criação de romaneio para selecionar obra
 - [x] Permitir múltiplos romaneios por obra
 - [x] Testar criação de obra e romaneio completo
+
+## Popular Obra DUBAI LM
+- [x] Adicionar todos os 12 ambientes e caixilhos originais à obra DUBAI LM
