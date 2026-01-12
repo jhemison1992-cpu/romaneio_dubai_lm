@@ -44,3 +44,8 @@
 - [x] Testar upload de fotos e vídeos
 - [x] Testar geração de PDF
 - [x] Criar checkpoint final
+
+## Bugs Reportados
+- [x] Página de detalhes da vistoria fica travada em "Carregando..."
+- [x] Erro de autenticação ao buscar dados da vistoria
+- [x] Melhorar tratamento de erros nos componentes

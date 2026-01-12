@@ -2,6 +2,7 @@ import { COOKIE_NAME } from "@shared/const";
 import { getSessionCookieOptions } from "./_core/cookies";
 import { systemRouter } from "./_core/systemRouter";
 import { publicProcedure, protectedProcedure, router } from "./_core/trpc";
+import { z } from "zod";
 
 export const appRouter = router({
     // if you need to use socket.io, read and register route in server/_core/index.ts, all api should start with '/api/' so that the gateway can route correctly
@@ -33,7 +34,7 @@ export const appRouter = router({
     
     create: protectedProcedure
       .input((val: unknown) => {
-        const { z } = require("zod");
+
         return z.object({ title: z.string() }).parse(val);
       })
       .mutation(async ({ ctx, input }) => {
@@ -44,7 +45,7 @@ export const appRouter = router({
     
     get: protectedProcedure
       .input((val: unknown) => {
-        const { z } = require("zod");
+
         return z.object({ id: z.number() }).parse(val);
       })
       .query(async ({ input }) => {
@@ -54,7 +55,7 @@ export const appRouter = router({
     
     updateStatus: protectedProcedure
       .input((val: unknown) => {
-        const { z } = require("zod");
+
         return z.object({ 
           id: z.number(), 
           status: z.enum(["draft", "in_progress", "completed"]) 
@@ -68,7 +69,7 @@ export const appRouter = router({
     
     delete: protectedProcedure
       .input((val: unknown) => {
-        const { z } = require("zod");
+
         return z.object({ id: z.number() }).parse(val);
       })
       .mutation(async ({ input }) => {
@@ -81,7 +82,7 @@ export const appRouter = router({
   inspectionItems: router({
     list: protectedProcedure
       .input((val: unknown) => {
-        const { z } = require("zod");
+
         return z.object({ inspectionId: z.number() }).parse(val);
       })
       .query(async ({ input }) => {
@@ -91,7 +92,7 @@ export const appRouter = router({
     
     upsert: protectedProcedure
       .input((val: unknown) => {
-        const { z } = require("zod");
+
         return z.object({
           id: z.number().optional(),
           inspectionId: z.number(),
@@ -115,7 +116,7 @@ export const appRouter = router({
   media: router({
     upload: protectedProcedure
       .input((val: unknown) => {
-        const { z } = require("zod");
+
         return z.object({
           inspectionItemId: z.number(),
           fileData: z.string(),
@@ -148,7 +149,7 @@ export const appRouter = router({
     
     list: protectedProcedure
       .input((val: unknown) => {
-        const { z } = require("zod");
+
         return z.object({ inspectionItemId: z.number() }).parse(val);
       })
       .query(async ({ input }) => {
@@ -158,7 +159,7 @@ export const appRouter = router({
     
     delete: protectedProcedure
       .input((val: unknown) => {
-        const { z } = require("zod");
+
         return z.object({ id: z.number() }).parse(val);
       })
       .mutation(async ({ input }) => {
@@ -171,7 +172,7 @@ export const appRouter = router({
   reports: router({
     generatePDF: protectedProcedure
       .input((val: unknown) => {
-        const { z } = require("zod");
+
         return z.object({ inspectionId: z.number() }).parse(val);
       })
       .mutation(async ({ input }) => {
