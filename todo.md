@@ -102,3 +102,8 @@
 
 ## Popular Obra DUBAI LM
 - [x] Adicionar todos os 12 ambientes e caixilhos originais à obra DUBAI LM
+
+## Melhorias de Layout
+- [x] Redesenhar cards de obras com layout mais profissional
+- [x] Adicionar informações de vistorias vinculadas aos cards
+- [x] Melhorar hierarquia visual das informações

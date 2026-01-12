@@ -1,11 +1,28 @@
-import { eq } from "drizzle-orm";
+import { eq, sql } from "drizzle-orm";
 import { getDb } from "./db";
 
 export async function getAllProjects() {
   const db = await getDb();
   if (!db) return [];
-  const { projects } = await import("../drizzle/schema");
-  return await db.select().from(projects).orderBy(projects.createdAt);
+  const { projects, inspections } = await import("../drizzle/schema");
+  
+  // Get projects with inspection count
+  const result = await db
+    .select({
+      id: projects.id,
+      name: projects.name,
+      address: projects.address,
+      contractor: projects.contractor,
+      technicalManager: projects.technicalManager,
+      supplier: projects.supplier,
+      createdAt: projects.createdAt,
+      updatedAt: projects.updatedAt,
+      inspectionCount: sql<number>`(SELECT COUNT(*) FROM ${inspections} WHERE ${inspections.projectId} = ${projects.id})`
+    })
+    .from(projects)
+    .orderBy(projects.createdAt);
+  
+  return result;
 }
 
 export async function getProjectById(id: number) {

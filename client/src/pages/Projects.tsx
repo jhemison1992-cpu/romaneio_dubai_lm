@@ -4,8 +4,9 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, Di
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { Badge } from "@/components/ui/badge";
 import { trpc } from "@/lib/trpc";
-import { Building2, Plus, Settings, Trash2 } from "lucide-react";
+import { Building2, Plus, Settings, Trash2, ClipboardList, MapPin, User, Briefcase } from "lucide-react";
 import { useState } from "react";
 import { useLocation } from "wouter";
 import { toast } from "sonner";
@@ -175,52 +176,72 @@ export default function Projects() {
           </CardContent>
         </Card>
       ) : (
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3">
           {projects.map((project) => (
-            <Card key={project.id} className="hover:shadow-lg transition-shadow">
-              <CardHeader>
-                <div className="flex items-start justify-between">
-                  <div className="flex-1">
-                    <CardTitle className="text-xl mb-2">{project.name}</CardTitle>
+            <Card key={project.id} className="hover:shadow-lg transition-all border-l-4 border-l-primary">
+              <CardHeader className="pb-3">
+                <div className="flex items-start justify-between gap-3">
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2 mb-2">
+                      <Building2 className="h-5 w-5 text-primary shrink-0" />
+                      <CardTitle className="text-xl truncate">{project.name}</CardTitle>
+                    </div>
                     {project.address && (
-                      <CardDescription className="text-sm line-clamp-2">
-                        {project.address}
-                      </CardDescription>
+                      <div className="flex items-start gap-2 text-sm text-muted-foreground">
+                        <MapPin className="h-4 w-4 shrink-0 mt-0.5" />
+                        <span className="line-clamp-2">{project.address}</span>
+                      </div>
                     )}
                   </div>
                 </div>
               </CardHeader>
-              <CardContent>
-                <div className="space-y-2 text-sm mb-4">
+              <CardContent className="space-y-4">
+                <div className="space-y-3 text-sm">
                   {project.contractor && (
-                    <div>
-                      <span className="font-medium">Contratante:</span>
-                      <p className="text-muted-foreground">{project.contractor}</p>
+                    <div className="flex items-start gap-2">
+                      <Briefcase className="h-4 w-4 text-muted-foreground shrink-0 mt-0.5" />
+                      <div className="min-w-0 flex-1">
+                        <p className="font-medium text-xs text-muted-foreground uppercase tracking-wide">Contratante</p>
+                        <p className="text-foreground line-clamp-2">{project.contractor}</p>
+                      </div>
                     </div>
                   )}
                   {project.technicalManager && (
-                    <div>
-                      <span className="font-medium">Responsável:</span>
-                      <p className="text-muted-foreground">{project.technicalManager}</p>
+                    <div className="flex items-start gap-2">
+                      <User className="h-4 w-4 text-muted-foreground shrink-0 mt-0.5" />
+                      <div className="min-w-0 flex-1">
+                        <p className="font-medium text-xs text-muted-foreground uppercase tracking-wide">Responsável Técnico</p>
+                        <p className="text-foreground">{project.technicalManager}</p>
+                      </div>
                     </div>
                   )}
                 </div>
-                <div className="flex gap-2">
-                  <Button
-                    className="flex-1"
-                    onClick={() => setLocation(`/project/${project.id}/environments`)}
-                  >
-                    <Settings className="mr-2 h-4 w-4" />
-                    Gerenciar Ambientes
-                  </Button>
-                  <Button
-                    variant="outline"
-                    size="icon"
-                    onClick={() => handleDelete(project.id, project.name)}
-                    disabled={deleteProject.isPending}
-                  >
-                    <Trash2 className="h-4 w-4" />
-                  </Button>
+
+                <div className="pt-3 border-t">
+                  <div className="flex items-center gap-2 mb-3">
+                    <ClipboardList className="h-4 w-4 text-muted-foreground" />
+                    <span className="text-sm font-medium">Vistorias</span>
+                    <Badge variant="secondary" className="ml-auto">
+                      {project.inspectionCount || 0}
+                    </Badge>
+                  </div>
+                  <div className="flex gap-2">
+                    <Button
+                      className="flex-1"
+                      onClick={() => setLocation(`/project/${project.id}/environments`)}
+                    >
+                      <Settings className="mr-2 h-4 w-4" />
+                      Gerenciar
+                    </Button>
+                    <Button
+                      variant="outline"
+                      size="icon"
+                      onClick={() => handleDelete(project.id, project.name)}
+                      disabled={deleteProject.isPending}
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </Button>
+                  </div>
                 </div>
               </CardContent>
             </Card>
