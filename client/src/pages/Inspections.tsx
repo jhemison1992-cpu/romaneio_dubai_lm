@@ -1,4 +1,3 @@
-import { useAuth } from "@/_core/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
@@ -13,7 +12,6 @@ import { toast } from "sonner";
 import { Link } from "wouter";
 
 export default function Inspections() {
-  const { user } = useAuth();
   const [open, setOpen] = useState(false);
   const [title, setTitle] = useState("");
   

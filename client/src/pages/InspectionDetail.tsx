@@ -1,4 +1,4 @@
-import { useAuth } from "@/_core/hooks/useAuth";
+
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -50,13 +50,12 @@ function GeneratePDFButton({ inspectionId }: { inspectionId: number }) {
 }
 
 export default function InspectionDetail() {
-  const { user, loading: authLoading } = useAuth();
   const params = useParams();
   const inspectionId = params.id ? parseInt(params.id) : 0;
   
   const { data: inspection, isLoading: inspectionLoading, error: inspectionError } = trpc.inspections.get.useQuery(
     { id: inspectionId },
-    { enabled: inspectionId > 0 && !!user }
+    { enabled: inspectionId > 0 }
   );
   const { data: environments, isLoading: environmentsLoading } = trpc.environments.list.useQuery();
   const { data: items, refetch: refetchItems } = trpc.inspectionItems.list.useQuery(
@@ -131,30 +130,6 @@ export default function InspectionDetail() {
     updateStatusMutation.mutate({ id: inspectionId, status });
   };
 
-  if (authLoading) {
-    return (
-      <div className="container py-8">
-        <div className="flex items-center justify-center min-h-[400px]">
-          <p className="text-muted-foreground">Verificando autenticação...</p>
-        </div>
-      </div>
-    );
-  }
-  
-  if (!user) {
-    return (
-      <div className="container py-8">
-        <div className="flex flex-col items-center justify-center min-h-[400px] gap-4">
-          <p className="text-destructive">Você precisa estar autenticado</p>
-          <p className="text-sm text-muted-foreground">Faça login para acessar esta página</p>
-          <Link href="/">
-            <Button>Voltar</Button>
-          </Link>
-        </div>
-      </div>
-    );
-  }
-  
   if (inspectionError) {
     return (
       <div className="container py-8">

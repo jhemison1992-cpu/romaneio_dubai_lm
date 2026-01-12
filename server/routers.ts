@@ -1,7 +1,7 @@
 import { COOKIE_NAME } from "@shared/const";
 import { getSessionCookieOptions } from "./_core/cookies";
 import { systemRouter } from "./_core/systemRouter";
-import { publicProcedure, protectedProcedure, router } from "./_core/trpc";
+import { publicProcedure, router } from "./_core/trpc";
 import { z } from "zod";
 
 export const appRouter = router({
@@ -27,23 +27,24 @@ export const appRouter = router({
   }),
 
   inspections: router({
-    list: protectedProcedure.query(async ({ ctx }) => {
-      const { getInspectionsByUser } = await import("./db");
-      return await getInspectionsByUser(ctx.user.id);
+    list: publicProcedure.query(async () => {
+      const { getAllInspections } = await import("./db");
+      return await getAllInspections();
     }),
     
-    create: protectedProcedure
+    create: publicProcedure
       .input((val: unknown) => {
 
         return z.object({ title: z.string() }).parse(val);
       })
-      .mutation(async ({ ctx, input }) => {
+      .mutation(async ({ input }) => {
         const { createInspection } = await import("./db");
-        const id = await createInspection(ctx.user.id, input.title);
+        // Usar userId padrão 1 para acesso público
+        const id = await createInspection(1, input.title);
         return { id };
       }),
     
-    get: protectedProcedure
+    get: publicProcedure
       .input((val: unknown) => {
 
         return z.object({ id: z.number() }).parse(val);
@@ -53,7 +54,7 @@ export const appRouter = router({
         return await getInspectionById(input.id);
       }),
     
-    updateStatus: protectedProcedure
+    updateStatus: publicProcedure
       .input((val: unknown) => {
 
         return z.object({ 
@@ -67,7 +68,7 @@ export const appRouter = router({
         return { success: true };
       }),
     
-    delete: protectedProcedure
+    delete: publicProcedure
       .input((val: unknown) => {
 
         return z.object({ id: z.number() }).parse(val);
@@ -80,7 +81,7 @@ export const appRouter = router({
   }),
 
   inspectionItems: router({
-    list: protectedProcedure
+    list: publicProcedure
       .input((val: unknown) => {
 
         return z.object({ inspectionId: z.number() }).parse(val);
@@ -90,7 +91,7 @@ export const appRouter = router({
         return await getInspectionItems(input.inspectionId);
       }),
     
-    upsert: protectedProcedure
+    upsert: publicProcedure
       .input((val: unknown) => {
 
         return z.object({
@@ -114,7 +115,7 @@ export const appRouter = router({
   }),
 
   media: router({
-    upload: protectedProcedure
+    upload: publicProcedure
       .input((val: unknown) => {
 
         return z.object({
@@ -147,7 +148,7 @@ export const appRouter = router({
         return { id, url };
       }),
     
-    list: protectedProcedure
+    list: publicProcedure
       .input((val: unknown) => {
 
         return z.object({ inspectionItemId: z.number() }).parse(val);
@@ -157,7 +158,7 @@ export const appRouter = router({
         return await getMediaFilesByItem(input.inspectionItemId);
       }),
     
-    delete: protectedProcedure
+    delete: publicProcedure
       .input((val: unknown) => {
 
         return z.object({ id: z.number() }).parse(val);
@@ -170,7 +171,7 @@ export const appRouter = router({
   }),
 
   reports: router({
-    generatePDF: protectedProcedure
+    generatePDF: publicProcedure
       .input((val: unknown) => {
 
         return z.object({ inspectionId: z.number() }).parse(val);

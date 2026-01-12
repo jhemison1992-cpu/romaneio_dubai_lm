@@ -139,6 +139,13 @@ export async function getInspectionsByUser(userId: number) {
   return await db.select().from(inspections).where(eq(inspections.userId, userId));
 }
 
+export async function getAllInspections() {
+  const db = await getDb();
+  if (!db) return [];
+  const { inspections } = await import("../drizzle/schema");
+  return await db.select().from(inspections);
+}
+
 export async function getInspectionById(id: number) {
   const db = await getDb();
   if (!db) return null;

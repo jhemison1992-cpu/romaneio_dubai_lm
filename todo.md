@@ -58,3 +58,9 @@
 - [x] Incluir assinaturas digitais no PDF gerado
 - [x] Adicionar cabeçalho profissional no PDF com dados do empreendimento
 - [x] Testar geração de PDF completo com fotos e assinaturas
+
+## Alteração de Acesso
+- [x] Remover autenticação obrigatória do sistema
+- [x] Tornar todas as rotas públicas (sem necessidade de login)
+- [x] Remover verificações de autenticação dos componentes
+- [x] Testar acesso público ao sistema
