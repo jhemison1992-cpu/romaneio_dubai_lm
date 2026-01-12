@@ -160,3 +160,5 @@
 ## Bugs Reportados - Carregamento
 - [x] Página de Vistorias não está carregando - mostra "1 error" e fica em loading infinito
 - [x] Adicionar tratamento de erro robusto com mensagem específica e botão de retry
+- [x] Adicionar botões de "Forçar Atualização" e "Recarregar Página" na tela de loading
+- [x] Implementar retry automático (3 tentativas) e timeout de 5 segundos

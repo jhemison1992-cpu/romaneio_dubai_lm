@@ -8,7 +8,7 @@ import { trpc } from "@/lib/trpc";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { ClipboardList, Edit2, Plus, Trash2, X } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { Link } from "wouter";
 
@@ -20,8 +20,30 @@ export default function Inspections() {
   const [editTitle, setEditTitle] = useState("");
   
   const utils = trpc.useUtils();
-  const { data: inspections, isLoading, error, refetch } = trpc.inspections.list.useQuery();
+  const { data: inspections, isLoading, error, refetch } = trpc.inspections.list.useQuery(undefined, {
+    retry: 3,
+    retryDelay: 1000,
+    staleTime: 0,
+    refetchOnMount: true,
+    refetchOnWindowFocus: false,
+  });
   const { data: projects } = trpc.projects.list.useQuery();
+
+  // Debug: Log query state
+  useEffect(() => {
+    console.log('[Inspections] Query state:', { isLoading, error: error?.message, dataLength: inspections?.length });
+  }, [isLoading, error, inspections]);
+
+  // Force refetch if stuck in loading for more than 5 seconds
+  useEffect(() => {
+    if (isLoading) {
+      const timeout = setTimeout(() => {
+        console.log('[Inspections] Loading timeout - forcing refetch');
+        refetch();
+      }, 5000);
+      return () => clearTimeout(timeout);
+    }
+  }, [isLoading, refetch]);
   
   const createMutation = trpc.inspections.create.useMutation({
     onSuccess: () => {
@@ -110,10 +132,23 @@ export default function Inspections() {
     return (
       <div className="container py-8">
         <div className="flex items-center justify-center min-h-[400px]">
-          <div className="text-center space-y-2">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto"></div>
-            <p className="text-muted-foreground">Carregando vistorias...</p>
-          </div>
+          <Card className="max-w-md w-full p-6">
+            <div className="text-center space-y-4">
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto"></div>
+              <p className="text-muted-foreground">Carregando vistorias...</p>
+              <div className="pt-4 space-y-2">
+                <p className="text-xs text-muted-foreground">Demorando muito?</p>
+                <div className="flex gap-2 justify-center">
+                  <Button onClick={() => refetch()} variant="outline" size="sm">
+                    Forçar Atualização
+                  </Button>
+                  <Button onClick={() => window.location.reload()} variant="outline" size="sm">
+                    Recarregar Página
+                  </Button>
+                </div>
+              </div>
+            </div>
+          </Card>
         </div>
       </div>
     );
