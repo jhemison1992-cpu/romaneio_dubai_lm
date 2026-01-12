@@ -87,3 +87,15 @@
 - [x] Adicionar botão "Ver Planta" em cada ambiente
 - [x] Implementar visualização de PDF da planta
 - [x] Testar visualização em todos os ambientes
+
+## Generalização do Sistema - Múltiplas Obras
+- [x] Remover referências específicas a "DUBAI LM" do sistema
+- [x] Criar tabela de obras no banco de dados
+- [x] Adicionar campos: nome da obra, endereço, contratante, responsável técnico
+- [x] Vincular ambientes e caixilhos a obras específicas
+- [x] Criar interface para cadastrar novas obras
+- [x] Criar interface para adicionar ambientes personalizados por obra
+- [x] Criar interface para adicionar caixilhos personalizados por ambiente
+- [x] Atualizar fluxo de criação de romaneio para selecionar obra
+- [x] Permitir múltiplos romaneios por obra
+- [x] Testar criação de obra e romaneio completo

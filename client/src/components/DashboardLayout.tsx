@@ -21,15 +21,15 @@ import {
 } from "@/components/ui/sidebar";
 import { getLoginUrl } from "@/const";
 import { useIsMobile } from "@/hooks/useMobile";
-import { LayoutDashboard, LogOut, PanelLeft, Users } from "lucide-react";
+import { Building2, ClipboardList, LogOut, PanelLeft } from "lucide-react";
 import { CSSProperties, useEffect, useRef, useState } from "react";
 import { useLocation } from "wouter";
 import { DashboardLayoutSkeleton } from './DashboardLayoutSkeleton';
 import { Button } from "./ui/button";
 
 const menuItems = [
-  { icon: LayoutDashboard, label: "Page 1", path: "/" },
-  { icon: Users, label: "Page 2", path: "/some-path" },
+  { icon: Building2, label: "Obras", path: "/projects" },
+  { icon: ClipboardList, label: "Vistorias", path: "/inspections" },
 ];
 
 const SIDEBAR_WIDTH_KEY = "sidebar-width";
@@ -176,7 +176,7 @@ function DashboardLayoutContent({
                     className="h-8 w-auto object-contain"
                   />
                   <span className="font-semibold tracking-tight truncate text-sm">
-                    Romaneio DUBAI LM
+                    Romaneio ALUMINC
                   </span>
                 </div>
               ) : null}

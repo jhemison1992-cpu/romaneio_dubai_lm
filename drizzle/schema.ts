@@ -26,9 +26,27 @@ export type User = typeof users.$inferSelect;
 export type InsertUser = typeof users.$inferInsert;
 
 /**
+ * Obras/Projetos cadastrados no sistema
+ */
+export const projects = mysqlTable("projects", {
+  id: int("id").autoincrement().primaryKey(),
+  name: varchar("name", { length: 255 }).notNull(),
+  address: text("address"),
+  contractor: varchar("contractor", { length: 255 }),
+  technicalManager: varchar("technical_manager", { length: 255 }),
+  supplier: varchar("supplier", { length: 255 }).default("ALUMINC Esquadrias Metálicas Indústria e Comércio Ltda."),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type Project = typeof projects.$inferSelect;
+export type InsertProject = typeof projects.$inferInsert;
+
+/**
  * Ambientes do empreendimento com seus respectivos caixilhos
  */
 export const environments = mysqlTable("environments", {
+  projectId: int("project_id").notNull().references(() => projects.id, { onDelete: "cascade" }),
   id: int("id").autoincrement().primaryKey(),
   name: varchar("name", { length: 255 }).notNull(),
   caixilhoCode: varchar("caixilho_code", { length: 50 }).notNull(),
@@ -45,6 +63,7 @@ export type InsertEnvironment = typeof environments.$inferInsert;
  */
 export const inspections = mysqlTable("inspections", {
   id: int("id").autoincrement().primaryKey(),
+  projectId: int("project_id").notNull().references(() => projects.id, { onDelete: "cascade" }),
   userId: int("user_id").notNull().references(() => users.id),
   title: varchar("title", { length: 255 }).notNull(),
   status: mysqlEnum("status", ["draft", "in_progress", "completed"]).default("draft").notNull(),

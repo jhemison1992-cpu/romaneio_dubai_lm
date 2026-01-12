@@ -5,6 +5,8 @@ import { Route, Switch } from "wouter";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import DashboardLayout from "./components/DashboardLayout";
+import Projects from "./pages/Projects";
+import ProjectEnvironments from "./pages/ProjectEnvironments";
 import Inspections from "./pages/Inspections";
 import InspectionDetail from "./pages/InspectionDetail";
 
@@ -13,7 +15,17 @@ function Router() {
     <Switch>
       <Route path="/" component={() => (
         <DashboardLayout>
-          <Inspections />
+          <Projects />
+        </DashboardLayout>
+      )} />
+      <Route path="/projects" component={() => (
+        <DashboardLayout>
+          <Projects />
+        </DashboardLayout>
+      )} />
+      <Route path="/project/:id/environments" component={() => (
+        <DashboardLayout>
+          <ProjectEnvironments />
         </DashboardLayout>
       )} />
       <Route path="/inspections" component={() => (

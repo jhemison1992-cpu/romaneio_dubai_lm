@@ -3,6 +3,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { trpc } from "@/lib/trpc";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
@@ -14,9 +15,11 @@ import { Link } from "wouter";
 export default function Inspections() {
   const [open, setOpen] = useState(false);
   const [title, setTitle] = useState("");
+  const [selectedProjectId, setSelectedProjectId] = useState<string>("");
   
   const utils = trpc.useUtils();
   const { data: inspections, isLoading } = trpc.inspections.list.useQuery();
+  const { data: projects } = trpc.projects.list.useQuery();
   
   const createMutation = trpc.inspections.create.useMutation({
     onSuccess: () => {
@@ -24,6 +27,7 @@ export default function Inspections() {
       toast.success("Vistoria criada com sucesso!");
       setOpen(false);
       setTitle("");
+      setSelectedProjectId("");
     },
     onError: (error) => {
       toast.error("Erro ao criar vistoria: " + error.message);
@@ -45,7 +49,14 @@ export default function Inspections() {
       toast.error("Por favor, informe um título para a vistoria");
       return;
     }
-    createMutation.mutate({ title });
+    if (!selectedProjectId) {
+      toast.error("Por favor, selecione uma obra");
+      return;
+    }
+    createMutation.mutate({ 
+      title,
+      projectId: parseInt(selectedProjectId)
+    });
   };
   
   const handleDelete = (id: number) => {
@@ -88,7 +99,7 @@ export default function Inspections() {
         <div>
           <h1 className="text-3xl font-bold tracking-tight">Vistorias</h1>
           <p className="text-muted-foreground mt-2">
-            Gerencie as vistorias de liberação de ambientes do empreendimento DUBAI LM
+            Gerencie as vistorias de liberação de ambientes
           </p>
         </div>
         <Dialog open={open} onOpenChange={setOpen}>
@@ -102,18 +113,34 @@ export default function Inspections() {
             <DialogHeader>
               <DialogTitle>Criar Nova Vistoria</DialogTitle>
               <DialogDescription>
-                Informe um título para identificar esta vistoria
+                Selecione a obra e informe um título para esta vistoria
               </DialogDescription>
             </DialogHeader>
-            <div className="py-4">
-              <Label htmlFor="title">Título da Vistoria</Label>
-              <Input
-                id="title"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-                placeholder="Ex: Vistoria 01/2026 - Áreas Comuns"
-                className="mt-2"
-              />
+            <div className="space-y-4 py-4">
+              <div className="space-y-2">
+                <Label htmlFor="project">Obra *</Label>
+                <Select value={selectedProjectId} onValueChange={setSelectedProjectId}>
+                  <SelectTrigger id="project">
+                    <SelectValue placeholder="Selecione a obra" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {projects?.map((project) => (
+                      <SelectItem key={project.id} value={project.id.toString()}>
+                        {project.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="title">Título da Vistoria *</Label>
+                <Input
+                  id="title"
+                  value={title}
+                  onChange={(e) => setTitle(e.target.value)}
+                  placeholder="Ex: Romaneio ALUMINC"
+                />
+              </div>
             </div>
             <DialogFooter>
               <Button variant="outline" onClick={() => setOpen(false)}>

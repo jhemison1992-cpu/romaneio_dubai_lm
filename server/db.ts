@@ -106,29 +106,29 @@ export async function seedEnvironments() {
   if (existingEnvs.length > 0) return; // Already seeded
   
   const envData = [
-    { name: "Piscina Coberta", caixilhoCode: "AL 008 (CA08)", caixilhoType: "Fixo 4 Módulos com Bandeira de Tela, com Travessa - Linha-32", quantity: 4 },
-    { name: "Piscina Coberta", caixilhoCode: "AL 010 (CA10)", caixilhoType: "Porta de Giro com Fixo na Lateral com 3 Módulos com Bandeira Fixa com Tela (Ventilação Permanente) - Linha-32", quantity: 1 },
-    { name: "Entrada Social", caixilhoCode: "AL 011 (CA12)", caixilhoType: "Porta de Giro 2 Folhas com Travessa - Linha-32", quantity: 1 },
-    { name: "Entrada Serviço", caixilhoCode: "AL 012 (CA13)", caixilhoType: "Porta de Giro 2 Folhas com Travessa e Passa Pizza - Linha-32", quantity: 1 },
-    { name: "Abrigo de Gás", caixilhoCode: "AL 015 (PA3)", caixilhoType: "Portinhola Veneziana 3 Folhas Ventilada - Linha ALU-025", quantity: 1 },
-    { name: "Salão de Festas", caixilhoCode: "AL 019 (PB4)", caixilhoType: "Porta de Correr 2 Folhas com 2 Fixos nas Laterais - Linha ALU-32", quantity: 2 },
-    { name: "SPA", caixilhoCode: "AL 019 (PB4)", caixilhoType: "Porta de Correr 2 Folhas com 2 Fixos nas Laterais - Linha ALU-32", quantity: 1 },
-    { name: "Aquecedor Piscina", caixilhoCode: "AL 023 (VN7)", caixilhoType: "Portinhola de Giro 2 Folhas com Veneziana (Ventilação Permanente) - Linha ALU-025", quantity: 1 },
-    { name: "Aquecedor Piscina", caixilhoCode: "AL 024 (VN8)", caixilhoType: "Fixo com Ventilação Permanente - Linha ALU-025", quantity: 1 },
-    { name: "Casa de Bombas", caixilhoCode: "AL 027 (VN11)", caixilhoType: "Fixo com Ventilação Permanente - Linha ALU-025", quantity: 1 },
-    { name: "Sauna", caixilhoCode: "AL 029 (PA4)", caixilhoType: "Porta de Giro Lambril com Visor de Vidro - Linha ALU-032", quantity: 1 },
-    { name: "Shaft Hidráulica", caixilhoCode: "AL 034 (PA6)", caixilhoType: "Porta de Giro Veneziana 4 Folhas Ventilada - Linha ALU-025", quantity: 1 },
+    { projectId: 1, name: "Piscina Coberta", caixilhoCode: "AL 008 (CA08)", caixilhoType: "Fixo 4 Módulos com Bandeira de Tela, com Travessa - Linha-32", quantity: 4 },
+    { projectId: 1, name: "Piscina Coberta", caixilhoCode: "AL 010 (CA10)", caixilhoType: "Porta de Giro com Fixo na Lateral com 3 Módulos com Bandeira Fixa com Tela (Ventilação Permanente) - Linha-32", quantity: 1 },
+    { projectId: 1, name: "Entrada Social", caixilhoCode: "AL 011 (CA12)", caixilhoType: "Porta de Giro 2 Folhas com Travessa - Linha-32", quantity: 1 },
+    { projectId: 1, name: "Entrada Serviço", caixilhoCode: "AL 012 (CA13)", caixilhoType: "Porta de Giro 2 Folhas com Travessa e Passa Pizza - Linha-32", quantity: 1 },
+    { projectId: 1, name: "Abrigo de Gás", caixilhoCode: "AL 015 (PA3)", caixilhoType: "Portinhola Veneziana 3 Folhas Ventilada - Linha ALU-025", quantity: 1 },
+    { projectId: 1, name: "Salão de Festas", caixilhoCode: "AL 019 (PB4)", caixilhoType: "Porta de Correr 2 Folhas com 2 Fixos nas Laterais - Linha ALU-32", quantity: 2 },
+    { projectId: 1, name: "SPA", caixilhoCode: "AL 019 (PB4)", caixilhoType: "Porta de Correr 2 Folhas com 2 Fixos nas Laterais - Linha ALU-32", quantity: 1 },
+    { projectId: 1, name: "Aquecedor Piscina", caixilhoCode: "AL 023 (VN7)", caixilhoType: "Portinhola de Giro 2 Folhas com Veneziana (Ventilação Permanente) - Linha ALU-025", quantity: 1 },
+    { projectId: 1, name: "Aquecedor Piscina", caixilhoCode: "AL 024 (VN8)", caixilhoType: "Fixo com Ventilação Permanente - Linha ALU-025", quantity: 1 },
+    { projectId: 1, name: "Casa de Bombas", caixilhoCode: "AL 027 (VN11)", caixilhoType: "Fixo com Ventilação Permanente - Linha ALU-025", quantity: 1 },
+    { projectId: 1, name: "Sauna", caixilhoCode: "AL 029 (PA4)", caixilhoType: "Porta de Giro Lambril com Visor de Vidro - Linha ALU-032", quantity: 1 },
+    { projectId: 1, name: "Shaft Hidráulica", caixilhoCode: "AL 034 (PA6)", caixilhoType: "Porta de Giro Veneziana 4 Folhas Ventilada - Linha ALU-025", quantity: 1 },
   ];
   
   await db.insert(environments).values(envData);
 }
 
 // Inspections queries
-export async function createInspection(userId: number, title: string) {
+export async function createInspection(projectId: number, userId: number, title: string) {
   const db = await getDb();
   if (!db) throw new Error("Database not available");
   const { inspections } = await import("../drizzle/schema");
-  const result = await db.insert(inspections).values({ userId, title });
+  const result = await db.insert(inspections).values({ projectId, userId, title });
   return result[0].insertId;
 }
 

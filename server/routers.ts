@@ -3,6 +3,7 @@ import { getSessionCookieOptions } from "./_core/cookies";
 import { systemRouter } from "./_core/systemRouter";
 import { publicProcedure, router } from "./_core/trpc";
 import { z } from "zod";
+import * as dbProjects from "./db-projects";
 
 export const appRouter = router({
     // if you need to use socket.io, read and register route in server/_core/index.ts, all api should start with '/api/' so that the gateway can route correctly
@@ -18,14 +19,6 @@ export const appRouter = router({
     }),
   }),
 
-  environments: router({
-    list: publicProcedure.query(async () => {
-      const { getAllEnvironments, seedEnvironments } = await import("./db");
-      await seedEnvironments();
-      return await getAllEnvironments();
-    }),
-  }),
-
   inspections: router({
     list: publicProcedure.query(async () => {
       const { getAllInspections } = await import("./db");
@@ -35,12 +28,12 @@ export const appRouter = router({
     create: publicProcedure
       .input((val: unknown) => {
 
-        return z.object({ title: z.string() }).parse(val);
+        return z.object({ title: z.string(), projectId: z.number().optional() }).parse(val);
       })
       .mutation(async ({ input }) => {
         const { createInspection } = await import("./db");
-        // Usar userId padrão 1 para acesso público
-        const id = await createInspection(1, input.title);
+        // Usar projectId e userId padrão 1 para acesso público
+        const id = await createInspection(input.projectId || 1, 1, input.title);
         return { id };
       }),
     
@@ -219,6 +212,88 @@ export const appRouter = router({
         const { url } = await storagePut(fileKey, pdfBuffer, "application/pdf");
         
         return { url };
+      }),
+  }),
+  
+  projects: router({
+    list: publicProcedure.query(async () => {
+      return await dbProjects.getAllProjects();
+    }),
+    get: publicProcedure
+      .input((val: unknown) => z.object({ id: z.number() }).parse(val))
+      .query(async ({ input }) => {
+        return await dbProjects.getProjectById(input.id);
+      }),
+    create: publicProcedure
+      .input((val: unknown) => z.object({
+        name: z.string(),
+        address: z.string().optional(),
+        contractor: z.string().optional(),
+        technicalManager: z.string().optional(),
+        supplier: z.string().optional(),
+      }).parse(val))
+      .mutation(async ({ input }) => {
+        const id = await dbProjects.createProject(input);
+        return { id };
+      }),
+    update: publicProcedure
+      .input((val: unknown) => z.object({
+        id: z.number(),
+        name: z.string().optional(),
+        address: z.string().optional(),
+        contractor: z.string().optional(),
+        technicalManager: z.string().optional(),
+        supplier: z.string().optional(),
+      }).parse(val))
+      .mutation(async ({ input }) => {
+        const { id, ...data } = input;
+        await dbProjects.updateProject(id, data);
+        return { success: true };
+      }),
+    delete: publicProcedure
+      .input((val: unknown) => z.object({ id: z.number() }).parse(val))
+      .mutation(async ({ input }) => {
+        await dbProjects.deleteProject(input.id);
+        return { success: true };
+      }),
+    getEnvironments: publicProcedure
+      .input((val: unknown) => z.object({ projectId: z.number() }).parse(val))
+      .query(async ({ input }) => {
+        return await dbProjects.getProjectEnvironments(input.projectId);
+      }),
+  }),
+  
+  environments: router({
+    create: publicProcedure
+      .input((val: unknown) => z.object({
+        projectId: z.number(),
+        name: z.string(),
+        caixilhoCode: z.string(),
+        caixilhoType: z.string(),
+        quantity: z.number(),
+      }).parse(val))
+      .mutation(async ({ input }) => {
+        const id = await dbProjects.createEnvironment(input);
+        return { id };
+      }),
+    update: publicProcedure
+      .input((val: unknown) => z.object({
+        id: z.number(),
+        name: z.string().optional(),
+        caixilhoCode: z.string().optional(),
+        caixilhoType: z.string().optional(),
+        quantity: z.number().optional(),
+      }).parse(val))
+      .mutation(async ({ input }) => {
+        const { id, ...data } = input;
+        await dbProjects.updateEnvironment(id, data);
+        return { success: true };
+      }),
+    delete: publicProcedure
+      .input((val: unknown) => z.object({ id: z.number() }).parse(val))
+      .mutation(async ({ input }) => {
+        await dbProjects.deleteEnvironment(input.id);
+        return { success: true };
       }),
   }),
 });

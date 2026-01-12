@@ -58,7 +58,11 @@ export default function InspectionDetail() {
     { id: inspectionId },
     { enabled: inspectionId > 0 }
   );
-  const { data: environments, isLoading: environmentsLoading } = trpc.environments.list.useQuery();
+  // Buscar ambientes da obra vinculada à vistoria
+  const { data: environments, isLoading: environmentsLoading } = trpc.projects.getEnvironments.useQuery(
+    { projectId: inspection?.projectId || 0 },
+    { enabled: !!inspection?.projectId }
+  );
   const { data: items, refetch: refetchItems } = trpc.inspectionItems.list.useQuery(
     { inspectionId },
     { enabled: inspectionId > 0 }

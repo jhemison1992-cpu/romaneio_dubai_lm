@@ -22,6 +22,13 @@
       "when": 1768227649496,
       "tag": "0002_wild_secret_warriors",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "5",
+      "when": 1768229878937,
+      "tag": "0003_complete_supreme_intelligence",
+      "breakpoints": true
     }
   ]
 }
