@@ -107,3 +107,6 @@
 - [x] Redesenhar cards de obras com layout mais profissional
 - [x] Adicionar informações de vistorias vinculadas aos cards
 - [x] Melhorar hierarquia visual das informações
+
+## Bugs Reportados - Novo
+- [x] Botão "Abrir Vistoria" não está funcionando
