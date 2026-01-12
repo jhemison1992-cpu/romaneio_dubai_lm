@@ -314,6 +314,49 @@ export const appRouter = router({
         return { success: true };
       }),
   }),
+
+  users: router({
+    list: publicProcedure.query(async () => {
+      const { getAllAppUsers } = await import("./auth");
+      return await getAllAppUsers();
+    }),
+
+    create: publicProcedure
+      .input(z.object({
+        username: z.string().min(3).max(50),
+        password: z.string().min(6),
+        name: z.string().min(1).max(100),
+        role: z.enum(["user", "admin"]).default("user"),
+      }))
+      .mutation(async ({ input }) => {
+        const { createAppUser } = await import("./auth");
+        const id = await createAppUser(input);
+        return { id, success: true };
+      }),
+
+    update: publicProcedure
+      .input(z.object({
+        id: z.number(),
+        name: z.string().min(1).max(100).optional(),
+        password: z.string().min(6).optional(),
+        role: z.enum(["user", "admin"]).optional(),
+        active: z.number().optional(),
+      }))
+      .mutation(async ({ input }) => {
+        const { updateAppUser } = await import("./auth");
+        const { id, ...data } = input;
+        await updateAppUser(id, data);
+        return { success: true };
+      }),
+
+    delete: publicProcedure
+      .input(z.object({ id: z.number() }))
+      .mutation(async ({ input }) => {
+        const { deleteAppUser } = await import("./auth");
+        await deleteAppUser(input.id);
+        return { success: true };
+      }),
+  }),
 });
 
 export type AppRouter = typeof appRouter;

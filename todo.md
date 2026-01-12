@@ -140,8 +140,10 @@
 - [x] Criar tabela de usuários customizada no banco de dados
 - [x] Implementar funções de autenticação (hash, verify, CRUD)
 - [ ] Criar tela de login
-- [ ] Criar página de gerenciamento de usuários
-- [ ] Adicionar botão "Criar Usuário" na interface
+- [x] Criar routers tRPC para gerenciamento de usuários
+- [x] Criar página de gerenciamento de usuários
+- [x] Adicionar botão "Criar Usuário" na interface
+- [x] Adicionar link "Usuários" na sidebar
 - [ ] Implementar dois níveis de acesso: usuário padrão e administrador
 - [ ] Usuário padrão: pode visualizar e editar, mas NÃO pode excluir
 - [ ] Administrador: acesso total (incluindo exclusão)

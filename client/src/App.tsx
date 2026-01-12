@@ -9,6 +9,7 @@ import Projects from "./pages/Projects";
 import ProjectEnvironments from "./pages/ProjectEnvironments";
 import Inspections from "./pages/Inspections";
 import InspectionDetail from "./pages/InspectionDetail";
+import Users from "./pages/Users";
 
 function Router() {
   return (
@@ -38,6 +39,7 @@ function Router() {
           <InspectionDetail />
         </DashboardLayout>
       )} />
+      <Route path="/users" component={Users} />
       <Route path="/404" component={NotFound} />
       <Route component={NotFound} />
     </Switch>
