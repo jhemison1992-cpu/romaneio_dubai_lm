@@ -105,19 +105,43 @@ export const appRouter = router({
           id: z.number().optional(),
           inspectionId: z.number(),
           environmentId: z.number(),
-          releaseDate: z.string().nullable().optional(),
-          responsibleConstruction: z.string().nullable().optional(),
-          responsibleSupplier: z.string().nullable().optional(),
-          observations: z.string().nullable().optional(),
+          releaseDate: z.string().optional(),
+          responsibleConstruction: z.string().optional(),
+          responsibleSupplier: z.string().optional(),
+          observations: z.string().optional(),
+          signatureConstruction: z.string().optional(),
+          signatureSupplier: z.string().optional(),
         }).parse(val);
       })
       .mutation(async ({ input }) => {
         const { upsertInspectionItem } = await import("./db");
-        const id = await upsertInspectionItem({
+        const data = {
           ...input,
           releaseDate: input.releaseDate ? new Date(input.releaseDate) : null,
-        });
+        };
+        const id = await upsertInspectionItem(data);
         return { id };
+      }),
+  }),
+
+  signatures: router({
+    update: publicProcedure
+      .input((val: unknown) => {
+
+        return z.object({
+          inspectionItemId: z.number(),
+          type: z.enum(["construction", "supplier"]),
+          signatureData: z.string(),
+        }).parse(val);
+      })
+      .mutation(async ({ input }) => {
+        const { updateSignature } = await import("./db");
+        await updateSignature(
+          input.inspectionItemId,
+          input.type,
+          input.signatureData
+        );
+        return { success: true };
       }),
   }),
 
@@ -135,18 +159,20 @@ export const appRouter = router({
         }).parse(val);
       })
       .mutation(async ({ input }) => {
+        const { saveMediaFile } = await import("./db");
         const { storagePut } = await import("./storage");
-        const { createMediaFile } = await import("./db");
         const { nanoid } = await import("nanoid");
         
         const buffer = Buffer.from(input.fileData, "base64");
-        const fileKey = `inspections/${input.inspectionItemId}/${nanoid()}-${input.fileName}`;
+        const ext = input.fileName.split(".").pop() || "bin";
+        const fileKey = `media/${input.inspectionItemId}/${nanoid()}.${ext}`;
+        
         const { url } = await storagePut(fileKey, buffer, input.mimeType);
         
-        const id = await createMediaFile({
+        const id = await saveMediaFile({
           inspectionItemId: input.inspectionItemId,
-          fileKey,
           fileUrl: url,
+          fileKey,
           fileName: input.fileName,
           mimeType: input.mimeType,
           fileSize: buffer.length,
@@ -165,6 +191,20 @@ export const appRouter = router({
       .query(async ({ input }) => {
         const { getMediaFilesByItem } = await import("./db");
         return await getMediaFilesByItem(input.inspectionItemId);
+      }),
+    
+    updateComment: publicProcedure
+      .input((val: unknown) => {
+
+        return z.object({ 
+          id: z.number(),
+          comment: z.string()
+        }).parse(val);
+      })
+      .mutation(async ({ input }) => {
+        const { updateMediaComment } = await import("./db");
+        await updateMediaComment(input.id, input.comment);
+        return { success: true };
       }),
     
     delete: publicProcedure
@@ -272,14 +312,14 @@ export const appRouter = router({
         await dbProjects.deleteProject(input.id);
         return { success: true };
       }),
-    getEnvironments: publicProcedure
+  }),
+  
+  environments: router({
+    list: publicProcedure
       .input((val: unknown) => z.object({ projectId: z.number() }).parse(val))
       .query(async ({ input }) => {
         return await dbProjects.getProjectEnvironments(input.projectId);
       }),
-  }),
-  
-  environments: router({
     create: publicProcedure
       .input((val: unknown) => z.object({
         projectId: z.number(),
@@ -287,25 +327,29 @@ export const appRouter = router({
         caixilhoCode: z.string(),
         caixilhoType: z.string(),
         quantity: z.number(),
-        plantaFileKey: z.string().optional(),
-        plantaFileUrl: z.string().optional(),
+        technicalDrawingUrl: z.string().optional(),
       }).parse(val))
       .mutation(async ({ input }) => {
         const id = await dbProjects.createEnvironment(input);
         return { id };
       }),
-    update: publicProcedure
+    uploadDrawing: publicProcedure
       .input((val: unknown) => z.object({
-        id: z.number(),
-        name: z.string().optional(),
-        caixilhoCode: z.string().optional(),
-        caixilhoType: z.string().optional(),
-        quantity: z.number().optional(),
+        fileData: z.string(),
+        fileName: z.string(),
+        mimeType: z.string(),
       }).parse(val))
       .mutation(async ({ input }) => {
-        const { id, ...data } = input;
-        await dbProjects.updateEnvironment(id, data);
-        return { success: true };
+        const { storagePut } = await import("./storage");
+        const { nanoid } = await import("nanoid");
+        
+        const buffer = Buffer.from(input.fileData, "base64");
+        const ext = input.fileName.split(".").pop() || "pdf";
+        const fileKey = `drawings/${nanoid()}.${ext}`;
+        
+        const { url } = await storagePut(fileKey, buffer, input.mimeType);
+        
+        return { url };
       }),
     delete: publicProcedure
       .input((val: unknown) => z.object({ id: z.number() }).parse(val))
@@ -314,46 +358,31 @@ export const appRouter = router({
         return { success: true };
       }),
   }),
-
+  
   users: router({
     list: publicProcedure.query(async () => {
-      const { getAllAppUsers } = await import("./auth");
-      return await getAllAppUsers();
+      const { getAllUsers } = await import("./db");
+      return await getAllUsers();
     }),
-
+    
     create: publicProcedure
-      .input(z.object({
-        username: z.string().min(3).max(50),
-        password: z.string().min(6),
-        name: z.string().min(1).max(100),
-        role: z.enum(["user", "admin"]).default("user"),
-      }))
+      .input((val: unknown) => z.object({
+        username: z.string(),
+        password: z.string(),
+        fullName: z.string(),
+        role: z.enum(["user", "admin"]),
+      }).parse(val))
       .mutation(async ({ input }) => {
-        const { createAppUser } = await import("./auth");
-        const id = await createAppUser(input);
-        return { id, success: true };
+        const { createUser } = await import("./db");
+        const id = await createUser(input);
+        return { id };
       }),
-
-    update: publicProcedure
-      .input(z.object({
-        id: z.number(),
-        name: z.string().min(1).max(100).optional(),
-        password: z.string().min(6).optional(),
-        role: z.enum(["user", "admin"]).optional(),
-        active: z.number().optional(),
-      }))
-      .mutation(async ({ input }) => {
-        const { updateAppUser } = await import("./auth");
-        const { id, ...data } = input;
-        await updateAppUser(id, data);
-        return { success: true };
-      }),
-
+    
     delete: publicProcedure
-      .input(z.object({ id: z.number() }))
+      .input((val: unknown) => z.object({ id: z.number() }).parse(val))
       .mutation(async ({ input }) => {
-        const { deleteAppUser } = await import("./auth");
-        await deleteAppUser(input.id);
+        const { deleteUser } = await import("./db");
+        await deleteUser(input.id);
         return { success: true };
       }),
   }),

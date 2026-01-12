@@ -232,7 +232,7 @@ export async function upsertInspectionItem(data: {
 }
 
 // Media Files queries
-export async function createMediaFile(data: {
+export async function saveMediaFile(data: {
   inspectionItemId: number;
   fileKey: string;
   fileUrl: string;
@@ -256,9 +256,70 @@ export async function getMediaFilesByItem(inspectionItemId: number) {
   return await db.select().from(mediaFiles).where(eq(mediaFiles.inspectionItemId, inspectionItemId));
 }
 
+export async function updateMediaComment(id: number, comment: string) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  const { mediaFiles } = await import("../drizzle/schema");
+  await db.update(mediaFiles).set({ comment }).where(eq(mediaFiles.id, id));
+}
+
 export async function deleteMediaFile(id: number) {
   const db = await getDb();
   if (!db) throw new Error("Database not available");
   const { mediaFiles } = await import("../drizzle/schema");
   await db.delete(mediaFiles).where(eq(mediaFiles.id, id));
+}
+
+// App Users (sistema de autenticação próprio)
+export async function getAllUsers() {
+  const db = await getDb();
+  if (!db) return [];
+  const { appUsers } = await import("../drizzle/schema");
+  return await db.select().from(appUsers).where(eq(appUsers.active, 1));
+}
+
+export async function createUser(data: {
+  username: string;
+  password: string;
+  fullName: string;
+  role: "user" | "admin";
+}) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  const { appUsers } = await import("../drizzle/schema");
+  const { hashPassword } = await import("./auth");
+  
+  const passwordHash = await hashPassword(data.password);
+  
+  const result = await db.insert(appUsers).values({
+    username: data.username,
+    passwordHash,
+    name: data.fullName,
+    role: data.role,
+    active: 1,
+  });
+  
+  return result[0].insertId;
+}
+
+export async function deleteUser(id: number) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  const { appUsers } = await import("../drizzle/schema");
+  // Soft delete: marca como inativo ao invés de excluir
+  await db.update(appUsers).set({ active: 0 }).where(eq(appUsers.id, id));
+}
+
+// Signatures
+export async function updateSignature(
+  inspectionItemId: number,
+  type: "construction" | "supplier",
+  signatureData: string
+) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  const { inspectionItems } = await import("../drizzle/schema");
+  
+  const field = type === "construction" ? "signatureConstruction" : "signatureSupplier";
+  await db.update(inspectionItems).set({ [field]: signatureData }).where(eq(inspectionItems.id, inspectionItemId));
 }

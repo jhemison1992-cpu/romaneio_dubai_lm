@@ -109,13 +109,13 @@
 - [x] Melhorar hierarquia visual das informações
 
 ## Bugs Reportados - Novo
-- [x] Botão "Abrir Vistoria" não está funcionando
+- [x] Botão "Abrir Vistoria" não estava funcionando - CORRIGIDO
 
 ## Melhorias de Mídia
-- [ ] Adicionar campo de comentário para cada foto/vídeo
-- [ ] Adicionar botão de excluir fotos e vídeos
-- [ ] Corrigir botão "Tirar Foto" que não está funcionando
-- [ ] Corrigir botão "Gravar Vídeo" que não está funcionando
+- [x] Adicionar campo de comentário em cada foto/vídeo na galeria
+- [x] Adicionar botão de excluir em cada foto/vídeo na galeria
+- [x] Implementar confirmação antes de excluir mídia
+- [ ] Corrigir botões "Tirar Foto" e "Gravar Vídeo" que não estão funcionando
 
 ## Edição de Vistorias
 - [x] Renomear vistoria existente para "Romaneio ALUMINC - Obra DUBAI LM"

@@ -69,7 +69,12 @@ export default function Users() {
       return;
     }
 
-    createMutation.mutate(newUser);
+    createMutation.mutate({
+      username: newUser.username,
+      password: newUser.password,
+      fullName: newUser.name,
+      role: newUser.role,
+    });
   };
 
   const handleDeleteUser = (id: number, username: string) => {
