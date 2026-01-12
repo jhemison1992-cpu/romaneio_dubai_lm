@@ -77,3 +77,13 @@
 - [x] Gerar QR Code com URL do sistema
 - [x] Adicionar QR Code no rodapé do PDF
 - [x] Testar escaneamento do QR Code
+
+## Ajustes de Nomenclatura
+- [x] Alterar nome da vistoria de "Test Inspection" para "Romaneio ALUMINC"
+
+## Plantas Técnicas
+- [x] Copiar PDFs das plantas para pasta public do projeto
+- [x] Criar mapeamento entre ambientes/caixilhos e PDFs
+- [x] Adicionar botão "Ver Planta" em cada ambiente
+- [x] Implementar visualização de PDF da planta
+- [x] Testar visualização em todos os ambientes

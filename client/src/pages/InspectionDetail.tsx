@@ -8,7 +8,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
 import { trpc } from "@/lib/trpc";
 import { format } from "date-fns";
-import { ArrowLeft, Download, Save } from "lucide-react";
+import { ArrowLeft, Download, Save, FileText } from "lucide-react";
+import { getPlantaUrl } from "@/lib/plantasMapping";
 import { MediaUpload } from "@/components/MediaUpload";
 import { SignaturePad } from "@/components/SignaturePad";
 import { useEffect, useState } from "react";
@@ -208,14 +209,29 @@ export default function InspectionDetail() {
             <TabsContent key={env.id} value={index.toString()}>
               <Card>
                 <CardHeader>
-                  <CardTitle>{env.name}</CardTitle>
-                  <CardDescription>
-                    <div className="space-y-1 mt-2">
-                      <p><span className="font-medium">Caixilho:</span> {env.caixilhoCode}</p>
-                      <p><span className="font-medium">Tipo:</span> {env.caixilhoType}</p>
-                      <p><span className="font-medium">Quantidade:</span> {env.quantity} peça(s)</p>
+                  <div className="flex items-start justify-between">
+                    <div className="flex-1">
+                      <CardTitle>{env.name}</CardTitle>
+                      <CardDescription>
+                        <div className="space-y-1 mt-2">
+                          <p><span className="font-medium">Caixilho:</span> {env.caixilhoCode}</p>
+                          <p><span className="font-medium">Tipo:</span> {env.caixilhoType}</p>
+                          <p><span className="font-medium">Quantidade:</span> {env.quantity} peça(s)</p>
+                        </div>
+                      </CardDescription>
                     </div>
-                  </CardDescription>
+                    {getPlantaUrl(env.caixilhoCode) && (
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="gap-2"
+                        onClick={() => window.open(getPlantaUrl(env.caixilhoCode)!, '_blank')}
+                      >
+                        <FileText className="h-4 w-4" />
+                        Ver Planta
+                      </Button>
+                    )}
+                  </div>
                 </CardHeader>
                 <CardContent className="space-y-6">
                   <div className="grid gap-6 md:grid-cols-2">
