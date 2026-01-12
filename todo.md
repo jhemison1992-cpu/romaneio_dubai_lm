@@ -64,3 +64,16 @@
 - [x] Tornar todas as rotas públicas (sem necessidade de login)
 - [x] Remover verificações de autenticação dos componentes
 - [x] Testar acesso público ao sistema
+
+## Branding - Logo ALUMINC
+- [x] Copiar logo para pasta public do projeto
+- [x] Adicionar logo no cabeçalho do PDF
+- [x] Adicionar logo na sidebar da interface web
+- [x] Configurar favicon com o logo
+- [x] Testar visualização em todas as páginas
+
+## QR Code de Acesso
+- [x] Instalar biblioteca de geração de QR Code
+- [x] Gerar QR Code com URL do sistema
+- [x] Adicionar QR Code no rodapé do PDF
+- [x] Testar escaneamento do QR Code
