@@ -287,6 +287,8 @@ export const appRouter = router({
         caixilhoCode: z.string(),
         caixilhoType: z.string(),
         quantity: z.number(),
+        plantaFileKey: z.string().optional(),
+        plantaFileUrl: z.string().optional(),
       }).parse(val))
       .mutation(async ({ input }) => {
         const id = await dbProjects.createEnvironment(input);

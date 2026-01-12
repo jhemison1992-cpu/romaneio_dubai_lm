@@ -52,6 +52,8 @@ export const environments = mysqlTable("environments", {
   caixilhoCode: varchar("caixilho_code", { length: 50 }).notNull(),
   caixilhoType: text("caixilho_type").notNull(),
   quantity: int("quantity").notNull().default(1),
+  plantaFileKey: varchar("planta_file_key", { length: 500 }), // Chave do arquivo da planta no S3
+  plantaFileUrl: varchar("planta_file_url", { length: 1000 }), // URL da planta
   createdAt: timestamp("createdAt").defaultNow().notNull(),
 });
 

@@ -22,6 +22,8 @@ export default function ProjectEnvironments() {
     caixilhoType: "",
     quantity: 1,
   });
+  const [plantaFile, setPlantaFile] = useState<File | null>(null);
+  const [uploadingPlanta, setUploadingPlanta] = useState(false);
 
   const { data: project } = trpc.projects.get.useQuery({ id: projectId });
   const { data: environments, isLoading, refetch } = trpc.projects.getEnvironments.useQuery({ projectId });
@@ -53,15 +55,48 @@ export default function ProjectEnvironments() {
     },
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!formData.name.trim() || !formData.caixilhoCode.trim() || !formData.caixilhoType.trim()) {
       toast.error("Preencha todos os campos obrigatórios");
       return;
     }
+    
+    let plantaFileKey: string | undefined;
+    let plantaFileUrl: string | undefined;
+    
+    // Upload da planta se fornecida
+    if (plantaFile) {
+      try {
+        setUploadingPlanta(true);
+        const formData = new FormData();
+        formData.append('file', plantaFile);
+        
+        // Upload para S3
+        const response = await fetch('/api/upload-planta', {
+          method: 'POST',
+          body: formData,
+        });
+        
+        if (!response.ok) throw new Error('Erro ao fazer upload da planta');
+        
+        const data = await response.json();
+        plantaFileKey = data.fileKey;
+        plantaFileUrl = data.fileUrl;
+      } catch (error) {
+        toast.error('Erro ao fazer upload da planta');
+        setUploadingPlanta(false);
+        return;
+      } finally {
+        setUploadingPlanta(false);
+      }
+    }
+    
     createEnvironment.mutate({
       projectId,
       ...formData,
+      plantaFileKey,
+      plantaFileUrl,
     });
   };
 
@@ -157,11 +192,22 @@ export default function ProjectEnvironments() {
                   required
                 />
               </div>
+              <div className="space-y-2">
+                <Label htmlFor="planta">Planta/Projeto do Caixilho (PDF)</Label>
+                <Input
+                  id="planta"
+                  type="file"
+                  accept=".pdf"
+                  onChange={(e) => setPlantaFile(e.target.files?.[0] || null)}
+                  className="cursor-pointer"
+                />
+                <p className="text-xs text-muted-foreground">Opcional: Anexe o PDF da planta técnica do caixilho</p>
+              </div>
               <div className="flex justify-end gap-3 pt-4">
                 <Button type="button" variant="outline" onClick={() => setIsCreateDialogOpen(false)}>
                   Cancelar
                 </Button>
-                <Button type="submit" disabled={createEnvironment.isPending}>
+                <Button type="submit" disabled={createEnvironment.isPending || uploadingPlanta}>
                   {createEnvironment.isPending ? "Adicionando..." : "Adicionar Ambiente"}
                 </Button>
               </div>

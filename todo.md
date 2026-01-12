@@ -122,9 +122,9 @@
 - [x] Adicionar funcionalidade de editar nome das vistorias
 
 ## Upload de Plantas por Ambiente
-- [ ] Adicionar campo para upload de PDF da planta ao criar novo ambiente
-- [ ] Salvar arquivo da planta no S3
-- [ ] Vincular planta ao ambiente no banco de dados
+- [x] Adicionar campo para upload de PDF da planta ao criar novo ambiente
+- [x] Salvar arquivo da planta no S3
+- [x] Vincular planta ao ambiente no banco de dados
 
 ## Sistema de Autenticação
 - [ ] Criar tela de login com usuário e senha
