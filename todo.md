@@ -49,3 +49,12 @@
 - [x] Página de detalhes da vistoria fica travada em "Carregando..."
 - [x] Erro de autenticação ao buscar dados da vistoria
 - [x] Melhorar tratamento de erros nos componentes
+
+## Novas Funcionalidades Solicitadas
+- [x] Adicionar campo de assinatura digital para responsável da obra
+- [x] Adicionar campo de assinatura digital para responsável do fornecedor
+- [x] Salvar assinaturas no banco de dados (base64)
+- [x] Melhorar geração de PDF incluindo fotos dos ambientes
+- [x] Incluir assinaturas digitais no PDF gerado
+- [x] Adicionar cabeçalho profissional no PDF com dados do empreendimento
+- [x] Testar geração de PDF completo com fotos e assinaturas

@@ -10,6 +10,7 @@ import { trpc } from "@/lib/trpc";
 import { format } from "date-fns";
 import { ArrowLeft, Download, Save } from "lucide-react";
 import { MediaUpload } from "@/components/MediaUpload";
+import { SignaturePad } from "@/components/SignaturePad";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { Link, useParams } from "wouter";
@@ -17,10 +18,12 @@ import { Link, useParams } from "wouter";
 interface InspectionItemData {
   id?: number;
   environmentId: number;
-  releaseDate: string | null;
-  responsibleConstruction: string | null;
-  responsibleSupplier: string | null;
-  observations: string | null;
+  releaseDate?: Date;
+  responsibleConstruction?: string;
+  responsibleSupplier?: string;
+  observations?: string;
+  signatureConstruction?: string;
+  signatureSupplier?: string;
 }
 
 function GeneratePDFButton({ inspectionId }: { inspectionId: number }) {
@@ -91,10 +94,12 @@ export default function InspectionDetail() {
         initialData[env.id] = {
           id: existingItem?.id,
           environmentId: env.id,
-          releaseDate: existingItem?.releaseDate ? format(new Date(existingItem.releaseDate), "yyyy-MM-dd") : null,
-          responsibleConstruction: existingItem?.responsibleConstruction || null,
-          responsibleSupplier: existingItem?.responsibleSupplier || null,
-          observations: existingItem?.observations || null,
+          releaseDate: existingItem?.releaseDate ? new Date(existingItem.releaseDate) : undefined,
+          responsibleConstruction: existingItem?.responsibleConstruction || "",
+          responsibleSupplier: existingItem?.responsibleSupplier || "",
+          observations: existingItem?.observations || "",
+          signatureConstruction: (existingItem as any)?.signatureConstruction || "",
+          signatureSupplier: (existingItem as any)?.signatureSupplier || "",
         };
       });
       setFormData(initialData);
@@ -107,11 +112,12 @@ export default function InspectionDetail() {
     
     upsertMutation.mutate({
       ...data,
+      releaseDate: data.releaseDate ? format(data.releaseDate, "yyyy-MM-dd") : null,
       inspectionId,
     });
   };
   
-  const handleChange = (environmentId: number, field: keyof InspectionItemData, value: string | null) => {
+  const handleChange = (environmentId: number, field: keyof InspectionItemData, value: string | Date | null | undefined) => {
     setFormData((prev) => ({
       ...prev,
       [environmentId]: {
@@ -243,8 +249,8 @@ export default function InspectionDetail() {
                       <Input
                         id={`releaseDate-${env.id}`}
                         type="date"
-                        value={data.releaseDate || ""}
-                        onChange={(e) => handleChange(env.id, "releaseDate", e.target.value || null)}
+                        value={data.releaseDate ? format(data.releaseDate, "yyyy-MM-dd") : ""}
+                        onChange={(e) => handleChange(env.id, "releaseDate", e.target.value ? new Date(e.target.value) : undefined)}
                       />
                     </div>
                     
@@ -271,14 +277,27 @@ export default function InspectionDetail() {
                   
                   <div className="space-y-2">
                     <Label htmlFor={`observations-${env.id}`}>Observações</Label>
-                    <Textarea
+                    <textarea
                       id={`observations-${env.id}`}
-                      value={data.observations || ""}
-                      onChange={(e) => handleChange(env.id, "observations", e.target.value || null)}
+                      value={formData[env.id]?.observations || ""}
+                      onChange={(e) => handleChange(env.id, "observations", e.target.value)}
                       placeholder="Adicione observações sobre este ambiente..."
-                      rows={4}
+                      className="w-full min-h-[100px] px-3 py-2 border rounded-md"
                     />
                   </div>
+
+          {/* Assinaturas Digitais */}
+          <div className="grid md:grid-cols-2 gap-6 mt-6">
+            <SignaturePad
+              label="Assinatura do Responsável da Obra"
+              value={formData[env.id]?.signatureConstruction}
+              onChange={(sig) => handleChange(env.id, "signatureConstruction", sig)}
+            />
+            <SignaturePad
+              label="Assinatura do Responsável do Fornecedor"
+              value={formData[env.id]?.signatureSupplier}
+              onChange={(sig) => handleChange(env.id, "signatureSupplier", sig)}
+            />                  </div>
                   
                   <div className="border-t pt-6">
                     <h3 className="font-semibold mb-4">Fotos e Vídeos</h3>

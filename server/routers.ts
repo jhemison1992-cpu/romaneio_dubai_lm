@@ -190,6 +190,7 @@ export const appRouter = router({
           items.map(async (item) => {
             const media = await getMediaFilesByItem(item.id);
             return {
+              id: item.id,
               environmentName: item.environmentName || "",
               caixilhoCode: item.caixilhoCode || "",
               caixilhoType: item.caixilhoType || "",
@@ -198,6 +199,8 @@ export const appRouter = router({
               responsibleConstruction: item.responsibleConstruction,
               responsibleSupplier: item.responsibleSupplier,
               observations: item.observations,
+              signatureConstruction: (item as any).signatureConstruction,
+              signatureSupplier: (item as any).signatureSupplier,
               photos: media.filter((m) => m.mediaType === "photo").length,
               videos: media.filter((m) => m.mediaType === "video").length,
             };

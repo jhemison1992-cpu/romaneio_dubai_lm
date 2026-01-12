@@ -15,6 +15,13 @@
       "when": 1768225924909,
       "tag": "0001_zippy_silk_fever",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1768227649496,
+      "tag": "0002_wild_secret_warriors",
+      "breakpoints": true
     }
   ]
 }

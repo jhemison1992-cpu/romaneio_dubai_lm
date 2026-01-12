@@ -66,6 +66,8 @@ export const inspectionItems = mysqlTable("inspection_items", {
   responsibleConstruction: varchar("responsible_construction", { length: 255 }),
   responsibleSupplier: varchar("responsible_supplier", { length: 255 }),
   observations: text("observations"),
+  signatureConstruction: text("signature_construction"), // Base64 da assinatura do responsável da obra
+  signatureSupplier: text("signature_supplier"), // Base64 da assinatura do responsável do fornecedor
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
 });
