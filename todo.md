@@ -132,3 +132,19 @@
 - [ ] Criar tabela de usuários com níveis (padrão e administrador)
 - [ ] Proteger rotas que requerem autenticação
 - [ ] Criar usuário administrador padrão
+
+## Alteração de Título
+- [ ] Alterar título do sistema para "Romaneio ALUMINC" na interface
+
+## Sistema de Autenticação e Gerenciamento de Usuários
+- [x] Criar tabela de usuários customizada no banco de dados
+- [x] Implementar funções de autenticação (hash, verify, CRUD)
+- [ ] Criar tela de login
+- [ ] Criar página de gerenciamento de usuários
+- [ ] Adicionar botão "Criar Usuário" na interface
+- [ ] Implementar dois níveis de acesso: usuário padrão e administrador
+- [ ] Usuário padrão: pode visualizar e editar, mas NÃO pode excluir
+- [ ] Administrador: acesso total (incluindo exclusão)
+- [ ] Aplicar controle de permissões no backend
+- [ ] Ocultar/desabilitar botões de exclusão para usuários padrão
+- [ ] Testar sistema completo de autenticação

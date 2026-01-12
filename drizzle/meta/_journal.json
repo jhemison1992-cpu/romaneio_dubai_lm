@@ -43,6 +43,13 @@
       "when": 1768233623835,
       "tag": "0005_workable_tomorrow_man",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "5",
+      "when": 1768234068855,
+      "tag": "0006_loose_shockwave",
+      "breakpoints": true
     }
   ]
 }
