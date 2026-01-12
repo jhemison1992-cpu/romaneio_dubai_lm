@@ -1,5 +1,6 @@
 
 import { Button } from "@/components/ui/button";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -8,7 +9,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
 import { trpc } from "@/lib/trpc";
 import { format } from "date-fns";
-import { ArrowLeft, Download, Save, FileText, Plus } from "lucide-react";
+import { ArrowLeft, Download, Save, FileText, Plus, Trash2 } from "lucide-react";
 import { getPlantaUrl } from "@/lib/plantasMapping";
 import { MediaUpload } from "@/components/MediaUpload";
 import { SignaturePad } from "@/components/SignaturePad";
@@ -85,6 +86,9 @@ export default function InspectionDetail() {
   const [newEnvQty, setNewEnvQty] = useState(1);
   const [newEnvPlantaFile, setNewEnvPlantaFile] = useState<File | null>(null);
   
+  // Estado para confirmação de exclusão
+  const [envToDelete, setEnvToDelete] = useState<number | null>(null);
+  
   const utils = trpc.useUtils();
   
   const upsertMutation = trpc.inspectionItems.upsert.useMutation({
@@ -117,6 +121,19 @@ export default function InspectionDetail() {
     },
     onError: (error) => {
       toast.error("Erro ao adicionar ambiente: " + error.message);
+    },
+  });
+  
+  const deleteEnvMutation = trpc.inspectionEnvironments.delete.useMutation({
+    onSuccess: () => {
+      toast.success("Ambiente excluído com sucesso!");
+      refetchInspectionEnvs();
+      setEnvToDelete(null);
+      // Voltar para primeira aba se a aba atual foi excluída
+      setActiveTab("0");
+    },
+    onError: (error) => {
+      toast.error("Erro ao excluir ambiente: " + error.message);
     },
   });
   
@@ -309,17 +326,30 @@ export default function InspectionDetail() {
                         </div>
                       </CardDescription>
                     </div>
-                    {(env.plantaFileUrl || getPlantaUrl(env.caixilhoCode)) && (
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        className="gap-2"
-                        onClick={() => window.open(env.plantaFileUrl || getPlantaUrl(env.caixilhoCode)!, '_blank')}
-                      >
-                        <FileText className="h-4 w-4" />
-                        Ver Planta
-                      </Button>
-                    )}
+                    <div className="flex gap-2">
+                      {(env.plantaFileUrl || getPlantaUrl(env.caixilhoCode)) && (
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="gap-2"
+                          onClick={() => window.open(env.plantaFileUrl || getPlantaUrl(env.caixilhoCode)!, '_blank')}
+                        >
+                          <FileText className="h-4 w-4" />
+                          Ver Planta
+                        </Button>
+                      )}
+                      {/* Mostrar botão de excluir apenas para ambientes personalizados (inspectionEnvs) */}
+                      {inspectionEnvs?.some(ie => ie.id === env.id) && (
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="gap-2 text-destructive hover:bg-destructive hover:text-destructive-foreground"
+                          onClick={() => setEnvToDelete(env.id)}
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
+                      )}
+                    </div>
                   </div>
                 </CardHeader>
                 <CardContent className="space-y-6">
@@ -418,6 +448,26 @@ export default function InspectionDetail() {
         onSubmit={handleCreateEnv}
         isSubmitting={createEnvMutation.isPending}
       />
+      
+      <AlertDialog open={envToDelete !== null} onOpenChange={(open) => !open && setEnvToDelete(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Excluir Ambiente</AlertDialogTitle>
+            <AlertDialogDescription>
+              Tem certeza que deseja excluir este ambiente? Esta ação não pode ser desfeita e todos os dados de liberação associados serão perdidos.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancelar</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={() => envToDelete && deleteEnvMutation.mutate({ id: envToDelete })}
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+            >
+              Excluir
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }

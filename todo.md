@@ -192,3 +192,10 @@
 - [x] Permitir editar informações do ambiente (nome, código, tipo, quantidade) - endpoint implementado
 - [x] Permitir excluir ambientes da vistoria - endpoint implementado
 - [x] Testar fluxo completo de adição e edição de ambientes - 5 testes passando
+
+
+## Exclusão de Ambientes Personalizados
+- [x] Adicionar botão de exclusão (ícone lixeira) no card de cada ambiente
+- [x] Implementar dialog de confirmação antes de excluir
+- [x] Chamar endpoint de exclusão e atualizar lista de ambientes
+- [x] Testar exclusão de ambientes personalizados - Testado com sucesso!
