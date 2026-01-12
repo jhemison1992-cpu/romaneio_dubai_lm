@@ -89,4 +89,161 @@ export async function getUserByOpenId(openId: string) {
   return result.length > 0 ? result[0] : undefined;
 }
 
-// TODO: add feature queries here as your schema grows.
+// Environments queries
+export async function getAllEnvironments() {
+  const db = await getDb();
+  if (!db) return [];
+  const { environments } = await import("../drizzle/schema");
+  return await db.select().from(environments);
+}
+
+export async function seedEnvironments() {
+  const db = await getDb();
+  if (!db) return;
+  const { environments } = await import("../drizzle/schema");
+  
+  const existingEnvs = await db.select().from(environments).limit(1);
+  if (existingEnvs.length > 0) return; // Already seeded
+  
+  const envData = [
+    { name: "Piscina Coberta", caixilhoCode: "AL 008 (CA08)", caixilhoType: "Fixo 4 Módulos com Bandeira de Tela, com Travessa - Linha-32", quantity: 4 },
+    { name: "Piscina Coberta", caixilhoCode: "AL 010 (CA10)", caixilhoType: "Porta de Giro com Fixo na Lateral com 3 Módulos com Bandeira Fixa com Tela (Ventilação Permanente) - Linha-32", quantity: 1 },
+    { name: "Entrada Social", caixilhoCode: "AL 011 (CA12)", caixilhoType: "Porta de Giro 2 Folhas com Travessa - Linha-32", quantity: 1 },
+    { name: "Entrada Serviço", caixilhoCode: "AL 012 (CA13)", caixilhoType: "Porta de Giro 2 Folhas com Travessa e Passa Pizza - Linha-32", quantity: 1 },
+    { name: "Abrigo de Gás", caixilhoCode: "AL 015 (PA3)", caixilhoType: "Portinhola Veneziana 3 Folhas Ventilada - Linha ALU-025", quantity: 1 },
+    { name: "Salão de Festas", caixilhoCode: "AL 019 (PB4)", caixilhoType: "Porta de Correr 2 Folhas com 2 Fixos nas Laterais - Linha ALU-32", quantity: 2 },
+    { name: "SPA", caixilhoCode: "AL 019 (PB4)", caixilhoType: "Porta de Correr 2 Folhas com 2 Fixos nas Laterais - Linha ALU-32", quantity: 1 },
+    { name: "Aquecedor Piscina", caixilhoCode: "AL 023 (VN7)", caixilhoType: "Portinhola de Giro 2 Folhas com Veneziana (Ventilação Permanente) - Linha ALU-025", quantity: 1 },
+    { name: "Aquecedor Piscina", caixilhoCode: "AL 024 (VN8)", caixilhoType: "Fixo com Ventilação Permanente - Linha ALU-025", quantity: 1 },
+    { name: "Casa de Bombas", caixilhoCode: "AL 027 (VN11)", caixilhoType: "Fixo com Ventilação Permanente - Linha ALU-025", quantity: 1 },
+    { name: "Sauna", caixilhoCode: "AL 029 (PA4)", caixilhoType: "Porta de Giro Lambril com Visor de Vidro - Linha ALU-032", quantity: 1 },
+    { name: "Shaft Hidráulica", caixilhoCode: "AL 034 (PA6)", caixilhoType: "Porta de Giro Veneziana 4 Folhas Ventilada - Linha ALU-025", quantity: 1 },
+  ];
+  
+  await db.insert(environments).values(envData);
+}
+
+// Inspections queries
+export async function createInspection(userId: number, title: string) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  const { inspections } = await import("../drizzle/schema");
+  const result = await db.insert(inspections).values({ userId, title });
+  return result[0].insertId;
+}
+
+export async function getInspectionsByUser(userId: number) {
+  const db = await getDb();
+  if (!db) return [];
+  const { inspections } = await import("../drizzle/schema");
+  return await db.select().from(inspections).where(eq(inspections.userId, userId));
+}
+
+export async function getInspectionById(id: number) {
+  const db = await getDb();
+  if (!db) return null;
+  const { inspections } = await import("../drizzle/schema");
+  const result = await db.select().from(inspections).where(eq(inspections.id, id)).limit(1);
+  return result[0] || null;
+}
+
+export async function updateInspectionStatus(id: number, status: "draft" | "in_progress" | "completed") {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  const { inspections } = await import("../drizzle/schema");
+  await db.update(inspections).set({ status }).where(eq(inspections.id, id));
+}
+
+export async function deleteInspection(id: number) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  const { inspections } = await import("../drizzle/schema");
+  await db.delete(inspections).where(eq(inspections.id, id));
+}
+
+// Inspection Items queries
+export async function getInspectionItems(inspectionId: number) {
+  const db = await getDb();
+  if (!db) return [];
+  const { inspectionItems, environments } = await import("../drizzle/schema");
+  return await db.select({
+    id: inspectionItems.id,
+    inspectionId: inspectionItems.inspectionId,
+    environmentId: inspectionItems.environmentId,
+    releaseDate: inspectionItems.releaseDate,
+    responsibleConstruction: inspectionItems.responsibleConstruction,
+    responsibleSupplier: inspectionItems.responsibleSupplier,
+    observations: inspectionItems.observations,
+    environmentName: environments.name,
+    caixilhoCode: environments.caixilhoCode,
+    caixilhoType: environments.caixilhoType,
+    quantity: environments.quantity,
+  }).from(inspectionItems)
+    .leftJoin(environments, eq(inspectionItems.environmentId, environments.id))
+    .where(eq(inspectionItems.inspectionId, inspectionId));
+}
+
+export async function upsertInspectionItem(data: {
+  id?: number;
+  inspectionId: number;
+  environmentId: number;
+  releaseDate?: Date | null;
+  responsibleConstruction?: string | null;
+  responsibleSupplier?: string | null;
+  observations?: string | null;
+}) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  const { inspectionItems } = await import("../drizzle/schema");
+  
+  if (data.id) {
+    await db.update(inspectionItems).set({
+      releaseDate: data.releaseDate,
+      responsibleConstruction: data.responsibleConstruction,
+      responsibleSupplier: data.responsibleSupplier,
+      observations: data.observations,
+    }).where(eq(inspectionItems.id, data.id));
+    return data.id;
+  } else {
+    const result = await db.insert(inspectionItems).values({
+      inspectionId: data.inspectionId,
+      environmentId: data.environmentId,
+      releaseDate: data.releaseDate,
+      responsibleConstruction: data.responsibleConstruction,
+      responsibleSupplier: data.responsibleSupplier,
+      observations: data.observations,
+    });
+    return result[0].insertId;
+  }
+}
+
+// Media Files queries
+export async function createMediaFile(data: {
+  inspectionItemId: number;
+  fileKey: string;
+  fileUrl: string;
+  fileName: string;
+  mimeType: string;
+  fileSize: number;
+  mediaType: "photo" | "video";
+}) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  const { mediaFiles } = await import("../drizzle/schema");
+  const result = await db.insert(mediaFiles).values(data);
+  return result[0].insertId;
+}
+
+export async function getMediaFilesByItem(inspectionItemId: number) {
+  const db = await getDb();
+  if (!db) return [];
+  const { mediaFiles } = await import("../drizzle/schema");
+  return await db.select().from(mediaFiles).where(eq(mediaFiles.inspectionItemId, inspectionItemId));
+}
+
+export async function deleteMediaFile(id: number) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  const { mediaFiles } = await import("../drizzle/schema");
+  await db.delete(mediaFiles).where(eq(mediaFiles.id, id));
+}

@@ -1,0 +1,262 @@
+import { useAuth } from "@/_core/hooks/useAuth";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Textarea } from "@/components/ui/textarea";
+import { trpc } from "@/lib/trpc";
+import { format } from "date-fns";
+import { ArrowLeft, Download, Save } from "lucide-react";
+import { MediaUpload } from "@/components/MediaUpload";
+import { useEffect, useState } from "react";
+import { toast } from "sonner";
+import { Link, useParams } from "wouter";
+
+interface InspectionItemData {
+  id?: number;
+  environmentId: number;
+  releaseDate: string | null;
+  responsibleConstruction: string | null;
+  responsibleSupplier: string | null;
+  observations: string | null;
+}
+
+function GeneratePDFButton({ inspectionId }: { inspectionId: number }) {
+  const generatePDFMutation = trpc.reports.generatePDF.useMutation({
+    onSuccess: (data) => {
+      window.open(data.url, "_blank");
+      toast.success("Relatório gerado com sucesso!");
+    },
+    onError: (error) => {
+      toast.error("Erro ao gerar relatório: " + error.message);
+    },
+  });
+
+  return (
+    <Button
+      onClick={() => generatePDFMutation.mutate({ inspectionId })}
+      disabled={generatePDFMutation.isPending}
+      className="gap-2"
+    >
+      <Download className="h-4 w-4" />
+      {generatePDFMutation.isPending ? "Gerando..." : "Gerar PDF"}
+    </Button>
+  );
+}
+
+export default function InspectionDetail() {
+  const params = useParams();
+  const inspectionId = params.id ? parseInt(params.id) : 0;
+  
+  const { data: inspection } = trpc.inspections.get.useQuery({ id: inspectionId });
+  const { data: environments } = trpc.environments.list.useQuery();
+  const { data: items, refetch: refetchItems } = trpc.inspectionItems.list.useQuery({ inspectionId });
+  
+  const [formData, setFormData] = useState<Record<number, InspectionItemData>>({});
+  const [activeTab, setActiveTab] = useState<string>("0");
+  
+  const utils = trpc.useUtils();
+  
+  const upsertMutation = trpc.inspectionItems.upsert.useMutation({
+    onSuccess: () => {
+      toast.success("Dados salvos com sucesso!");
+      refetchItems();
+    },
+    onError: (error) => {
+      toast.error("Erro ao salvar: " + error.message);
+    },
+  });
+  
+  const updateStatusMutation = trpc.inspections.updateStatus.useMutation({
+    onSuccess: () => {
+      utils.inspections.get.invalidate({ id: inspectionId });
+      toast.success("Status atualizado!");
+    },
+  });
+  
+  useEffect(() => {
+    if (environments && items) {
+      const initialData: Record<number, InspectionItemData> = {};
+      environments.forEach((env) => {
+        const existingItem = items.find((item) => item.environmentId === env.id);
+        initialData[env.id] = {
+          id: existingItem?.id,
+          environmentId: env.id,
+          releaseDate: existingItem?.releaseDate ? format(new Date(existingItem.releaseDate), "yyyy-MM-dd") : null,
+          responsibleConstruction: existingItem?.responsibleConstruction || null,
+          responsibleSupplier: existingItem?.responsibleSupplier || null,
+          observations: existingItem?.observations || null,
+        };
+      });
+      setFormData(initialData);
+    }
+  }, [environments, items]);
+  
+  const handleSave = (environmentId: number) => {
+    const data = formData[environmentId];
+    if (!data) return;
+    
+    upsertMutation.mutate({
+      ...data,
+      inspectionId,
+    });
+  };
+  
+  const handleChange = (environmentId: number, field: keyof InspectionItemData, value: string | null) => {
+    setFormData((prev) => ({
+      ...prev,
+      [environmentId]: {
+        ...prev[environmentId]!,
+        [field]: value,
+      },
+    }));
+  };
+  
+  const handleStatusChange = (status: "draft" | "in_progress" | "completed") => {
+    updateStatusMutation.mutate({ id: inspectionId, status });
+  };
+
+  if (!inspection || !environments) {
+    return (
+      <div className="container py-8">
+        <div className="flex items-center justify-center min-h-[400px]">
+          <p className="text-muted-foreground">Carregando...</p>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="container py-8 max-w-6xl">
+      <div className="mb-6">
+        <Link href="/inspections">
+          <Button variant="ghost" className="gap-2 mb-4">
+            <ArrowLeft className="h-4 w-4" />
+            Voltar para Vistorias
+          </Button>
+        </Link>
+        
+        <div className="flex items-start justify-between">
+          <div>
+            <h1 className="text-3xl font-bold tracking-tight">{inspection.title}</h1>
+            <p className="text-muted-foreground mt-2">
+              Preencha os dados de liberação para cada ambiente
+            </p>
+          </div>
+          <div className="flex gap-2">
+            <Select value={inspection.status} onValueChange={(value) => handleStatusChange(value as any)}>
+              <SelectTrigger className="w-[180px]">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="draft">Rascunho</SelectItem>
+                <SelectItem value="in_progress">Em Andamento</SelectItem>
+                <SelectItem value="completed">Concluída</SelectItem>
+              </SelectContent>
+            </Select>
+            <GeneratePDFButton inspectionId={inspectionId} />
+          </div>
+        </div>
+      </div>
+
+      <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
+        <TabsList className="grid grid-cols-3 lg:grid-cols-6 gap-2 h-auto bg-muted/50 p-2">
+          {environments.map((env, index) => (
+            <TabsTrigger 
+              key={env.id} 
+              value={index.toString()}
+              className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground text-xs lg:text-sm"
+            >
+              {env.name}
+            </TabsTrigger>
+          ))}
+        </TabsList>
+
+        {environments.map((env, index) => {
+          const data = formData[env.id];
+          if (!data) return null;
+          
+          return (
+            <TabsContent key={env.id} value={index.toString()}>
+              <Card>
+                <CardHeader>
+                  <CardTitle>{env.name}</CardTitle>
+                  <CardDescription>
+                    <div className="space-y-1 mt-2">
+                      <p><span className="font-medium">Caixilho:</span> {env.caixilhoCode}</p>
+                      <p><span className="font-medium">Tipo:</span> {env.caixilhoType}</p>
+                      <p><span className="font-medium">Quantidade:</span> {env.quantity} peça(s)</p>
+                    </div>
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-6">
+                  <div className="grid gap-6 md:grid-cols-2">
+                    <div className="space-y-2">
+                      <Label htmlFor={`releaseDate-${env.id}`}>Data de Liberação</Label>
+                      <Input
+                        id={`releaseDate-${env.id}`}
+                        type="date"
+                        value={data.releaseDate || ""}
+                        onChange={(e) => handleChange(env.id, "releaseDate", e.target.value || null)}
+                      />
+                    </div>
+                    
+                    <div className="space-y-2">
+                      <Label htmlFor={`responsibleConstruction-${env.id}`}>Responsável da Obra</Label>
+                      <Input
+                        id={`responsibleConstruction-${env.id}`}
+                        value={data.responsibleConstruction || ""}
+                        onChange={(e) => handleChange(env.id, "responsibleConstruction", e.target.value || null)}
+                        placeholder="Nome do responsável"
+                      />
+                    </div>
+                    
+                    <div className="space-y-2">
+                      <Label htmlFor={`responsibleSupplier-${env.id}`}>Responsável do Fornecedor</Label>
+                      <Input
+                        id={`responsibleSupplier-${env.id}`}
+                        value={data.responsibleSupplier || ""}
+                        onChange={(e) => handleChange(env.id, "responsibleSupplier", e.target.value || null)}
+                        placeholder="Nome do responsável"
+                      />
+                    </div>
+                  </div>
+                  
+                  <div className="space-y-2">
+                    <Label htmlFor={`observations-${env.id}`}>Observações</Label>
+                    <Textarea
+                      id={`observations-${env.id}`}
+                      value={data.observations || ""}
+                      onChange={(e) => handleChange(env.id, "observations", e.target.value || null)}
+                      placeholder="Adicione observações sobre este ambiente..."
+                      rows={4}
+                    />
+                  </div>
+                  
+                  <div className="border-t pt-6">
+                    <h3 className="font-semibold mb-4">Fotos e Vídeos</h3>
+                    <MediaUpload inspectionItemId={data.id} />
+                  </div>
+                  
+                  <div className="flex justify-end gap-3 pt-4 border-t">
+                    <Button 
+                      onClick={() => handleSave(env.id)}
+                      disabled={upsertMutation.isPending}
+                      className="gap-2"
+                      size="lg"
+                    >
+                      <Save className="h-4 w-4" />
+                      {upsertMutation.isPending ? "Salvando..." : "Salvar Dados"}
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            </TabsContent>
+          );
+        })}
+      </Tabs>
+    </div>
+  );
+}

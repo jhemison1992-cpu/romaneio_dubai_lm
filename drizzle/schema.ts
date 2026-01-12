@@ -25,4 +25,68 @@ export const users = mysqlTable("users", {
 export type User = typeof users.$inferSelect;
 export type InsertUser = typeof users.$inferInsert;
 
-// TODO: Add your tables here
+/**
+ * Ambientes do empreendimento com seus respectivos caixilhos
+ */
+export const environments = mysqlTable("environments", {
+  id: int("id").autoincrement().primaryKey(),
+  name: varchar("name", { length: 255 }).notNull(),
+  caixilhoCode: varchar("caixilho_code", { length: 50 }).notNull(),
+  caixilhoType: text("caixilho_type").notNull(),
+  quantity: int("quantity").notNull().default(1),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export type Environment = typeof environments.$inferSelect;
+export type InsertEnvironment = typeof environments.$inferInsert;
+
+/**
+ * Vistorias/romaneios criados pelos usuários
+ */
+export const inspections = mysqlTable("inspections", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("user_id").notNull().references(() => users.id),
+  title: varchar("title", { length: 255 }).notNull(),
+  status: mysqlEnum("status", ["draft", "in_progress", "completed"]).default("draft").notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type Inspection = typeof inspections.$inferSelect;
+export type InsertInspection = typeof inspections.$inferInsert;
+
+/**
+ * Itens individuais de cada vistoria (um por ambiente)
+ */
+export const inspectionItems = mysqlTable("inspection_items", {
+  id: int("id").autoincrement().primaryKey(),
+  inspectionId: int("inspection_id").notNull().references(() => inspections.id, { onDelete: "cascade" }),
+  environmentId: int("environment_id").notNull().references(() => environments.id),
+  releaseDate: timestamp("release_date"),
+  responsibleConstruction: varchar("responsible_construction", { length: 255 }),
+  responsibleSupplier: varchar("responsible_supplier", { length: 255 }),
+  observations: text("observations"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type InspectionItem = typeof inspectionItems.$inferSelect;
+export type InsertInspectionItem = typeof inspectionItems.$inferInsert;
+
+/**
+ * Arquivos de mídia (fotos e vídeos) associados aos itens de vistoria
+ */
+export const mediaFiles = mysqlTable("media_files", {
+  id: int("id").autoincrement().primaryKey(),
+  inspectionItemId: int("inspection_item_id").notNull().references(() => inspectionItems.id, { onDelete: "cascade" }),
+  fileKey: varchar("file_key", { length: 500 }).notNull(),
+  fileUrl: varchar("file_url", { length: 1000 }).notNull(),
+  fileName: varchar("file_name", { length: 255 }).notNull(),
+  mimeType: varchar("mime_type", { length: 100 }).notNull(),
+  fileSize: int("file_size").notNull(),
+  mediaType: mysqlEnum("media_type", ["photo", "video"]).notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export type MediaFile = typeof mediaFiles.$inferSelect;
+export type InsertMediaFile = typeof mediaFiles.$inferInsert;
