@@ -197,7 +197,7 @@ function DashboardLayoutContent({
                       className={`h-10 transition-all font-normal`}
                     >
                       <item.icon
-                        className={`h-4 w-4 ${isActive ? "text-gray-300" : "text-gray-400"}`}
+                        className={`h-4 w-4 ${isActive ? "text-white" : "text-gray-300"}`}
                       />
                       <span className="text-white">{item.label}</span>
                     </SidebarMenuButton>

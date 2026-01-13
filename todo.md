@@ -471,3 +471,14 @@
 - [x] Botões mostram: Instalação, Acabamento, Finalizado
 - [x] Botões ficam verdes quando concluídos com ícone de check
 - [x] Layout em grid de 3 colunas para os botões
+
+## Adicionar Data de Finalização na Tela de Detalhes
+- [ ] Adicionar campo "Data de Finalização" ao lado de "Data de Liberação" na tela de detalhes do ambiente
+
+## Correção: Ícones Invisíveis na Sidebar Colapsada
+- [ ] Corrigir cores dos ícones quando sidebar está colapsada
+- [ ] Garantir que ícones sejam visíveis em branco/cinza claro
+
+- [x] Corrigido cores dos ícones da sidebar (agora visíveis em branco/cinza claro)
+- [x] Adicionado Data de Finalização na tela de detalhes do ambiente
+- [x] Datas aparecem no cabeçalho do card junto com informações do caixilho

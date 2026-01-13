@@ -369,6 +369,12 @@ export default function InspectionDetail() {
                           <p><span className="font-medium">Caixilho:</span> {env.caixilhoCode}</p>
                           <p><span className="font-medium">Tipo:</span> {env.caixilhoType}</p>
                           <p><span className="font-medium">Quantidade:</span> {env.quantity} peça(s)</p>
+                          {env.startDate && (
+                            <p><span className="font-medium">Data de Liberação:</span> {new Date(env.startDate).toLocaleDateString('pt-BR')}</p>
+                          )}
+                          {env.endDate && (
+                            <p><span className="font-medium">Data de Finalização:</span> {new Date(env.endDate).toLocaleDateString('pt-BR')}</p>
+                          )}
                         </div>
                       </CardDescription>
                     </div>
