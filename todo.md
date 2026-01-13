@@ -217,3 +217,11 @@
 - [x] Implementar lógica de upload no frontend
 - [x] Adicionar botão para visualizar projeto do caixilho
 - [x] Testar upload e visualização de projeto - Dialog com 2 campos de upload funcionando!
+
+
+## Exclusão Individual de Fotos e Vídeos
+- [x] Adicionar botão de exclusão (ícone X ou lixeira) em cada foto na galeria - Já existia
+- [x] Adicionar botão de exclusão em cada vídeo na galeria - Já existia
+- [x] Implementar dialog de confirmação antes de excluir mídia - AlertDialog profissional
+- [x] Chamar endpoint de exclusão e atualizar galeria - Já implementado
+- [x] Testar exclusão de fotos e vídeos - Botões já existiam, melhoramos o dialog

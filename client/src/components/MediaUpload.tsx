@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 import { Input } from "@/components/ui/input";
 import { trpc } from "@/lib/trpc";
 import { Camera, Image as ImageIcon, Pencil, Save, Trash2, Video, X } from "lucide-react";
@@ -18,6 +19,7 @@ export function MediaUpload({ inspectionItemId, onUploadComplete }: MediaUploadP
   const [previewType, setPreviewType] = useState<"photo" | "video">("photo");
   const [editingCommentId, setEditingCommentId] = useState<number | null>(null);
   const [editingCommentText, setEditingCommentText] = useState("");
+  const [mediaToDelete, setMediaToDelete] = useState<number | null>(null);
   
   const photoInputRef = useRef<HTMLInputElement>(null);
   const videoInputRef = useRef<HTMLInputElement>(null);
@@ -57,6 +59,7 @@ export function MediaUpload({ inspectionItemId, onUploadComplete }: MediaUploadP
     onSuccess: () => {
       toast.success("Arquivo excluído!");
       refetch();
+      setMediaToDelete(null);
     },
     onError: (error) => {
       toast.error("Erro ao excluir: " + error.message);
@@ -103,8 +106,12 @@ export function MediaUpload({ inspectionItemId, onUploadComplete }: MediaUploadP
   };
   
   const handleDelete = (id: number) => {
-    if (confirm("Tem certeza que deseja excluir este arquivo?")) {
-      deleteMutation.mutate({ id });
+    setMediaToDelete(id);
+  };
+  
+  const confirmDelete = () => {
+    if (mediaToDelete !== null) {
+      deleteMutation.mutate({ id: mediaToDelete });
     }
   };
 
@@ -407,6 +414,26 @@ export function MediaUpload({ inspectionItemId, onUploadComplete }: MediaUploadP
           </div>
         </DialogContent>
       </Dialog>
+      
+      <AlertDialog open={mediaToDelete !== null} onOpenChange={(open) => !open && setMediaToDelete(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Confirmar Exclusão</AlertDialogTitle>
+            <AlertDialogDescription>
+              Tem certeza que deseja excluir esta mídia? Esta ação não pode ser desfeita.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancelar</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={confirmDelete}
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+            >
+              Excluir
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }
