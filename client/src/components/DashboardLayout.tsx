@@ -199,7 +199,7 @@ function DashboardLayoutContent({
                       <item.icon
                         className={`h-4 w-4 ${isActive ? "text-gray-300" : "text-gray-400"}`}
                       />
-                      <span>{item.label}</span>
+                      <span className="text-white">{item.label}</span>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
                 );
@@ -217,10 +217,10 @@ function DashboardLayoutContent({
                     </AvatarFallback>
                   </Avatar>
                   <div className="flex-1 min-w-0 group-data-[collapsible=icon]:hidden">
-                    <p className="text-sm font-medium truncate leading-none">
+                    <p className="text-sm font-medium truncate leading-none text-white">
                       {user?.name || "-"}
                     </p>
-                    <p className="text-xs text-muted-foreground truncate mt-1.5">
+                    <p className="text-xs text-gray-400 truncate mt-1.5">
                       {user?.email || "-"}
                     </p>
                   </div>

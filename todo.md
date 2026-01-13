@@ -459,3 +459,15 @@
 - [x] Adicionada verificação para evitar criação de etapas duplicadas
 - [x] Limpeza de etapas duplicadas no banco de dados
 - [x] Sistema agora garante apenas 3 etapas por ambiente
+
+## Correções Urgentes
+- [ ] Corrigir texto da sidebar (letras brancas invisíveis)
+- [ ] Corrigir nomes das etapas (aparecem "Medição" ao invés dos nomes corretos)
+- [ ] Mudar radio buttons para botões na evolução da instalação
+- [ ] Garantir que apareçam: Instalação, Acabamento, Finalizado
+
+- [x] Corrigido texto da sidebar (todas as letras agora visíveis em branco)
+- [x] Mudado de radio buttons para botões na evolução da instalação
+- [x] Botões mostram: Instalação, Acabamento, Finalizado
+- [x] Botões ficam verdes quando concluídos com ícone de check
+- [x] Layout em grid de 3 colunas para os botões

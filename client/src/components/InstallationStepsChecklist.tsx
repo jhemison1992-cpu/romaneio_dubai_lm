@@ -3,7 +3,7 @@ import { trpc } from "@/lib/trpc";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
-import { CheckCircle2, Circle, Loader2, FileText } from "lucide-react";
+import { Check, FileText, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { DeliveryTermDialog } from "./DeliveryTermDialog";
 
@@ -149,41 +149,30 @@ export function InstallationStepsChecklist({ inspectionItemId, environmentName }
             <Progress value={progress} className="h-2" />
           </div>
 
-          <div className="space-y-3">
+          <div className="grid grid-cols-3 gap-3">
             {steps.map((step: any) => {
               const isCompleted = step.isCompleted === 1;
 
               return (
-                <div
+                <Button
                   key={step.id}
-                  className={`flex items-center gap-3 p-3 rounded-lg border transition-colors ${
-                    isCompleted
-                      ? "bg-green-50 border-green-200"
-                      : "bg-background border-border hover:bg-muted/30"
+                  onClick={() => handleToggle(step.id, step.isCompleted)}
+                  disabled={toggleMutation.isPending}
+                  variant={isCompleted ? "default" : "outline"}
+                  className={`h-auto py-4 flex flex-col items-center gap-2 ${
+                    isCompleted 
+                      ? "bg-green-600 hover:bg-green-700 text-white" 
+                      : "hover:bg-muted"
                   }`}
                 >
-                  <button
-                    onClick={() => handleToggle(step.id, step.isCompleted)}
-                    disabled={toggleMutation.isPending}
-                    className="flex items-center gap-3 flex-1 text-left"
-                  >
-                    {isCompleted ? (
-                      <CheckCircle2 className="h-5 w-5 text-green-600 flex-shrink-0" />
-                    ) : (
-                      <Circle className="h-5 w-5 text-muted-foreground flex-shrink-0" />
-                    )}
-                    <div className="flex-1">
-                      <p className={`font-medium ${isCompleted ? "text-green-700" : ""}`}>
-                        {step.stepName}
-                      </p>
-                      {step.completedAt && (
-                        <p className="text-xs text-muted-foreground">
-                          Concluído em {new Date(step.completedAt).toLocaleDateString("pt-BR")}
-                        </p>
-                      )}
-                    </div>
-                  </button>
-                </div>
+                  {isCompleted && <Check className="h-5 w-5" />}
+                  <span className="font-medium">{step.stepName}</span>
+                  {step.completedAt && (
+                    <span className="text-xs opacity-80">
+                      {new Date(step.completedAt).toLocaleDateString("pt-BR")}
+                    </span>
+                  )}
+                </Button>
               );
             })}
           </div>
