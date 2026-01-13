@@ -11,11 +11,12 @@ import { DeliveryTermDialog } from "./DeliveryTermDialog";
 
 interface InstallationStepsChecklistProps {
   inspectionItemId: number;
+  environmentId: number;
   environmentName: string;
   totalQuantity: number; // Quantidade total de caixilhos do ambiente
 }
 
-export function InstallationStepsChecklist({ inspectionItemId, environmentName, totalQuantity }: InstallationStepsChecklistProps) {
+export function InstallationStepsChecklist({ inspectionItemId, environmentId, environmentName, totalQuantity }: InstallationStepsChecklistProps) {
   const [initialized, setInitialized] = useState(false);
   const [openDeliveryTerm, setOpenDeliveryTerm] = useState(false);
   const [responsibleName, setResponsibleName] = useState("");
@@ -43,6 +44,13 @@ export function InstallationStepsChecklist({ inspectionItemId, environmentName, 
     },
     onError: (error) => {
       console.error("Erro ao criar etapas:", error);
+    },
+  });
+
+  // Mutation para atualizar quantidade
+  const updateEnvironmentMutation = trpc.environments.update.useMutation({
+    onSuccess: () => {
+      toast.success("Data de finalização atualizada!");
     },
   });
 
@@ -92,10 +100,24 @@ export function InstallationStepsChecklist({ inspectionItemId, environmentName, 
       return;
     }
     
+    // Verificar se é a etapa "Finalizado" e se atingiu 100%
+    const step = steps.find((s: any) => s.id === stepId);
+    const isFinalizadoStep = step?.stepName === "Finalizado";
+    const willBe100Percent = quantity === totalQuantity;
+    
     updateQuantityMutation.mutate({
       stepId,
       completedQuantity: quantity,
     });
+    
+    // Auto-preencher data de finalização quando etapa "Finalizado" atinge 100%
+    if (isFinalizadoStep && willBe100Percent) {
+      const today = new Date().toISOString().split('T')[0];
+      updateEnvironmentMutation.mutate({
+        id: environmentId,
+        endDate: today,
+      });
+    }
   };
 
   const handleSaveDeliveryTerm = () => {

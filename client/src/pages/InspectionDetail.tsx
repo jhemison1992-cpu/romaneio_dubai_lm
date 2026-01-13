@@ -488,7 +488,8 @@ export default function InspectionDetail() {
                     <div className="border-t pt-6">
                       <h3 className="font-semibold mb-4">Evolução da Instalação</h3>
                       <InstallationStepsChecklist 
-                        inspectionItemId={data.id} 
+                        inspectionItemId={data.id}
+                        environmentId={data.environmentId}
                         environmentName={env.name}
                         totalQuantity={data.quantity || 1}
                       />

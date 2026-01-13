@@ -565,3 +565,15 @@
 - [x] Garantir que ambientes existentes tenham as 3 etapas criadas
 - [x] Sistema já configurado para criar etapas automaticamente
 - [x] Todas as funcionalidades disponíveis em todos os ambientes
+
+## Finalização - Sistema 100% Funcional
+
+- [ ] Adicionar botão de download do PDF do termo de entrega na interface
+- [ ] Implementar auto-preenchimento da data de finalização quando etapa "Finalizado" atinge 100%
+- [ ] Testar geração de PDF completo com todas as informações
+- [ ] Verificar funcionamento em todos os ambientes
+
+- [x] Adicionar botão de download do PDF do termo de entrega na interface
+- [x] Implementar auto-preenchimento da data de finalização quando etapa "Finalizado" atinge 100%
+- [x] Botão de PDF aparece quando todas as etapas atingem 100%
+- [x] Data de finalização preenchida automaticamente ao concluir última etapa
