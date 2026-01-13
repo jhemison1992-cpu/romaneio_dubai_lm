@@ -257,7 +257,7 @@ export function MediaUpload({ inspectionItemId, onUploadComplete }: MediaUploadP
                   <Button
                     variant="destructive"
                     size="icon"
-                    className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity h-8 w-8"
+                    className="absolute top-2 right-2 h-8 w-8 shadow-lg"
                     onClick={() => handleDelete(photo.id)}
                   >
                     <Trash2 className="h-4 w-4" />

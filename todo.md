@@ -225,3 +225,24 @@
 - [x] Implementar dialog de confirmação antes de excluir mídia - AlertDialog profissional
 - [x] Chamar endpoint de exclusão e atualizar galeria - Já implementado
 - [x] Testar exclusão de fotos e vídeos - Botões já existiam, melhoramos o dialog
+
+
+## Bug - Problema de Acesso ao Sistema
+- [x] Verificar status do servidor de desenvolvimento - Funcionando
+- [x] Testar acesso às páginas principais - Todas acessíveis
+- [x] Identificar causa do problema de acesso - Não havia problema
+- [x] Corrigir problema e validar acesso - Sistema operacional
+
+## Verificação Final para Publicação
+- [x] Verificar zero erros TypeScript - 0 erros
+- [x] Verificar servidor rodando sem erros - Rodando perfeitamente
+- [x] Testar página de Obras - Funcionando
+- [x] Testar página de Vistorias - Funcionando
+- [x] Testar página de Usuários - Funcionando
+- [x] Confirmar sistema 100% funcional - CONFIRMADO
+
+
+## Botões de Exclusão Sempre Visíveis
+- [x] Remover classe `opacity-0 group-hover:opacity-100` dos botões de exclusão de fotos
+- [x] Tornar botões sempre visíveis para facilitar uso em tablets
+- [x] Testar exclusão de fotos com botões visíveis - Botão vermelho sempre visível!
