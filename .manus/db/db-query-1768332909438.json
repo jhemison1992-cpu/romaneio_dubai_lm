@@ -1,0 +1,9 @@
+{
+  "query": "\nUPDATE installation_steps \nSET step_name = CASE \n  WHEN step_order = 1 THEN 'Instalação'\n  WHEN step_order = 2 THEN 'Acabamento'\n  WHEN step_order = 3 THEN 'Finalizado'\n  ELSE step_name\nEND\nWHERE step_order IN (1, 2, 3);\n",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway03.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 2RJ6pkiYcWrkG7s.7677514b54b3 --database AdJ4NUusdiWEA7xpHs45nc --execute \nUPDATE installation_steps \nSET step_name = CASE \n  WHEN step_order = 1 THEN 'Instalação'\n  WHEN step_order = 2 THEN 'Acabamento'\n  WHEN step_order = 3 THEN 'Finalizado'\n  ELSE step_name\nEND\nWHERE step_order IN (1, 2, 3);\n",
+  "rows": [],
+  "messages": [],
+  "stdout": "",
+  "stderr": "",
+  "execution_time_ms": 55
+}

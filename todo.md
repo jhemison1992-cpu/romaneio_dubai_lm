@@ -530,3 +530,11 @@
 - [x] Adicionado campo "Data de Finalização" ao lado de "Data de Liberação"
 - [x] Campo mostra endDate do ambiente (somente leitura)
 - [x] Reorganizado grid: Data Liberação | Data Finalização | Resp. Obra | Resp. Aluminc
+
+## Corrigir Nomes das Etapas (Medição → Instalação, Acabamento, Finalizado)
+- [ ] Atualizar nomes das etapas no banco de dados
+- [ ] Garantir que todas as etapas existentes sejam renomeadas
+- [ ] Garantir que novas etapas sejam criadas com nomes corretos
+
+- [x] Atualizado nomes das etapas no banco de dados (step_order 1,2,3 → Instalação, Acabamento, Finalizado)
+- [x] Todas as etapas existentes foram renomeadas
