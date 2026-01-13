@@ -256,3 +256,8 @@
 - [x] Alterar label "Responsável do Fornecedor" para "Responsável da Aluminc"
 - [x] Verificar todas as ocorrências na interface
 - [x] Testar visualização no formulário de vistoria
+
+## Correção de Bug: Erro de INSERT com valores inválidos
+- [x] Corrigir função upsertInspectionItem que está enviando valores com interrogação (?)
+- [x] Garantir que todos os valores sejam corretamente convertidos antes do INSERT
+- [x] Testar salvamento de dados do formulário

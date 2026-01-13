@@ -116,8 +116,13 @@ export const appRouter = router({
       .mutation(async ({ input }) => {
         const { upsertInspectionItem } = await import("./db");
         const data = {
-          ...input,
+          id: input.id,
+          inspectionId: input.inspectionId,
+          environmentId: input.environmentId,
           releaseDate: input.releaseDate ? new Date(input.releaseDate) : null,
+          responsibleConstruction: input.responsibleConstruction || null,
+          responsibleSupplier: input.responsibleSupplier || null,
+          observations: input.observations || null,
         };
         const id = await upsertInspectionItem(data);
         return { id };
