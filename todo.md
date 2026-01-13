@@ -597,3 +597,18 @@
 - [x] PDF do termo de entrega configurado
 - [x] Auto-preenchimento de datas funcionando
 - [x] Porcentagem por etapa implementada corretamente
+
+## Correção - Evolução da Instalação
+
+- [ ] Investigar erros na seção Evolução da Instalação
+- [ ] Verificar se as 3 etapas estão sendo criadas corretamente
+- [ ] Corrigir problemas de exibição dos botões
+- [ ] Garantir que todos os ambientes tenham as 3 etapas
+- [ ] Testar em múltiplos ambientes
+
+- [x] Investigar erros na seção Evolução da Instalação
+- [x] Verificar se as 3 etapas estão sendo criadas corretamente
+- [x] Corrigir problemas de exibição dos botões
+- [x] Garantir que todos os ambientes tenham as 3 etapas
+- [x] Todos os 4 ambientes agora têm Instalação, Acabamento e Finalizado
+- [x] Sistema criando etapas automaticamente para novos ambientes
