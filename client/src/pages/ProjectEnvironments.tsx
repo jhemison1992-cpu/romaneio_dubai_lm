@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { trpc } from "@/lib/trpc";
-import { ArrowLeft, Plus, Trash2 } from "lucide-react";
+import { ArrowLeft, Edit2, Plus, Trash2 } from "lucide-react";
 import { useState } from "react";
 import { useLocation, useRoute } from "wouter";
 import { toast } from "sonner";
@@ -16,6 +16,8 @@ export default function ProjectEnvironments() {
   const projectId = params?.id ? parseInt(params.id) : 0;
 
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+  const [editingEnvironment, setEditingEnvironment] = useState<any>(null);
   const [formData, setFormData] = useState({
     name: "",
     caixilhoCode: "",
@@ -52,6 +54,24 @@ export default function ProjectEnvironments() {
     },
     onError: (error) => {
       toast.error("Erro ao excluir ambiente: " + error.message);
+    },
+  });
+
+  const updateEnvironment = trpc.environments.update.useMutation({
+    onSuccess: () => {
+      toast.success("Ambiente atualizado com sucesso!");
+      setIsEditDialogOpen(false);
+      setEditingEnvironment(null);
+      setFormData({
+        name: "",
+        caixilhoCode: "",
+        caixilhoType: "",
+        quantity: 1,
+      });
+      refetch();
+    },
+    onError: (error) => {
+      toast.error("Erro ao atualizar ambiente: " + error.message);
     },
   });
 
@@ -240,14 +260,32 @@ export default function ProjectEnvironments() {
                       <span className="font-medium">Caixilho:</span> {env.caixilhoCode}
                     </CardDescription>
                   </div>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    onClick={() => handleDelete(env.id, env.name)}
-                    disabled={deleteEnvironment.isPending}
-                  >
-                    <Trash2 className="h-4 w-4" />
-                  </Button>
+                  <div className="flex gap-2">
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={() => {
+                        setEditingEnvironment(env);
+                        setFormData({
+                          name: env.name,
+                          caixilhoCode: env.caixilhoCode,
+                          caixilhoType: env.caixilhoType,
+                          quantity: env.quantity,
+                        });
+                        setIsEditDialogOpen(true);
+                      }}
+                    >
+                      <Edit2 className="h-4 w-4" />
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={() => handleDelete(env.id, env.name)}
+                      disabled={deleteEnvironment.isPending}
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </Button>
+                  </div>
                 </div>
               </CardHeader>
               <CardContent>
@@ -265,6 +303,80 @@ export default function ProjectEnvironments() {
           ))}
         </div>
       )}
+
+      {/* Dialog de Edição */}
+      <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
+        <DialogContent className="max-w-2xl">
+          <DialogHeader>
+            <DialogTitle>Editar Ambiente</DialogTitle>
+            <DialogDescription>
+              Atualize os dados do ambiente
+            </DialogDescription>
+          </DialogHeader>
+          <form onSubmit={(e) => {
+            e.preventDefault();
+            if (!formData.name.trim() || !formData.caixilhoCode.trim() || !formData.caixilhoType.trim()) {
+              toast.error("Preencha todos os campos obrigatórios");
+              return;
+            }
+            updateEnvironment.mutate({
+              id: editingEnvironment.id,
+              ...formData,
+            });
+          }} className="space-y-4 mt-4">
+            <div className="space-y-2">
+              <Label htmlFor="edit-name">Nome do Ambiente *</Label>
+              <Input
+                id="edit-name"
+                value={formData.name}
+                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                placeholder="Ex: Piscina Coberta"
+                required
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="edit-caixilhoCode">Código do Caixilho *</Label>
+              <Input
+                id="edit-caixilhoCode"
+                value={formData.caixilhoCode}
+                onChange={(e) => setFormData({ ...formData, caixilhoCode: e.target.value })}
+                placeholder="Ex: AL 008 (CA08)"
+                required
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="edit-caixilhoType">Tipo do Caixilho *</Label>
+              <Textarea
+                id="edit-caixilhoType"
+                value={formData.caixilhoType}
+                onChange={(e) => setFormData({ ...formData, caixilhoType: e.target.value })}
+                placeholder="Ex: Fixo 4 Módulos com Bandeira de Tela, com Travessa - Linha-32"
+                rows={3}
+                required
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="edit-quantity">Quantidade *</Label>
+              <Input
+                id="edit-quantity"
+                type="number"
+                min="1"
+                value={formData.quantity}
+                onChange={(e) => setFormData({ ...formData, quantity: parseInt(e.target.value) || 1 })}
+                required
+              />
+            </div>
+            <div className="flex justify-end gap-3 pt-4">
+              <Button type="button" variant="outline" onClick={() => setIsEditDialogOpen(false)}>
+                Cancelar
+              </Button>
+              <Button type="submit" disabled={updateEnvironment.isPending}>
+                {updateEnvironment.isPending ? "Salvando..." : "Salvar Alterações"}
+              </Button>
+            </div>
+          </form>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

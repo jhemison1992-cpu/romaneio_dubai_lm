@@ -358,6 +358,19 @@ export const appRouter = router({
         
         return { url, fileKey };
       }),
+    update: publicProcedure
+      .input((val: unknown) => z.object({
+        id: z.number(),
+        name: z.string().optional(),
+        caixilhoCode: z.string().optional(),
+        caixilhoType: z.string().optional(),
+        quantity: z.number().optional(),
+      }).parse(val))
+      .mutation(async ({ input }) => {
+        const { id, ...data } = input;
+        await dbProjects.updateEnvironment(id, data);
+        return { success: true };
+      }),
     delete: publicProcedure
       .input((val: unknown) => z.object({ id: z.number() }).parse(val))
       .mutation(async ({ input }) => {

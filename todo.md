@@ -288,3 +288,11 @@
 - [ ] Integrar upload na edição de usuários existentes
 - [ ] Exibir foto de perfil na lista de usuários e no header
 - [x] Testar upload, visualização e atualização de foto
+
+## Nova Funcionalidade: Edição de Ambientes
+- [x] Adicionar botão de editar ao lado do botão de excluir na lista de ambientes
+- [x] Criar dialog de edição com todos os campos do ambiente
+- [x] Implementar router environments.update no backend
+- [x] Criar função updateEnvironment no db.ts
+- [x] Garantir que ambientes criados sejam 100% funcionais e editáveis
+- [x] Testar criação, edição e exclusão de ambientes
