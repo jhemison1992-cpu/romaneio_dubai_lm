@@ -501,3 +501,24 @@
 - [x] Alterado texto e ícones do menu para preto
 - [x] Removidas todas as classes de cor forçada (bg-[#111827], text-white)
 - [x] Ajustado hover states para fundo claro
+
+## Remover Barra Preta do Cabeçalho
+- [ ] Remover fundo preto do cabeçalho superior
+- [ ] Deixar cabeçalho com fundo claro
+
+## Reverter para Tema Escuro (Fundo Preto + Texto Branco)
+- [ ] Alterar tema para dark mode
+- [ ] Fundo preto/escuro em toda interface
+- [ ] Texto branco para máximo contraste
+- [ ] Sidebar escura com texto branco
+
+## Ajuste: Apenas Header Superior com Fundo Preto
+- [ ] Reverter tema geral para light (fundo claro)
+- [ ] Aplicar fundo preto APENAS no header/cabeçalho da sidebar
+- [ ] Texto branco apenas no header
+- [ ] Resto da interface mantém fundo claro e texto preto
+
+- [x] Revertido tema geral para light (fundo claro + texto preto)
+- [x] Aplicado fundo preto (#111827) APENAS no header da sidebar
+- [x] Texto branco apenas no header (ícone e título)
+- [x] Resto da interface mantém fundo claro e texto preto

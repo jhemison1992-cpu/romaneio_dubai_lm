@@ -160,7 +160,7 @@ function DashboardLayoutContent({
           className="border-r"
           disableTransition={isResizing}
         >
-          <SidebarHeader className="h-16 justify-center">
+          <SidebarHeader className="h-16 justify-center bg-[#111827]">
             <div className="flex items-center gap-3 px-2 transition-all w-full">
               <button
                 onClick={toggleSidebar}
@@ -176,7 +176,7 @@ function DashboardLayoutContent({
                     alt="ALUMINC" 
                     className="h-8 w-auto object-contain"
                   />
-                  <span className="font-semibold tracking-tight truncate text-sm text-white">
+                  <span className="text-lg font-semibold tracking-tight truncate text-white">
                     Romaneio ALUMINC
                   </span>
                 </div>
