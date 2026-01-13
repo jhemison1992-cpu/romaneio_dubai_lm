@@ -246,3 +246,13 @@
 - [x] Remover classe `opacity-0 group-hover:opacity-100` dos botões de exclusão de fotos
 - [x] Tornar botões sempre visíveis para facilitar uso em tablets
 - [x] Testar exclusão de fotos com botões visíveis - Botão vermelho sempre visível!
+
+## Correção de Bug: Erro ao Salvar Itens de Vistoria
+- [x] Corrigir função upsertInspectionItem para garantir que campos obrigatórios não sejam enviados como undefined
+- [x] Converter undefined para null nos campos opcionais antes do INSERT
+- [x] Testar salvamento de dados do formulário de vistoria
+
+## Melhoria de Nomenclatura - Campo Responsável
+- [x] Alterar label "Responsável do Fornecedor" para "Responsável da Aluminc"
+- [x] Verificar todas as ocorrências na interface
+- [x] Testar visualização no formulário de vistoria

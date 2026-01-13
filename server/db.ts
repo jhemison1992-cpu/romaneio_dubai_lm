@@ -222,10 +222,10 @@ export async function upsertInspectionItem(data: {
     const result = await db.insert(inspectionItems).values({
       inspectionId: data.inspectionId,
       environmentId: data.environmentId,
-      releaseDate: data.releaseDate,
-      responsibleConstruction: data.responsibleConstruction,
-      responsibleSupplier: data.responsibleSupplier,
-      observations: data.observations,
+      releaseDate: data.releaseDate ?? null,
+      responsibleConstruction: data.responsibleConstruction ?? null,
+      responsibleSupplier: data.responsibleSupplier ?? null,
+      observations: data.observations ?? null,
     });
     return result[0].insertId;
   }

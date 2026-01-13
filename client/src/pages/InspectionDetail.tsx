@@ -416,7 +416,7 @@ export default function InspectionDetail() {
                     </div>
                     
                     <div className="space-y-2">
-                      <Label htmlFor={`responsibleSupplier-${env.id}`}>Responsável do Fornecedor</Label>
+                      <Label htmlFor={`responsibleSupplier-${env.id}`}>Responsável da Aluminc</Label>
                       <Input
                         id={`responsibleSupplier-${env.id}`}
                         value={data.responsibleSupplier || ""}
@@ -445,7 +445,7 @@ export default function InspectionDetail() {
               onChange={(sig) => handleChange(env.id, "signatureConstruction", sig)}
             />
             <SignaturePad
-              label="Assinatura do Responsável do Fornecedor"
+              label="Assinatura do Responsável da Aluminc"
               value={formData[env.id]?.signatureSupplier}
               onChange={(sig) => handleChange(env.id, "signatureSupplier", sig)}
             />                  </div>
