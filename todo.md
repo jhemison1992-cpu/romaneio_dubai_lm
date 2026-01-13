@@ -390,3 +390,53 @@
 - [x] Campos de data já existem no formulário de edição em ProjectEnvironments.tsx
 - [x] Datas agora são exibidas nos cards de ambiente para visualização rápida
 - [x] Backend atualizado para aceitar e salvar datas
+
+## Refatoração: Sistema de Evolução com 3 Etapas e Termo de Entrega
+- [ ] Alterar etapas de 5 para 3 (Instalação, Acabamento, Finalizado)
+- [ ] Adicionar campo de assinatura do responsável no termo de entrega
+- [ ] Criar componente de termo de entrega com assinatura
+- [ ] Implementar geração de PDF do termo de entrega
+- [ ] Ajustar layout: Data de Finalização ao lado da Data de Liberação
+- [ ] Testar fluxo completo das 3 etapas
+- [ ] Testar geração de PDF do termo
+
+## Facelift: Design Similar ao Sistema ALUMINC
+- [ ] Atualizar paleta de cores: azul royal (#1e40af ou similar) + amarelo/dourado (#fbbf24)
+- [ ] Redesenhar cabeçalho com fundo azul royal
+- [ ] Estilizar botões principais com amarelo/dourado
+- [ ] Adicionar badges de status azuis nos cards
+- [ ] Redesenhar cards de obras com fotos em grid
+- [ ] Atualizar sidebar com novo esquema de cores
+- [ ] Adicionar filtros e pesquisa no topo das páginas
+- [ ] Melhorar espaçamento e tipografia geral
+
+## PDF do Termo de Entrega - Completo
+- [ ] Incluir todas as informações do ambiente (nome, código, tipo, quantidade)
+- [ ] Incluir Data de Liberação e Data de Finalização
+- [ ] Incluir evolução das 3 etapas (Instalação, Acabamento, Finalizado) com datas
+- [ ] Incluir todas as fotos adicionadas (thumbnails)
+- [ ] Incluir links para vídeos
+- [ ] Incluir termo de entrega com declaração
+- [ ] Incluir nome e assinatura do responsável
+- [ ] Incluir informações da obra (nome, endereço, contratante)
+- [ ] Incluir logo ALUMINC no cabeçalho
+- [ ] Testar geração de PDF completo
+
+## Atualização: Sistema de 3 Etapas e PDF Completo
+- [x] Reduzir etapas para 3 (Instalação, Acabamento, Finalizado)
+- [x] Criar componente DeliveryTermDialog
+- [x] Adicionar endpoints getById e saveDeliveryTerm
+- [x] Criar gerador de PDF completo do termo de entrega
+- [x] PDF inclui informações do ambiente e obra
+- [x] PDF inclui evolução das 3 etapas
+- [x] PDF inclui fotos e vídeos
+- [x] PDF inclui termo com assinatura
+
+## Finalização: Todas as Funcionalidades Implementadas
+- [x] Sistema de 3 etapas (Instalação, Acabamento, Finalizado) funcionando
+- [x] Termo de entrega com assinatura implementado
+- [x] Geração de PDF completo com todas as informações
+- [x] PDF inclui fotos e vídeos
+- [x] Layout de datas lado a lado em todos os formulários
+- [x] Facelift visual aplicado (sidebar azul royal, botões amarelos)
+- [x] Cores do sistema atualizadas para match com ALUMINC

@@ -469,7 +469,10 @@ export default function InspectionDetail() {
                   {data.id && (
                     <div className="border-t pt-6">
                       <h3 className="font-semibold mb-4">Evolução da Instalação</h3>
-                      <InstallationStepsChecklist inspectionItemId={data.id} />
+                      <InstallationStepsChecklist 
+                        inspectionItemId={data.id} 
+                        environmentName={env.name}
+                      />
                     </div>
                   )}
                   

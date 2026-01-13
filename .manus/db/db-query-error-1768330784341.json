@@ -1,0 +1,8 @@
+{
+  "query": "ALTER TABLE inspection_items \nADD COLUMN delivery_term_signature TEXT AFTER signature_supplier,\nADD COLUMN delivery_term_responsible VARCHAR(255) AFTER delivery_term_signature;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway03.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 2RJ6pkiYcWrkG7s.7677514b54b3 --database AdJ4NUusdiWEA7xpHs45nc --execute ALTER TABLE inspection_items \nADD COLUMN delivery_term_signature TEXT AFTER signature_supplier,\nADD COLUMN delivery_term_responsible VARCHAR(255) AFTER delivery_term_signature;",
+  "returncode": 1,
+  "logs": [
+    "ERROR 1054 (42S22) at line 1: Unknown column 'delivery_term_signature' in 'inspection_items'"
+  ]
+}

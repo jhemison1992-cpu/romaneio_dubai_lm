@@ -157,17 +157,17 @@ function DashboardLayoutContent({
       <div className="relative" ref={sidebarRef}>
         <Sidebar
           collapsible="icon"
-          className="border-r-0"
+          className="border-r-0 bg-[#1e40af] text-white"
           disableTransition={isResizing}
         >
-          <SidebarHeader className="h-16 justify-center">
+          <SidebarHeader className="h-16 justify-center bg-[#1e40af]">
             <div className="flex items-center gap-3 px-2 transition-all w-full">
               <button
                 onClick={toggleSidebar}
                 className="h-8 w-8 flex items-center justify-center hover:bg-accent rounded-lg transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-ring shrink-0"
                 aria-label="Toggle navigation"
               >
-                <PanelLeft className="h-4 w-4 text-muted-foreground" />
+                <PanelLeft className="h-4 w-4 text-white" />
               </button>
               {!isCollapsed ? (
                 <div className="flex items-center gap-3 min-w-0">
@@ -176,7 +176,7 @@ function DashboardLayoutContent({
                     alt="ALUMINC" 
                     className="h-8 w-auto object-contain"
                   />
-                  <span className="font-semibold tracking-tight truncate text-sm">
+                  <span className="font-semibold tracking-tight truncate text-sm text-white">
                     Romaneio ALUMINC
                   </span>
                 </div>
@@ -197,7 +197,7 @@ function DashboardLayoutContent({
                       className={`h-10 transition-all font-normal`}
                     >
                       <item.icon
-                        className={`h-4 w-4 ${isActive ? "text-primary" : ""}`}
+                        className={`h-4 w-4 ${isActive ? "text-[#fbbf24]" : "text-white"}`}
                       />
                       <span>{item.label}</span>
                     </SidebarMenuButton>

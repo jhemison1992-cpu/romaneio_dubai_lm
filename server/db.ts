@@ -197,6 +197,14 @@ export async function getInspectionItems(inspectionId: number) {
     .where(eq(inspectionItems.inspectionId, inspectionId));
 }
 
+export async function getInspectionItemById(id: number) {
+  const db = await getDb();
+  if (!db) return null;
+  const { inspectionItems } = await import("../drizzle/schema");
+  const result = await db.select().from(inspectionItems).where(eq(inspectionItems.id, id)).limit(1);
+  return result[0] || null;
+}
+
 export async function upsertInspectionItem(data: {
   id?: number;
   inspectionId: number;
@@ -235,6 +243,21 @@ export async function upsertInspectionItem(data: {
     });
     return result[0].insertId;
   }
+}
+
+export async function saveDeliveryTerm(
+  inspectionItemId: number,
+  responsibleName: string,
+  signature: string
+) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  const { inspectionItems } = await import("../drizzle/schema");
+  
+  await db.update(inspectionItems).set({
+    deliveryTermResponsible: responsibleName,
+    deliveryTermSignature: signature,
+  }).where(eq(inspectionItems.id, inspectionItemId));
 }
 
 // Media Files queries

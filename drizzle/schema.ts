@@ -111,6 +111,8 @@ export const inspectionItems = mysqlTable("inspection_items", {
   observations: text("observations"),
   signatureConstruction: text("signature_construction"), // Base64 da assinatura do responsável da obra
   signatureSupplier: text("signature_supplier"), // Base64 da assinatura do responsável do fornecedor
+  deliveryTermSignature: text("delivery_term_signature"), // Base64 da assinatura do responsável no termo de entrega
+  deliveryTermResponsible: varchar("delivery_term_responsible", { length: 255 }), // Nome do responsável que assinou o termo
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
 });

@@ -98,6 +98,13 @@ export const appRouter = router({
         return await getInspectionItems(input.inspectionId);
       }),
     
+    getById: publicProcedure
+      .input((val: unknown) => z.object({ id: z.number() }).parse(val))
+      .query(async ({ input }) => {
+        const { getInspectionItemById } = await import("./db");
+        return await getInspectionItemById(input.id);
+      }),
+    
     upsert: publicProcedure
       .input((val: unknown) => {
 
@@ -128,6 +135,22 @@ export const appRouter = router({
         };
         const id = await upsertInspectionItem(data);
         return { id };
+      }),
+    
+    saveDeliveryTerm: publicProcedure
+      .input((val: unknown) => z.object({
+        inspectionItemId: z.number(),
+        responsibleName: z.string(),
+        signature: z.string(),
+      }).parse(val))
+      .mutation(async ({ input }) => {
+        const { saveDeliveryTerm } = await import("./db");
+        await saveDeliveryTerm(
+          input.inspectionItemId,
+          input.responsibleName,
+          input.signature
+        );
+        return { success: true };
       }),
   }),
 

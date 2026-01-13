@@ -42,6 +42,83 @@ async function startServer() {
   // Upload planta route
   app.post("/api/upload-planta", upload.single("file"), handleUploadPlanta);
   
+  // Generate delivery term PDF route
+  app.get("/api/generate-delivery-term-pdf/:inspectionItemId", async (req, res) => {
+    try {
+      const inspectionItemId = parseInt(req.params.inspectionItemId);
+      const { generateDeliveryTermPDF } = await import("../deliveryTermPdfGenerator");
+      const { getDb, getMediaFilesByItem } = await import("../db");
+      const { getInstallationSteps } = await import("../db-installation-steps");
+      
+      const db = await getDb();
+      if (!db) throw new Error("Database not available");
+      
+      const { inspectionItems, environments, inspections, projects } = await import("../../drizzle/schema");
+      const { eq } = await import("drizzle-orm");
+      
+      // Buscar dados do item
+      const itemResult = await db
+        .select({
+          item: inspectionItems,
+          environment: environments,
+          inspection: inspections,
+          project: projects,
+        })
+        .from(inspectionItems)
+        .leftJoin(environments, eq(inspectionItems.environmentId, environments.id))
+        .leftJoin(inspections, eq(inspectionItems.inspectionId, inspections.id))
+        .leftJoin(projects, eq(inspections.projectId, projects.id))
+        .where(eq(inspectionItems.id, inspectionItemId))
+        .limit(1);
+      
+      if (!itemResult[0]) {
+        res.status(404).json({ error: "Item não encontrado" });
+        return;
+      }
+      
+      const { item, environment, inspection, project } = itemResult[0];
+      
+      // Buscar etapas de instalação
+      const steps = await getInstallationSteps(inspectionItemId);
+      
+      // Buscar mídias
+      const media = await getMediaFilesByItem(inspectionItemId);
+      
+      // Preparar dados para o PDF
+      const pdfData = {
+        environment: {
+          name: environment?.name || "",
+          caixilhoCode: environment?.caixilhoCode || "",
+          caixilhoType: environment?.caixilhoType || "",
+          quantity: environment?.quantity || 0,
+          startDate: environment?.startDate || null,
+          endDate: environment?.endDate || null,
+        },
+        project: {
+          name: project?.name || "",
+          address: project?.address || "",
+          contractor: project?.contractor || "",
+          technicalManager: project?.technicalManager || "",
+        },
+        installationSteps: steps,
+        media: media,
+        deliveryTerm: {
+          responsibleName: item.deliveryTermResponsible || "",
+          signature: item.deliveryTermSignature || "",
+        },
+      };
+      
+      const pdfBuffer = await generateDeliveryTermPDF(pdfData);
+      
+      res.setHeader("Content-Type", "application/pdf");
+      res.setHeader("Content-Disposition", `attachment; filename=termo-entrega-${environment?.name || 'ambiente'}.pdf`);
+      res.send(pdfBuffer);
+    } catch (error) {
+      console.error("Erro ao gerar PDF:", error);
+      res.status(500).json({ error: "Erro ao gerar PDF" });
+    }
+  });
+  
   // OAuth callback under /api/oauth/callback
   registerOAuthRoutes(app);
   // tRPC API

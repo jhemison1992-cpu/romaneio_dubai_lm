@@ -6,11 +6,9 @@ import { eq } from "drizzle-orm";
  * Etapas padrão da instalação do caixilho
  */
 export const DEFAULT_STEPS = [
-  { name: "Medição", order: 1 },
-  { name: "Fabricação", order: 2 },
-  { name: "Instalação", order: 3 },
-  { name: "Acabamento", order: 4 },
-  { name: "Finalizado", order: 5 },
+  { name: "Instalação", order: 1 },
+  { name: "Acabamento", order: 2 },
+  { name: "Finalizado", order: 3 },
 ];
 
 /**
