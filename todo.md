@@ -450,3 +450,12 @@
 - [x] Sidebar em tom preto/cinza escuro (#111827)
 - [x] Botões principais em cinza escuro (#1f2937)
 - [x] Ícones ativos em cinza claro, inativos em cinza médio
+
+## Correção: Etapas Duplicadas
+- [ ] Verificar e corrigir criação de etapas duplicadas
+- [ ] Garantir que apenas 3 etapas sejam criadas (Instalação, Acabamento, Finalizado)
+- [ ] Limpar etapas duplicadas existentes no banco de dados
+
+- [x] Adicionada verificação para evitar criação de etapas duplicadas
+- [x] Limpeza de etapas duplicadas no banco de dados
+- [x] Sistema agora garante apenas 3 etapas por ambiente

@@ -18,6 +18,17 @@ export async function createDefaultSteps(inspectionItemId: number) {
   const db = await getDb();
   if (!db) throw new Error("Database not available");
   
+  // Verificar se já existem etapas para este item
+  const existingSteps = await db
+    .select()
+    .from(installationSteps)
+    .where(eq(installationSteps.inspectionItemId, inspectionItemId));
+  
+  // Se já existem etapas, não criar novamente
+  if (existingSteps.length > 0) {
+    return;
+  }
+  
   const steps = DEFAULT_STEPS.map((step) => ({
     inspectionItemId,
     stepName: step.name,
