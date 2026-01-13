@@ -378,6 +378,7 @@ export const appRouter = router({
         password: z.string(),
         fullName: z.string(),
         role: z.enum(["user", "admin"]),
+        profilePhoto: z.string().nullable().optional(),
       }).parse(val))
       .mutation(async ({ input }) => {
         const { createUser } = await import("./db");

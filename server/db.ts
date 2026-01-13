@@ -289,6 +289,7 @@ export async function createUser(data: {
   password: string;
   fullName: string;
   role: "user" | "admin";
+  profilePhoto?: string | null;
 }) {
   const db = await getDb();
   if (!db) throw new Error("Database not available");
@@ -302,6 +303,7 @@ export async function createUser(data: {
     passwordHash,
     name: data.fullName,
     role: data.role,
+    profilePhoto: data.profilePhoto || null,
     active: 1,
   });
   

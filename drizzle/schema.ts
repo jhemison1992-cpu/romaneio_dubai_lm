@@ -34,6 +34,7 @@ export const appUsers = mysqlTable("app_users", {
   passwordHash: varchar("password_hash", { length: 255 }).notNull(),
   name: varchar("name", { length: 100 }).notNull(),
   role: mysqlEnum("role", ["user", "admin"]).default("user").notNull(),
+  profilePhoto: text("profile_photo"), // URL da foto de perfil armazenada no S3
   active: int("active").default(1).notNull(), // 1 = ativo, 0 = inativo
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().onUpdateNow().notNull(),

@@ -30,6 +30,7 @@ import { Loader2, Plus, Shield, ShieldAlert, Trash2, UserCog } from "lucide-reac
 import { useState } from "react";
 import { toast } from "sonner";
 import DashboardLayout from "@/components/DashboardLayout";
+import { ProfilePhotoUpload } from "@/components/ProfilePhotoUpload";
 
 export default function Users() {
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
@@ -38,6 +39,7 @@ export default function Users() {
     password: "",
     name: "",
     role: "user" as "user" | "admin",
+    profilePhoto: null as string | null,
   });
 
   const { data: users, isLoading, refetch } = trpc.users.list.useQuery();
@@ -45,7 +47,7 @@ export default function Users() {
     onSuccess: () => {
       toast.success("Usuário criado com sucesso!");
       setIsCreateDialogOpen(false);
-      setNewUser({ username: "", password: "", name: "", role: "user" });
+      setNewUser({ username: "", password: "", name: "", role: "user", profilePhoto: null });
       refetch();
     },
     onError: (error) => {
@@ -74,6 +76,7 @@ export default function Users() {
       password: newUser.password,
       fullName: newUser.name,
       role: newUser.role,
+      profilePhoto: newUser.profilePhoto,
     });
   };
 
@@ -193,6 +196,12 @@ export default function Users() {
             </DialogHeader>
 
             <div className="space-y-4 py-4">
+              <ProfilePhotoUpload
+                currentPhotoUrl={newUser.profilePhoto}
+                onPhotoChange={(photoUrl) => setNewUser({ ...newUser, profilePhoto: photoUrl })}
+                userName={newUser.name || "Novo Usuário"}
+              />
+
               <div className="space-y-2">
                 <Label htmlFor="name">Nome Completo *</Label>
                 <Input

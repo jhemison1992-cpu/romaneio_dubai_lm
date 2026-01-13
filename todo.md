@@ -279,3 +279,12 @@
 - [x] Investigar por que upload de mídia não está funcionando
 - [x] Corrigir componente MediaUpload ou backend
 - [x] Testar upload de fotos e vídeos
+
+## Nova Funcionalidade: Foto de Perfil de Usuário
+- [x] Adicionar campo `profilePhoto` na tabela `user` do schema
+- [x] Executar migração do banco de dados (db:push)
+- [x] Criar componente de upload de foto de perfil
+- [x] Integrar upload na criação de novos usuários
+- [ ] Integrar upload na edição de usuários existentes
+- [ ] Exibir foto de perfil na lista de usuários e no header
+- [x] Testar upload, visualização e atualização de foto
