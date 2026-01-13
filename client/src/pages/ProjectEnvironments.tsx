@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { trpc } from "@/lib/trpc";
-import { ArrowLeft, Edit2, Plus, Trash2 } from "lucide-react";
+import { ArrowLeft, Edit2, FileText, Plus, Trash2 } from "lucide-react";
 import { useState } from "react";
 import { useLocation, useRoute } from "wouter";
 import { toast } from "sonner";
@@ -85,6 +85,8 @@ export default function ProjectEnvironments() {
     
     let plantaFileKey: string | undefined;
     let plantaFileUrl: string | undefined;
+    let projectFileKey: string | undefined;
+    let projectFileUrl: string | undefined;
     
     // Upload da planta se fornecida
     if (plantaFile) {
@@ -113,10 +115,39 @@ export default function ProjectEnvironments() {
       }
     }
     
+    // Upload do projeto se fornecido
+    if (projectFile) {
+      try {
+        setUploadingPlanta(true);
+        const formData = new FormData();
+        formData.append('file', projectFile);
+        
+        // Upload para S3
+        const response = await fetch('/api/upload-planta', {
+          method: 'POST',
+          body: formData,
+        });
+        
+        if (!response.ok) throw new Error('Erro ao fazer upload do projeto');
+        
+        const data = await response.json();
+        projectFileKey = data.fileKey;
+        projectFileUrl = data.fileUrl;
+      } catch (error) {
+        toast.error('Erro ao fazer upload do projeto');
+        setUploadingPlanta(false);
+        return;
+      } finally {
+        setUploadingPlanta(false);
+      }
+    }
+    
     createEnvironment.mutate({
       projectId,
       ...formData,
       technicalDrawingUrl: plantaFileUrl,
+      projectFileKey,
+      projectFileUrl,
     });
   };
 
@@ -213,7 +244,7 @@ export default function ProjectEnvironments() {
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="planta">Planta/Projeto do Caixilho (PDF)</Label>
+                <Label htmlFor="planta">Planta Técnica (PDF)</Label>
                 <Input
                   id="planta"
                   type="file"
@@ -221,7 +252,18 @@ export default function ProjectEnvironments() {
                   onChange={(e) => setPlantaFile(e.target.files?.[0] || null)}
                   className="cursor-pointer"
                 />
-                <p className="text-xs text-muted-foreground">Opcional: Anexe o PDF da planta técnica do caixilho</p>
+                <p className="text-xs text-muted-foreground">Opcional: Anexe o PDF da planta técnica</p>
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="projeto">Projeto do Caixilho (PDF)</Label>
+                <Input
+                  id="projeto"
+                  type="file"
+                  accept=".pdf"
+                  onChange={(e) => setProjectFile(e.target.files?.[0] || null)}
+                  className="cursor-pointer"
+                />
+                <p className="text-xs text-muted-foreground">Opcional: Anexe o PDF do projeto do caixilho</p>
               </div>
               <div className="flex justify-end gap-3 pt-4">
                 <Button type="button" variant="outline" onClick={() => setIsCreateDialogOpen(false)}>
@@ -290,13 +332,35 @@ export default function ProjectEnvironments() {
                 </div>
               </CardHeader>
               <CardContent>
-                <div className="space-y-2 text-sm">
+                <div className="space-y-3 text-sm">
                   <div>
                     <span className="font-medium">Tipo:</span>
                     <p className="text-muted-foreground">{env.caixilhoType}</p>
                   </div>
                   <div>
                     <span className="font-medium">Quantidade:</span> {env.quantity} peça(s)
+                  </div>
+                  <div className="flex gap-2 mt-3">
+                    {env.technicalDrawingUrl && (
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => window.open(env.technicalDrawingUrl, '_blank')}
+                      >
+                        <FileText className="mr-2 h-4 w-4" />
+                        Ver Planta
+                      </Button>
+                    )}
+                    {env.projectFileUrl && (
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => window.open(env.projectFileUrl, '_blank')}
+                      >
+                        <FileText className="mr-2 h-4 w-4" />
+                        Ver Projeto
+                      </Button>
+                    )}
                   </div>
                 </div>
               </CardContent>

@@ -326,3 +326,9 @@
 - [x] Criar dialog de edição de usuário (nome, senha, foto, role)
 - [x] Implementar router users.update no backend
 - [x] Testar edição de usuários
+
+## Correção: Upload de Projeto do Caixilho
+- [x] Adicionar campo de upload de projeto ao criar novo ambiente (dialog de criação)
+- [x] Adicionar botão "Ver Projeto" nos cards de ambiente quando projeto existir
+- [x] Testar upload de projeto ao criar ambiente
+- [x] Testar visualização de projeto nos cards
