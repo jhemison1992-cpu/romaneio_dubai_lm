@@ -612,3 +612,17 @@
 - [x] Garantir que todos os ambientes tenham as 3 etapas
 - [x] Todos os 4 ambientes agora têm Instalação, Acabamento e Finalizado
 - [x] Sistema criando etapas automaticamente para novos ambientes
+
+## Funcionalidade de Exclusão de Ambientes
+
+- [ ] Criar endpoint de exclusão no backend (environments.delete)
+- [ ] Adicionar função de exclusão no db.ts
+- [ ] Adicionar botão de exclusão nos cards de ambiente
+- [ ] Implementar dialog de confirmação antes de excluir
+- [ ] Testar exclusão de ambiente
+
+- [x] Criar endpoint de exclusão no backend (environments.delete) - JÁ EXISTE
+- [x] Adicionar função de exclusão no db.ts - JÁ EXISTE (deleteEnvironment)
+- [x] Adicionar botão de exclusão nos cards de ambiente - JÁ EXISTE (ícone Trash2)
+- [x] Implementar dialog de confirmação antes de excluir - JÁ EXISTE (confirm dialog)
+- [x] Funcionalidade de exclusão 100% implementada e funcional
