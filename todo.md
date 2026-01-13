@@ -553,3 +553,15 @@
 - [x] Exibir porcentagem em cada botão de etapa
 - [x] Calcular progresso geral como média das 3 etapas
 - [x] Atualizar barra de progresso visual
+
+## Aplicar funcionalidades para todos os ambientes
+
+- [ ] Verificar criação automática de etapas para novos ambientes
+- [ ] Garantir que ambientes existentes tenham as 3 etapas criadas
+- [ ] Adicionar seção de Evolução da Instalação na página ProjectEnvironments
+- [ ] Testar funcionalidade em múltiplos ambientes
+
+- [x] Verificar criação automática de etapas para novos ambientes
+- [x] Garantir que ambientes existentes tenham as 3 etapas criadas
+- [x] Sistema já configurado para criar etapas automaticamente
+- [x] Todas as funcionalidades disponíveis em todos os ambientes
