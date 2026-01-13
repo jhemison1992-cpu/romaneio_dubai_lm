@@ -338,3 +338,24 @@
 - [x] Corrigir lógica de upload no dialog de edição
 - [x] Garantir que upload funcione tanto ao criar quanto ao editar
 - [x] Testar upload de planta e projeto ao editar ambiente
+
+## Correção: Problema de Timezone nas Datas
+- [x] Investigar por que data está salvando um dia anterior
+- [x] Corrigir conversão de timezone para salvar data correta
+- [x] Testar salvamento de datas em vistorias e ambientes
+
+## Nova Funcionalidade: Datas de Início e Término nos Ambientes
+- [x] Adicionar campos startDate e endDate no schema de environments
+- [x] Executar migração do banco de dados
+- [x] Adicionar campos de data no dialog de criação de ambiente
+- [x] Adicionar campos de data no dialog de edição de ambiente
+- [ ] Exibir datas nos cards de ambiente
+- [x] Testar criação e edição com datas
+
+## Nova Funcionalidade: Acompanhamento da Evolução da Instalação
+- [ ] Criar tabela installation_progress no schema
+- [ ] Definir etapas padrão da instalação (ex: medição, fabricação, instalação, acabamento)
+- [ ] Criar interface para marcar etapas concluídas
+- [ ] Adicionar indicador visual de progresso nos cards de ambiente
+- [ ] Permitir adicionar observações em cada etapa
+- [ ] Testar registro de progresso da instalação

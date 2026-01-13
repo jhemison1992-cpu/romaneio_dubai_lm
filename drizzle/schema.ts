@@ -1,4 +1,4 @@
-import { int, mysqlEnum, mysqlTable, text, timestamp, varchar } from "drizzle-orm/mysql-core";
+import { date, int, mysqlEnum, mysqlTable, text, timestamp, varchar } from "drizzle-orm/mysql-core";
 
 /**
  * Core user table backing auth flow.
@@ -74,6 +74,8 @@ export const environments = mysqlTable("environments", {
   plantaFileUrl: varchar("planta_file_url", { length: 1000 }), // URL da planta
   projectFileKey: varchar("project_file_key", { length: 500 }), // Chave do arquivo do projeto do caixilho no S3
   projectFileUrl: varchar("project_file_url", { length: 1000 }), // URL do projeto do caixilho
+  startDate: date("start_date"), // Data de início da instalação
+  endDate: date("end_date"), // Data de término da instalação
   createdAt: timestamp("createdAt").defaultNow().notNull(),
 });
 
@@ -149,6 +151,8 @@ export const inspectionEnvironments = mysqlTable("inspection_environments", {
   plantaFileUrl: varchar("planta_file_url", { length: 1000 }), // URL da planta
   projectFileKey: varchar("project_file_key", { length: 500 }), // Chave do arquivo do projeto do caixilho no S3
   projectFileUrl: varchar("project_file_url", { length: 1000 }), // URL do projeto do caixilho
+  startDate: date("start_date"), // Data de início da instalação
+  endDate: date("end_date"), // Data de término da instalação
   createdAt: timestamp("createdAt").defaultNow().notNull(),
 });
 

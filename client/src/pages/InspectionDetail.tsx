@@ -9,6 +9,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
 import { trpc } from "@/lib/trpc";
 import { format } from "date-fns";
+import { parseInputDate, formatInputDate } from "@/lib/dateUtils";
 import { ArrowLeft, Download, Save, FileText, Plus, Trash2 } from "lucide-react";
 import { getPlantaUrl } from "@/lib/plantasMapping";
 import { MediaUpload } from "@/components/MediaUpload";
@@ -179,7 +180,7 @@ export default function InspectionDetail() {
     
     upsertMutation.mutate({
       ...data,
-      releaseDate: data.releaseDate ? format(data.releaseDate, "yyyy-MM-dd") : undefined,
+      releaseDate: data.releaseDate ? formatInputDate(data.releaseDate) : undefined,
       inspectionId,
     });
   };
@@ -410,8 +411,8 @@ export default function InspectionDetail() {
                       <Input
                         id={`releaseDate-${env.id}`}
                         type="date"
-                        value={data.releaseDate ? format(data.releaseDate, "yyyy-MM-dd") : ""}
-                        onChange={(e) => handleChange(env.id, "releaseDate", e.target.value ? new Date(e.target.value) : undefined)}
+                        value={data.releaseDate ? formatInputDate(data.releaseDate) : ""}
+                        onChange={(e) => handleChange(env.id, "releaseDate", e.target.value ? parseInputDate(e.target.value) : undefined)}
                       />
                     </div>
                     

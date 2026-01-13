@@ -23,6 +23,8 @@ export default function ProjectEnvironments() {
     caixilhoCode: "",
     caixilhoType: "",
     quantity: 1,
+    startDate: "",
+    endDate: "",
   });
   const [plantaFile, setPlantaFile] = useState<File | null>(null);
   const [projectFile, setProjectFile] = useState<File | null>(null);
@@ -40,6 +42,8 @@ export default function ProjectEnvironments() {
         caixilhoCode: "",
         caixilhoType: "",
         quantity: 1,
+        startDate: "",
+        endDate: "",
       });
       refetch();
     },
@@ -68,6 +72,8 @@ export default function ProjectEnvironments() {
         caixilhoCode: "",
         caixilhoType: "",
         quantity: 1,
+        startDate: "",
+        endDate: "",
       });
       refetch();
     },
@@ -244,6 +250,24 @@ export default function ProjectEnvironments() {
                 />
               </div>
               <div className="space-y-2">
+                <Label htmlFor="startDate">Data de Início</Label>
+                <Input
+                  id="startDate"
+                  type="date"
+                  value={formData.startDate}
+                  onChange={(e) => setFormData({ ...formData, startDate: e.target.value })}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="endDate">Data de Término</Label>
+                <Input
+                  id="endDate"
+                  type="date"
+                  value={formData.endDate}
+                  onChange={(e) => setFormData({ ...formData, endDate: e.target.value })}
+                />
+              </div>
+              <div className="space-y-2">
                 <Label htmlFor="planta">Planta Técnica (PDF)</Label>
                 <Input
                   id="planta"
@@ -314,6 +338,8 @@ export default function ProjectEnvironments() {
                           caixilhoCode: env.caixilhoCode,
                           caixilhoType: env.caixilhoType,
                           quantity: env.quantity,
+                          startDate: env.startDate || "",
+                          endDate: env.endDate || "",
                         });
                         setIsEditDialogOpen(true);
                       }}
@@ -481,6 +507,24 @@ export default function ProjectEnvironments() {
                 value={formData.quantity}
                 onChange={(e) => setFormData({ ...formData, quantity: parseInt(e.target.value) || 1 })}
                 required
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="edit-startDate">Data de Início</Label>
+              <Input
+                id="edit-startDate"
+                type="date"
+                value={formData.startDate}
+                onChange={(e) => setFormData({ ...formData, startDate: e.target.value })}
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="edit-endDate">Data de Término</Label>
+              <Input
+                id="edit-endDate"
+                type="date"
+                value={formData.endDate}
+                onChange={(e) => setFormData({ ...formData, endDate: e.target.value })}
               />
             </div>
             <div className="space-y-2">

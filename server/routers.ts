@@ -337,6 +337,8 @@ export const appRouter = router({
         technicalDrawingUrl: z.string().optional(),
         projectFileKey: z.string().optional(),
         projectFileUrl: z.string().optional(),
+        startDate: z.string().optional(),
+        endDate: z.string().optional(),
       }).parse(val))
       .mutation(async ({ input }) => {
         const id = await dbProjects.createEnvironment(input);
@@ -371,6 +373,8 @@ export const appRouter = router({
         plantaFileUrl: z.string().optional(),
         projectFileKey: z.string().optional(),
         projectFileUrl: z.string().optional(),
+        startDate: z.string().optional(),
+        endDate: z.string().optional(),
       }).parse(val))
       .mutation(async ({ input }) => {
         const { id, ...data } = input;
@@ -465,6 +469,8 @@ export const appRouter = router({
         plantaFileUrl: z.string().optional(),
         projectFileKey: z.string().optional(),
         projectFileUrl: z.string().optional(),
+        startDate: z.string().optional(),
+        endDate: z.string().optional(),
       }).parse(val))
       .mutation(async ({ input }) => {
         const { updateInspectionEnvironment } = await import("./db");

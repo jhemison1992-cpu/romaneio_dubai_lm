@@ -71,6 +71,13 @@
       "when": 1768325266883,
       "tag": "0009_rapid_shape",
       "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "5",
+      "when": 1768329125763,
+      "tag": "0010_worthless_molten_man",
+      "breakpoints": true
     }
   ]
 }
