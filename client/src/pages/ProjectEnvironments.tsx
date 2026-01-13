@@ -250,7 +250,7 @@ export default function ProjectEnvironments() {
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="startDate">Data de Início</Label>
+                <Label htmlFor="startDate">Data de Liberação</Label>
                 <Input
                   id="startDate"
                   type="date"
@@ -259,7 +259,7 @@ export default function ProjectEnvironments() {
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="endDate">Data de Término</Label>
+                <Label htmlFor="endDate">Data de Finalização</Label>
                 <Input
                   id="endDate"
                   type="date"
@@ -510,7 +510,7 @@ export default function ProjectEnvironments() {
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="edit-startDate">Data de Início</Label>
+              <Label htmlFor="edit-startDate">Data de Liberação</Label>
               <Input
                 id="edit-startDate"
                 type="date"
@@ -519,7 +519,7 @@ export default function ProjectEnvironments() {
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="edit-endDate">Data de Término</Label>
+              <Label htmlFor="edit-endDate">Data de Finalização</Label>
               <Input
                 id="edit-endDate"
                 type="date"

@@ -359,3 +359,19 @@
 - [ ] Adicionar indicador visual de progresso nos cards de ambiente
 - [ ] Permitir adicionar observações em cada etapa
 - [ ] Testar registro de progresso da instalação
+
+## Ajuste: Renomear Campos de Data nos Ambientes
+- [x] Renomear "Data de Início" para "Data de Liberação"
+- [x] Renomear "Data de Término" para "Data de Finalização"
+- [x] Atualizar labels na interface de criação e edição
+- [x] Atualizar nomes dos campos no schema se necessário
+
+## Implementação Completa: Sistema de Acompanhamento da Evolução
+- [x] Criar tabela installation_steps no schema do banco
+- [x] Definir etapas padrão (Medição, Fabricação, Instalação, Acabamento, Finalizado)
+- [x] Criar router installationSteps com CRUD completo
+- [x] Implementar componente de checklist de etapas na página de vistoria
+- [x] Adicionar indicador visual de progresso (barra de progresso ou percentual)
+- [x] Permitir marcar/desmarcar etapas concluídas
+- [x] Salvar data de conclusão de cada etapa
+- [x] Testar fluxo completo de acompanhamento

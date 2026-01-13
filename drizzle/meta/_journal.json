@@ -78,6 +78,13 @@
       "when": 1768329125763,
       "tag": "0010_worthless_molten_man",
       "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "5",
+      "when": 1768329801627,
+      "tag": "0011_lean_the_anarchist",
+      "breakpoints": true
     }
   ]
 }

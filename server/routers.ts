@@ -486,6 +486,42 @@ export const appRouter = router({
         return { success: true };
       }),
   }),
+  installationSteps: router({
+    list: publicProcedure
+      .input((val: unknown) => z.object({ inspectionItemId: z.number() }).parse(val))
+      .query(async ({ input }) => {
+        const { getInstallationSteps } = await import("./db-installation-steps");
+        return await getInstallationSteps(input.inspectionItemId);
+      }),
+    toggle: publicProcedure
+      .input((val: unknown) => z.object({ stepId: z.number(), isCompleted: z.boolean() }).parse(val))
+      .mutation(async ({ input }) => {
+        const { toggleStepCompletion } = await import("./db-installation-steps");
+        await toggleStepCompletion(input.stepId, input.isCompleted);
+        return { success: true };
+      }),
+    updateNotes: publicProcedure
+      .input((val: unknown) => z.object({ stepId: z.number(), notes: z.string() }).parse(val))
+      .mutation(async ({ input }) => {
+        const { updateStepNotes } = await import("./db-installation-steps");
+        await updateStepNotes(input.stepId, input.notes);
+        return { success: true };
+      }),
+    getProgress: publicProcedure
+      .input((val: unknown) => z.object({ inspectionItemId: z.number() }).parse(val))
+      .query(async ({ input }) => {
+        const { getInstallationProgress } = await import("./db-installation-steps");
+        const progress = await getInstallationProgress(input.inspectionItemId);
+        return { progress };
+      }),
+    createDefault: publicProcedure
+      .input((val: unknown) => z.object({ inspectionItemId: z.number() }).parse(val))
+      .mutation(async ({ input }) => {
+        const { createDefaultSteps } = await import("./db-installation-steps");
+        await createDefaultSteps(input.inspectionItemId);
+        return { success: true };
+      }),
+  }),
 });
 
 export type AppRouter = typeof appRouter;

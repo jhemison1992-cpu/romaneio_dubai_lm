@@ -158,3 +158,20 @@ export const inspectionEnvironments = mysqlTable("inspection_environments", {
 
 export type InspectionEnvironment = typeof inspectionEnvironments.$inferSelect;
 export type InsertInspectionEnvironment = typeof inspectionEnvironments.$inferInsert;
+/**
+ * Etapas de evolução da instalação do caixilho
+ */
+export const installationSteps = mysqlTable("installation_steps", {
+  id: int("id").autoincrement().primaryKey(),
+  inspectionItemId: int("inspection_item_id").notNull().references(() => inspectionItems.id, { onDelete: "cascade" }),
+  stepName: varchar("step_name", { length: 100 }).notNull(), // Nome da etapa (ex: Medição, Fabricação, Instalação, Acabamento)
+  stepOrder: int("step_order").notNull(), // Ordem da etapa (1, 2, 3, 4...)
+  isCompleted: int("is_completed").default(0).notNull(), // 0 = não concluída, 1 = concluída
+  completedAt: timestamp("completed_at"), // Data/hora de conclusão da etapa
+  notes: text("notes"), // Observações sobre a etapa
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type InstallationStep = typeof installationSteps.$inferSelect;
+export type InsertInstallationStep = typeof installationSteps.$inferInsert;

@@ -14,6 +14,7 @@ import { ArrowLeft, Download, Save, FileText, Plus, Trash2 } from "lucide-react"
 import { getPlantaUrl } from "@/lib/plantasMapping";
 import { MediaUpload } from "@/components/MediaUpload";
 import { SignaturePad } from "@/components/SignaturePad";
+import { InstallationStepsChecklist } from "@/components/InstallationStepsChecklist";
 import { NewEnvironmentDialog } from "@/components/NewEnvironmentDialog";
 import { FillGuideDialog } from "@/components/FillGuideDialog";
 import { useEffect, useState } from "react";
@@ -460,6 +461,13 @@ export default function InspectionDetail() {
               value={formData[env.id]?.signatureSupplier}
               onChange={(sig) => handleChange(env.id, "signatureSupplier", sig)}
             />                  </div>
+                  
+                  {data.id && (
+                    <div className="border-t pt-6">
+                      <h3 className="font-semibold mb-4">Evolução da Instalação</h3>
+                      <InstallationStepsChecklist inspectionItemId={data.id} />
+                    </div>
+                  )}
                   
                   <div className="border-t pt-6">
                     <h3 className="font-semibold mb-4">Fotos e Vídeos</h3>
