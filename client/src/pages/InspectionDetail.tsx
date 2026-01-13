@@ -428,6 +428,17 @@ export default function InspectionDetail() {
                     </div>
                     
                     <div className="space-y-2">
+                      <Label htmlFor={`endDate-${env.id}`}>Data de Finalização</Label>
+                      <Input
+                        id={`endDate-${env.id}`}
+                        type="date"
+                        value={env.endDate ? formatInputDate(new Date(env.endDate)) : ""}
+                        disabled
+                        className="bg-muted"
+                      />
+                    </div>
+                    
+                    <div className="space-y-2">
                       <Label htmlFor={`responsibleConstruction-${env.id}`}>Responsável da Obra</Label>
                       <Input
                         id={`responsibleConstruction-${env.id}`}

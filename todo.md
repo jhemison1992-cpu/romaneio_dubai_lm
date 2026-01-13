@@ -522,3 +522,11 @@
 - [x] Aplicado fundo preto (#111827) APENAS no header da sidebar
 - [x] Texto branco apenas no header (ícone e título)
 - [x] Resto da interface mantém fundo claro e texto preto
+
+## Adicionar Data de Finalização na Tela de Vistoria
+- [ ] Adicionar campo "Data de Finalização" ao lado de "Data de Liberação"
+- [ ] Salvar endDate no banco de dados via inspection_items ou environments
+
+- [x] Adicionado campo "Data de Finalização" ao lado de "Data de Liberação"
+- [x] Campo mostra endDate do ambiente (somente leitura)
+- [x] Reorganizado grid: Data Liberação | Data Finalização | Resp. Obra | Resp. Aluminc
