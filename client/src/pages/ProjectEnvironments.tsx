@@ -366,6 +366,26 @@ export default function ProjectEnvironments() {
                   <div>
                     <span className="font-medium">Quantidade:</span> {env.quantity} peça(s)
                   </div>
+                  {(env.startDate || env.endDate) && (
+                    <div className="flex gap-4 text-sm">
+                      {env.startDate && (
+                        <div>
+                          <span className="font-medium">Data de Liberação:</span>{" "}
+                          <span className="text-muted-foreground">
+                            {new Date(env.startDate).toLocaleDateString('pt-BR')}
+                          </span>
+                        </div>
+                      )}
+                      {env.endDate && (
+                        <div>
+                          <span className="font-medium">Data de Finalização:</span>{" "}
+                          <span className="text-muted-foreground">
+                            {new Date(env.endDate).toLocaleDateString('pt-BR')}
+                          </span>
+                        </div>
+                      )}
+                    </div>
+                  )}
                   <div className="flex gap-2 mt-3">
                     {env.technicalDrawingUrl && (
                       <Button

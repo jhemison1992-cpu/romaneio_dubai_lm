@@ -448,6 +448,8 @@ export const appRouter = router({
         caixilhoCode: z.string(),
         caixilhoType: z.string(),
         quantity: z.number(),
+        startDate: z.string().optional(),
+        endDate: z.string().optional(),
         plantaFileKey: z.string().optional(),
         plantaFileUrl: z.string().optional(),
         projectFileKey: z.string().optional(),

@@ -15,6 +15,10 @@ interface NewEnvironmentDialogProps {
   onTypeChange: (value: string) => void;
   quantity: number;
   onQuantityChange: (value: number) => void;
+  startDate: string;
+  onStartDateChange: (value: string) => void;
+  endDate: string;
+  onEndDateChange: (value: string) => void;
   plantaFile: File | null;
   onPlantaFileChange: (file: File | null) => void;
   projectFile: File | null;
@@ -34,6 +38,10 @@ export function NewEnvironmentDialog({
   onTypeChange,
   quantity,
   onQuantityChange,
+  startDate,
+  onStartDateChange,
+  endDate,
+  onEndDateChange,
   plantaFile,
   onPlantaFileChange,
   projectFile,
@@ -93,6 +101,28 @@ export function NewEnvironmentDialog({
               onChange={(e) => onTypeChange(e.target.value)}
               placeholder="Ex: Janela de Correr"
             />
+          </div>
+          
+          <div className="grid grid-cols-2 gap-4">
+            <div className="grid gap-2">
+              <Label htmlFor="envStartDate">Data de Liberação</Label>
+              <Input
+                id="envStartDate"
+                type="date"
+                value={startDate}
+                onChange={(e) => onStartDateChange(e.target.value)}
+              />
+            </div>
+            
+            <div className="grid gap-2">
+              <Label htmlFor="envEndDate">Data de Finalização</Label>
+              <Input
+                id="envEndDate"
+                type="date"
+                value={endDate}
+                onChange={(e) => onEndDateChange(e.target.value)}
+              />
+            </div>
           </div>
           
           <div className="grid gap-2">

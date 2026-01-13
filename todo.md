@@ -375,3 +375,18 @@
 - [x] Permitir marcar/desmarcar etapas concluídas
 - [x] Salvar data de conclusão de cada etapa
 - [x] Testar fluxo completo de acompanhamento
+
+## Adicionar Campos de Data de Liberação e Finalização nos Ambientes
+- [ ] Verificar se campos start_date e end_date existem no schema inspection_environments
+- [ ] Adicionar campos de data no formulário de criação de ambiente (NewEnvironmentDialog)
+- [ ] Adicionar campos de data no formulário de edição de ambiente (EditEnvironmentDialog)
+- [ ] Exibir datas nos cards de ambiente para visualização rápida
+- [ ] Testar salvamento e exibição das datas
+
+## Correção: Campos de Data nos Ambientes
+- [x] Campos startDate e endDate já existem no schema inspection_environments
+- [x] Adicionados campos de data no formulário de criação de ambiente (NewEnvironmentDialog)
+- [x] Campos de data já existem no formulário de criação em ProjectEnvironments.tsx
+- [x] Campos de data já existem no formulário de edição em ProjectEnvironments.tsx
+- [x] Datas agora são exibidas nos cards de ambiente para visualização rápida
+- [x] Backend atualizado para aceitar e salvar datas

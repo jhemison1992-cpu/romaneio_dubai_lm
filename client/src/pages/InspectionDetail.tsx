@@ -87,6 +87,8 @@ export default function InspectionDetail() {
   const [newEnvCode, setNewEnvCode] = useState("");
   const [newEnvType, setNewEnvType] = useState("");
   const [newEnvQty, setNewEnvQty] = useState(1);
+  const [newEnvStartDate, setNewEnvStartDate] = useState("");
+  const [newEnvEndDate, setNewEnvEndDate] = useState("");
   const [newEnvPlantaFile, setNewEnvPlantaFile] = useState<File | null>(null);
   const [newEnvProjectFile, setNewEnvProjectFile] = useState<File | null>(null);
   
@@ -267,6 +269,8 @@ export default function InspectionDetail() {
       caixilhoCode: newEnvCode,
       caixilhoType: newEnvType,
       quantity: newEnvQty,
+      startDate: newEnvStartDate || undefined,
+      endDate: newEnvEndDate || undefined,
       plantaFileKey,
       plantaFileUrl,
       projectFileKey,
@@ -503,6 +507,10 @@ export default function InspectionDetail() {
         onTypeChange={setNewEnvType}
         quantity={newEnvQty}
         onQuantityChange={setNewEnvQty}
+        startDate={newEnvStartDate}
+        onStartDateChange={setNewEnvStartDate}
+        endDate={newEnvEndDate}
+        onEndDateChange={setNewEnvEndDate}
         plantaFile={newEnvPlantaFile}
         onPlantaFileChange={setNewEnvPlantaFile}
         projectFile={newEnvProjectFile}
