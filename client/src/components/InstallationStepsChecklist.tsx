@@ -26,14 +26,12 @@ export function InstallationStepsChecklist({ inspectionItemId, environmentId, en
 
   // Buscar etapas
   const { data: steps = [], isLoading, refetch } = trpc.installationSteps.list.useQuery(
-    { inspectionItemId },
-    { enabled: initialized }
+    { inspectionItemId }
   );
 
   // Buscar dados do item para pegar assinatura salva
   const { data: itemData } = trpc.inspectionItems.getById.useQuery(
-    { id: inspectionItemId },
-    { enabled: initialized }
+    { id: inspectionItemId }
   );
 
   // Mutation para criar etapas padrão

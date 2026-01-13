@@ -626,3 +626,13 @@
 - [x] Adicionar botão de exclusão nos cards de ambiente - JÁ EXISTE (ícone Trash2)
 - [x] Implementar dialog de confirmação antes de excluir - JÁ EXISTE (confirm dialog)
 - [x] Funcionalidade de exclusão 100% implementada e funcional
+
+## Correção Layout Evolução da Instalação
+
+- [x] Corrigir layout dos botões para mostrar apenas 3 em sequência
+- [x] Remover duplicações de botões
+- [x] Limpar etapas duplicadas no banco de dados
+- [x] Garantir ordem correta: Instalação, Acabamento, Finalizado
+- [x] Testar em todos os ambientes (SPA, Sauna, Entrada Social, etc)
+- [x] Corrigir deadlock de inicialização no componente React
+- [x] Garantir que etapas sejam criadas para todos os ambientes
