@@ -440,3 +440,13 @@
 - [x] Layout de datas lado a lado em todos os formulários
 - [x] Facelift visual aplicado (sidebar azul royal, botões amarelos)
 - [x] Cores do sistema atualizadas para match com ALUMINC
+
+## Ajuste de Cores: Preto e Cinza
+- [ ] Alterar sidebar de azul royal para tons de preto/cinza escuro
+- [ ] Alterar botões de amarelo para preto/cinza
+- [ ] Ajustar esquema de cores global para preto e cinza
+
+- [x] Cores alteradas para preto e cinza
+- [x] Sidebar em tom preto/cinza escuro (#111827)
+- [x] Botões principais em cinza escuro (#1f2937)
+- [x] Ícones ativos em cinza claro, inativos em cinza médio
