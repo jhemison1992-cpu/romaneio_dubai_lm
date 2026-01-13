@@ -482,3 +482,12 @@
 - [x] Corrigido cores dos ícones da sidebar (agora visíveis em branco/cinza claro)
 - [x] Adicionado Data de Finalização na tela de detalhes do ambiente
 - [x] Datas aparecem no cabeçalho do card junto com informações do caixilho
+
+## Ajustar Cores: Texto Preto no Conteúdo
+- [ ] Alterar tema para texto preto no conteúdo principal
+- [ ] Manter sidebar escura com texto branco
+- [ ] Garantir contraste adequado em todos os elementos
+
+- [x] Alterado tema para texto preto no conteúdo principal
+- [x] Mantida sidebar escura com texto branco
+- [x] Ajustado contraste para melhor legibilidade
