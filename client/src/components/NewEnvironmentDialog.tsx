@@ -17,6 +17,8 @@ interface NewEnvironmentDialogProps {
   onQuantityChange: (value: number) => void;
   plantaFile: File | null;
   onPlantaFileChange: (file: File | null) => void;
+  projectFile: File | null;
+  onProjectFileChange: (file: File | null) => void;
   onSubmit: () => void;
   isSubmitting: boolean;
 }
@@ -34,6 +36,8 @@ export function NewEnvironmentDialog({
   onQuantityChange,
   plantaFile,
   onPlantaFileChange,
+  projectFile,
+  onProjectFileChange,
   onSubmit,
   isSubmitting,
 }: NewEnvironmentDialogProps) {
@@ -116,6 +120,35 @@ export function NewEnvironmentDialog({
               <p className="text-sm text-muted-foreground">
                 <Upload className="inline h-3 w-3 mr-1" />
                 {plantaFile.name}
+              </p>
+            )}
+          </div>
+          
+          <div className="grid gap-2">
+            <Label htmlFor="envProject">Projeto do Caixilho (opcional)</Label>
+            <div className="flex items-center gap-2">
+              <Input
+                id="envProject"
+                type="file"
+                accept="image/*,.pdf,.dwg,.dxf"
+                onChange={(e) => onProjectFileChange(e.target.files?.[0] || null)}
+                className="flex-1"
+              />
+              {projectFile && (
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={() => onProjectFileChange(null)}
+                >
+                  Remover
+                </Button>
+              )}
+            </div>
+            {projectFile && (
+              <p className="text-sm text-muted-foreground">
+                <Upload className="inline h-3 w-3 mr-1" />
+                {projectFile.name}
               </p>
             )}
           </div>

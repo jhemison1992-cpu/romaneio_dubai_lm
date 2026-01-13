@@ -71,6 +71,8 @@ export const environments = mysqlTable("environments", {
   quantity: int("quantity").notNull().default(1),
   plantaFileKey: varchar("planta_file_key", { length: 500 }), // Chave do arquivo da planta no S3
   plantaFileUrl: varchar("planta_file_url", { length: 1000 }), // URL da planta
+  projectFileKey: varchar("project_file_key", { length: 500 }), // Chave do arquivo do projeto do caixilho no S3
+  projectFileUrl: varchar("project_file_url", { length: 1000 }), // URL do projeto do caixilho
   createdAt: timestamp("createdAt").defaultNow().notNull(),
 });
 
@@ -144,6 +146,8 @@ export const inspectionEnvironments = mysqlTable("inspection_environments", {
   quantity: int("quantity").notNull().default(1),
   plantaFileKey: varchar("planta_file_key", { length: 500 }), // Chave do arquivo da planta no S3
   plantaFileUrl: varchar("planta_file_url", { length: 1000 }), // URL da planta
+  projectFileKey: varchar("project_file_key", { length: 500 }), // Chave do arquivo do projeto do caixilho no S3
+  projectFileUrl: varchar("project_file_url", { length: 1000 }), // URL do projeto do caixilho
   createdAt: timestamp("createdAt").defaultNow().notNull(),
 });
 

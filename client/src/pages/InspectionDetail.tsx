@@ -85,6 +85,7 @@ export default function InspectionDetail() {
   const [newEnvType, setNewEnvType] = useState("");
   const [newEnvQty, setNewEnvQty] = useState(1);
   const [newEnvPlantaFile, setNewEnvPlantaFile] = useState<File | null>(null);
+  const [newEnvProjectFile, setNewEnvProjectFile] = useState<File | null>(null);
   
   // Estado para confirmação de exclusão
   const [envToDelete, setEnvToDelete] = useState<number | null>(null);
@@ -196,6 +197,8 @@ export default function InspectionDetail() {
     
     let plantaFileKey: string | undefined;
     let plantaFileUrl: string | undefined;
+    let projectFileKey: string | undefined;
+    let projectFileUrl: string | undefined;
     
     // Upload da planta se fornecida
     if (newEnvPlantaFile) {
@@ -222,6 +225,31 @@ export default function InspectionDetail() {
       }
     }
     
+    // Upload do projeto do caixilho se fornecido
+    if (newEnvProjectFile) {
+      try {
+        const reader = new FileReader();
+        const fileData = await new Promise<string>((resolve, reject) => {
+          reader.onload = () => resolve(reader.result as string);
+          reader.onerror = reject;
+          reader.readAsDataURL(newEnvProjectFile);
+        });
+        
+        const base64Data = fileData.split(',')[1];
+        const uploadResult = await utils.client.environments.uploadDrawing.mutate({
+          fileData: base64Data,
+          fileName: newEnvProjectFile.name,
+          mimeType: newEnvProjectFile.type,
+        });
+        
+        projectFileKey = uploadResult.fileKey;
+        projectFileUrl = uploadResult.url;
+      } catch (error) {
+        toast.error("Erro ao fazer upload do projeto do caixilho");
+        return;
+      }
+    }
+    
     createEnvMutation.mutate({
       inspectionId,
       name: newEnvName,
@@ -230,6 +258,8 @@ export default function InspectionDetail() {
       quantity: newEnvQty,
       plantaFileKey,
       plantaFileUrl,
+      projectFileKey,
+      projectFileUrl,
     });
   };
 
@@ -336,6 +366,17 @@ export default function InspectionDetail() {
                         >
                           <FileText className="h-4 w-4" />
                           Ver Planta
+                        </Button>
+                      )}
+                      {env.projectFileUrl && (
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="gap-2"
+                          onClick={() => window.open(env.projectFileUrl, '_blank')}
+                        >
+                          <FileText className="h-4 w-4" />
+                          Ver Projeto
                         </Button>
                       )}
                       {/* Mostrar botão de excluir apenas para ambientes personalizados (inspectionEnvs) */}
@@ -445,6 +486,8 @@ export default function InspectionDetail() {
         onQuantityChange={setNewEnvQty}
         plantaFile={newEnvPlantaFile}
         onPlantaFileChange={setNewEnvPlantaFile}
+        projectFile={newEnvProjectFile}
+        onProjectFileChange={setNewEnvProjectFile}
         onSubmit={handleCreateEnv}
         isSubmitting={createEnvMutation.isPending}
       />

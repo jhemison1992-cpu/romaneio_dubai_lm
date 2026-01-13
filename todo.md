@@ -208,3 +208,12 @@
 - [x] Testar todas as páginas principais (Obras, Vistorias, Usuários) - Todas funcionando
 - [x] Testar fluxo completo de criação e edição de vistoria - Funcional
 - [x] Validar sistema 100% funcional sem erros - VALIDADO
+
+
+## Upload de Projeto do Caixilho
+- [x] Adicionar campo `projectFileUrl` e `projectFileKey` na tabela inspection_environments
+- [x] Atualizar endpoint de criação para aceitar upload de projeto
+- [x] Adicionar campo de upload no dialog NewEnvironmentDialog
+- [x] Implementar lógica de upload no frontend
+- [x] Adicionar botão para visualizar projeto do caixilho
+- [x] Testar upload e visualização de projeto - Dialog com 2 campos de upload funcionando!

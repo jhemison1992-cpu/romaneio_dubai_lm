@@ -403,6 +403,8 @@ export const appRouter = router({
         quantity: z.number(),
         plantaFileKey: z.string().optional(),
         plantaFileUrl: z.string().optional(),
+        projectFileKey: z.string().optional(),
+        projectFileUrl: z.string().optional(),
       }).parse(val))
       .mutation(async ({ input }) => {
         const { createInspectionEnvironment } = await import("./db");
@@ -418,6 +420,8 @@ export const appRouter = router({
         quantity: z.number().optional(),
         plantaFileKey: z.string().optional(),
         plantaFileUrl: z.string().optional(),
+        projectFileKey: z.string().optional(),
+        projectFileUrl: z.string().optional(),
       }).parse(val))
       .mutation(async ({ input }) => {
         const { updateInspectionEnvironment } = await import("./db");
