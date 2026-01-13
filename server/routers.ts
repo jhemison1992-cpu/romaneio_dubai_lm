@@ -123,6 +123,8 @@ export const appRouter = router({
           responsibleConstruction: input.responsibleConstruction || null,
           responsibleSupplier: input.responsibleSupplier || null,
           observations: input.observations || null,
+          signatureConstruction: input.signatureConstruction || null,
+          signatureSupplier: input.signatureSupplier || null,
         };
         const id = await upsertInspectionItem(data);
         return { id };

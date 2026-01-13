@@ -261,3 +261,21 @@
 - [x] Corrigir função upsertInspectionItem que está enviando valores com interrogação (?)
 - [x] Garantir que todos os valores sejam corretamente convertidos antes do INSERT
 - [x] Testar salvamento de dados do formulário
+
+## Nova Funcionalidade: Guia de Preenchimento
+- [x] Criar componente de modal para exibir guia de preenchimento
+- [x] Escrever conteúdo do guia com instruções passo a passo
+- [x] Adicionar botão "Como Preencher" ou ícone de ajuda na interface
+- [x] Incluir exemplos visuais e dicas práticas
+- [ ] Testar usabilidade do guia
+
+## Correção Urgente: Campos de assinatura faltando no INSERT
+- [x] Adicionar campos signature_construction e signature_supplier na função upsertInspectionItem
+- [x] Atualizar router para incluir campos de assinatura no salvamento
+- [x] Garantir que todos os campos do schema sejam incluídos no INSERT
+- [x] Testar salvamento com todos os campos
+
+## Correção: Upload de fotos e vídeos não funciona
+- [x] Investigar por que upload de mídia não está funcionando
+- [x] Corrigir componente MediaUpload ou backend
+- [x] Testar upload de fotos e vídeos

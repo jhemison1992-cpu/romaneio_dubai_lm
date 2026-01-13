@@ -205,6 +205,8 @@ export async function upsertInspectionItem(data: {
   responsibleConstruction?: string | null;
   responsibleSupplier?: string | null;
   observations?: string | null;
+  signatureConstruction?: string | null;
+  signatureSupplier?: string | null;
 }) {
   const db = await getDb();
   if (!db) throw new Error("Database not available");
@@ -216,6 +218,8 @@ export async function upsertInspectionItem(data: {
       responsibleConstruction: data.responsibleConstruction,
       responsibleSupplier: data.responsibleSupplier,
       observations: data.observations,
+      signatureConstruction: data.signatureConstruction,
+      signatureSupplier: data.signatureSupplier,
     }).where(eq(inspectionItems.id, data.id));
     return data.id;
   } else {
@@ -226,6 +230,8 @@ export async function upsertInspectionItem(data: {
       responsibleConstruction: data.responsibleConstruction ?? null,
       responsibleSupplier: data.responsibleSupplier ?? null,
       observations: data.observations ?? null,
+      signatureConstruction: data.signatureConstruction ?? null,
+      signatureSupplier: data.signatureSupplier ?? null,
     });
     return result[0].insertId;
   }

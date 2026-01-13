@@ -14,6 +14,7 @@ import { getPlantaUrl } from "@/lib/plantasMapping";
 import { MediaUpload } from "@/components/MediaUpload";
 import { SignaturePad } from "@/components/SignaturePad";
 import { NewEnvironmentDialog } from "@/components/NewEnvironmentDialog";
+import { FillGuideDialog } from "@/components/FillGuideDialog";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { Link, useParams } from "wouter";
@@ -93,8 +94,16 @@ export default function InspectionDetail() {
   const utils = trpc.useUtils();
   
   const upsertMutation = trpc.inspectionItems.upsert.useMutation({
-    onSuccess: () => {
+    onSuccess: (data, variables) => {
       toast.success("Dados salvos com sucesso!");
+      // Atualizar formData com o ID retornado para permitir upload de mídia
+      setFormData((prev) => ({
+        ...prev,
+        [variables.environmentId]: {
+          ...prev[variables.environmentId],
+          id: data.id,
+        },
+      }));
       refetchItems();
     },
     onError: (error) => {
@@ -305,6 +314,7 @@ export default function InspectionDetail() {
             </p>
           </div>
           <div className="flex gap-2">
+            <FillGuideDialog />
             <Button onClick={() => setOpenNewEnv(true)} variant="outline" className="gap-2">
               <Plus className="h-4 w-4" />
               Adicionar Ambiente
