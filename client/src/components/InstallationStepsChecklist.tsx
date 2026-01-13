@@ -3,6 +3,8 @@ import { trpc } from "@/lib/trpc";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { Check, FileText, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { DeliveryTermDialog } from "./DeliveryTermDialog";
@@ -10,13 +12,16 @@ import { DeliveryTermDialog } from "./DeliveryTermDialog";
 interface InstallationStepsChecklistProps {
   inspectionItemId: number;
   environmentName: string;
+  totalQuantity: number; // Quantidade total de caixilhos do ambiente
 }
 
-export function InstallationStepsChecklist({ inspectionItemId, environmentName }: InstallationStepsChecklistProps) {
+export function InstallationStepsChecklist({ inspectionItemId, environmentName, totalQuantity }: InstallationStepsChecklistProps) {
   const [initialized, setInitialized] = useState(false);
   const [openDeliveryTerm, setOpenDeliveryTerm] = useState(false);
   const [responsibleName, setResponsibleName] = useState("");
   const [signature, setSignature] = useState("");
+  const [editingStep, setEditingStep] = useState<number | null>(null);
+  const [tempQuantities, setTempQuantities] = useState<Record<number, number>>({});
 
   // Buscar etapas
   const { data: steps = [], isLoading, refetch } = trpc.installationSteps.list.useQuery(
@@ -27,12 +32,6 @@ export function InstallationStepsChecklist({ inspectionItemId, environmentName }
   // Buscar dados do item para pegar assinatura salva
   const { data: itemData } = trpc.inspectionItems.getById.useQuery(
     { id: inspectionItemId },
-    { enabled: initialized }
-  );
-
-  // Buscar progresso
-  const { data: progressData } = trpc.installationSteps.getProgress.useQuery(
-    { inspectionItemId },
     { enabled: initialized }
   );
 
@@ -47,36 +46,38 @@ export function InstallationStepsChecklist({ inspectionItemId, environmentName }
     },
   });
 
-  // Mutation para marcar/desmarcar etapa
-  const toggleMutation = trpc.installationSteps.toggle.useMutation({
+  // Mutation para atualizar quantidade
+  const updateQuantityMutation = trpc.installationSteps.updateQuantity.useMutation({
     onSuccess: () => {
       refetch();
-      toast.success("Etapa atualizada com sucesso");
+      toast.success("Quantidade atualizada com sucesso");
+      setEditingStep(null);
     },
     onError: () => {
-      toast.error("Erro ao atualizar etapa");
+      toast.error("Erro ao atualizar quantidade");
     },
   });
 
   // Mutation para salvar termo de entrega
   const saveDeliveryTermMutation = trpc.inspectionItems.saveDeliveryTerm.useMutation({
     onSuccess: () => {
-      toast.success("Termo de entrega salvo com sucesso!");
+      toast.success("Termo de entrega salvo com sucesso");
       setOpenDeliveryTerm(false);
+      refetch();
     },
     onError: () => {
       toast.error("Erro ao salvar termo de entrega");
     },
   });
 
-  // Inicializar etapas se não existirem
   useEffect(() => {
-    if (!initialized && inspectionItemId) {
+    if (steps.length === 0 && !isLoading && !createDefaultMutation.isPending) {
       createDefaultMutation.mutate({ inspectionItemId });
+    } else if (steps.length > 0) {
+      setInitialized(true);
     }
-  }, [inspectionItemId]);
+  }, [steps, isLoading]);
 
-  // Carregar dados salvos do termo
   useEffect(() => {
     if (itemData) {
       setResponsibleName(itemData.deliveryTermResponsible || "");
@@ -84,10 +85,16 @@ export function InstallationStepsChecklist({ inspectionItemId, environmentName }
     }
   }, [itemData]);
 
-  const handleToggle = (stepId: number, currentStatus: number) => {
-    toggleMutation.mutate({
+  const handleUpdateQuantity = (stepId: number) => {
+    const quantity = tempQuantities[stepId];
+    if (quantity === undefined || quantity < 0 || quantity > totalQuantity) {
+      toast.error(`Quantidade deve estar entre 0 e ${totalQuantity}`);
+      return;
+    }
+    
+    updateQuantityMutation.mutate({
       stepId,
-      isCompleted: currentStatus === 0,
+      completedQuantity: quantity,
     });
   };
 
@@ -134,8 +141,16 @@ export function InstallationStepsChecklist({ inspectionItemId, environmentName }
     );
   }
 
-  const progress = progressData?.progress || 0;
-  const allCompleted = progress === 100;
+  // Calcular progresso geral (média das 3 etapas)
+  const stepPercentages = steps.map((step: any) => {
+    const completed = step.completedQuantity || 0;
+    return totalQuantity > 0 ? Math.round((completed / totalQuantity) * 100) : 0;
+  });
+  const overallProgress = stepPercentages.length > 0 
+    ? Math.round(stepPercentages.reduce((a: number, b: number) => a + b, 0) / stepPercentages.length)
+    : 0;
+
+  const allCompleted = stepPercentages.every((p: number) => p === 100);
 
   return (
     <>
@@ -144,35 +159,69 @@ export function InstallationStepsChecklist({ inspectionItemId, environmentName }
           <div>
             <div className="flex items-center justify-between mb-2">
               <h3 className="text-lg font-semibold">Evolução da Instalação</h3>
-              <span className="text-sm font-medium text-muted-foreground">{progress}%</span>
+              <span className="text-sm font-medium text-muted-foreground">{overallProgress}%</span>
             </div>
-            <Progress value={progress} className="h-2" />
+            <Progress value={overallProgress} className="h-2" />
           </div>
 
           <div className="grid grid-cols-3 gap-3">
-            {steps.map((step: any) => {
-              const isCompleted = step.isCompleted === 1;
+            {steps.map((step: any, index: number) => {
+              const completedQty = step.completedQuantity || 0;
+              const percentage = stepPercentages[index];
+              const isEditing = editingStep === step.id;
 
               return (
-                <Button
-                  key={step.id}
-                  onClick={() => handleToggle(step.id, step.isCompleted)}
-                  disabled={toggleMutation.isPending}
-                  variant={isCompleted ? "default" : "outline"}
-                  className={`h-auto py-4 flex flex-col items-center gap-2 ${
-                    isCompleted 
-                      ? "bg-green-600 hover:bg-green-700 text-white" 
-                      : "hover:bg-muted"
-                  }`}
-                >
-                  {isCompleted && <Check className="h-5 w-5" />}
-                  <span className="font-medium">{step.stepName}</span>
-                  {step.completedAt && (
+                <div key={step.id} className="space-y-2">
+                  <Button
+                    onClick={() => {
+                      setEditingStep(step.id);
+                      setTempQuantities({ ...tempQuantities, [step.id]: completedQty });
+                    }}
+                    variant={percentage === 100 ? "default" : "outline"}
+                    className={`w-full h-auto py-4 flex flex-col items-center gap-2 ${
+                      percentage === 100
+                        ? "bg-green-600 hover:bg-green-700 text-white" 
+                        : "hover:bg-muted"
+                    }`}
+                  >
+                    {percentage === 100 && <Check className="h-5 w-5" />}
+                    <span className="font-medium">{step.stepName}</span>
+                    <span className="text-lg font-bold">{percentage}%</span>
                     <span className="text-xs opacity-80">
-                      {new Date(step.completedAt).toLocaleDateString("pt-BR")}
+                      {completedQty}/{totalQuantity} caixilhos
                     </span>
+                  </Button>
+                  
+                  {isEditing && (
+                    <div className="space-y-2 p-3 border rounded-lg bg-muted/50">
+                      <Label htmlFor={`qty-${step.id}`} className="text-xs">
+                        Quantidade concluída
+                      </Label>
+                      <div className="flex gap-2">
+                        <Input
+                          id={`qty-${step.id}`}
+                          type="number"
+                          min="0"
+                          max={totalQuantity}
+                          value={tempQuantities[step.id] ?? completedQty}
+                          onChange={(e) => setTempQuantities({
+                            ...tempQuantities,
+                            [step.id]: parseInt(e.target.value) || 0
+                          })}
+                          className="h-8"
+                        />
+                        <Button
+                          size="sm"
+                          onClick={() => handleUpdateQuantity(step.id)}
+                          disabled={updateQuantityMutation.isPending}
+                          className="h-8"
+                        >
+                          OK
+                        </Button>
+                      </div>
+                    </div>
                   )}
-                </Button>
+                </div>
               );
             })}
           </div>

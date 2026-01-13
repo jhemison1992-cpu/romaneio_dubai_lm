@@ -532,6 +532,13 @@ export const appRouter = router({
         await updateStepNotes(input.stepId, input.notes);
         return { success: true };
       }),
+    updateQuantity: publicProcedure
+      .input((val: unknown) => z.object({ stepId: z.number(), completedQuantity: z.number() }).parse(val))
+      .mutation(async ({ input }) => {
+        const { updateStepQuantity } = await import("./db-installation-steps");
+        await updateStepQuantity(input.stepId, input.completedQuantity);
+        return { success: true };
+      }),
     getProgress: publicProcedure
       .input((val: unknown) => z.object({ inspectionItemId: z.number() }).parse(val))
       .query(async ({ input }) => {

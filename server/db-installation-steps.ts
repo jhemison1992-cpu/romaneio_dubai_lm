@@ -91,3 +91,16 @@ export async function getInstallationProgress(inspectionItemId: number): Promise
   const completedSteps = steps.filter((step: any) => step.isCompleted === 1).length;
   return Math.round((completedSteps / steps.length) * 100);
 }
+
+/**
+ * Atualizar quantidade de caixilhos concluídos em uma etapa
+ */
+export async function updateStepQuantity(stepId: number, completedQuantity: number) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  await db
+    .update(installationSteps)
+    .set({ completedQuantity })
+    .where(eq(installationSteps.id, stepId));
+}

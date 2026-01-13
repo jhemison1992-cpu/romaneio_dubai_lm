@@ -538,3 +538,18 @@
 
 - [x] Atualizado nomes das etapas no banco de dados (step_order 1,2,3 → Instalação, Acabamento, Finalizado)
 - [x] Todas as etapas existentes foram renomeadas
+
+## Sistema de Porcentagem por Etapa (0-100%)
+- [ ] Adicionar campo completed_quantity em installation_steps
+- [ ] Criar interface para informar quantidade de caixilhos concluídos por etapa
+- [ ] Calcular porcentagem: (completed / total) × 100
+- [ ] Exibir porcentagem em cada botão de etapa
+- [ ] Calcular progresso geral como média das 3 etapas
+- [ ] Atualizar barra de progresso visual
+
+- [x] Adicionar campo completed_quantity em installation_steps
+- [x] Criar interface para informar quantidade de caixilhos concluídos por etapa
+- [x] Calcular porcentagem: (completed / total) × 100
+- [x] Exibir porcentagem em cada botão de etapa
+- [x] Calcular progresso geral como média das 3 etapas
+- [x] Atualizar barra de progresso visual

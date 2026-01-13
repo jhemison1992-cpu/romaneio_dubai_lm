@@ -169,6 +169,7 @@ export const installationSteps = mysqlTable("installation_steps", {
   stepName: varchar("step_name", { length: 100 }).notNull(), // Nome da etapa (ex: Medição, Fabricação, Instalação, Acabamento)
   stepOrder: int("step_order").notNull(), // Ordem da etapa (1, 2, 3, 4...)
   isCompleted: int("is_completed").default(0).notNull(), // 0 = não concluída, 1 = concluída
+  completedQuantity: int("completed_quantity").default(0).notNull(), // Quantidade de caixilhos concluídos nesta etapa
   completedAt: timestamp("completed_at"), // Data/hora de conclusão da etapa
   notes: text("notes"), // Observações sobre a etapa
   createdAt: timestamp("createdAt").defaultNow().notNull(),

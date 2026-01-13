@@ -30,6 +30,7 @@ interface InspectionItemData {
   observations?: string;
   signatureConstruction?: string;
   signatureSupplier?: string;
+  quantity?: number;
 }
 
 function GeneratePDFButton({ inspectionId }: { inspectionId: number }) {
@@ -489,6 +490,7 @@ export default function InspectionDetail() {
                       <InstallationStepsChecklist 
                         inspectionItemId={data.id} 
                         environmentName={env.name}
+                        totalQuantity={data.quantity || 1}
                       />
                     </div>
                   )}
