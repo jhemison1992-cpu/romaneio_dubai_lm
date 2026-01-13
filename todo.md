@@ -332,3 +332,9 @@
 - [x] Adicionar botão "Ver Projeto" nos cards de ambiente quando projeto existir
 - [x] Testar upload de projeto ao criar ambiente
 - [x] Testar visualização de projeto nos cards
+
+## Correção: Erro ao fazer upload da planta ao editar ambiente
+- [x] Investigar causa do erro "Erro ao fazer upload da planta"
+- [x] Corrigir lógica de upload no dialog de edição
+- [x] Garantir que upload funcione tanto ao criar quanto ao editar
+- [x] Testar upload de planta e projeto ao editar ambiente

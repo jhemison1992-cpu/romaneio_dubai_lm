@@ -396,14 +396,14 @@ export default function ProjectEnvironments() {
               try {
                 const formData = new FormData();
                 formData.append('file', plantaFile);
-                const response = await fetch('/api/upload', {
+                const response = await fetch('/api/upload-planta', {
                   method: 'POST',
                   body: formData,
                 });
                 if (!response.ok) throw new Error('Falha no upload da planta');
                 const data = await response.json();
-                plantaFileKey = data.key;
-                plantaFileUrl = data.url;
+                plantaFileKey = data.fileKey;
+                plantaFileUrl = data.fileUrl;
               } catch (error) {
                 toast.error('Erro ao fazer upload da planta');
                 setUploadingPlanta(false);
@@ -418,14 +418,14 @@ export default function ProjectEnvironments() {
               try {
                 const formData = new FormData();
                 formData.append('file', projectFile);
-                const response = await fetch('/api/upload', {
+                const response = await fetch('/api/upload-planta', {
                   method: 'POST',
                   body: formData,
                 });
                 if (!response.ok) throw new Error('Falha no upload do projeto');
                 const data = await response.json();
-                projectFileKey = data.key;
-                projectFileUrl = data.url;
+                projectFileKey = data.fileKey;
+                projectFileUrl = data.fileUrl;
               } catch (error) {
                 toast.error('Erro ao fazer upload do projeto');
                 setUploadingPlanta(false);
