@@ -71,10 +71,10 @@
   --border: oklch(0.92 0.004 286.32);
   --input: oklch(0.92 0.004 286.32);
   --ring: oklch(0.623 0.214 259.815);
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.235 0.015 65);
-  --sidebar-accent: oklch(0.967 0.001 286.375);
-  --sidebar-accent-foreground: oklch(0.141 0.005 285.823);
+  --sidebar: oklch(0.98 0 0); /* Fundo claro para sidebar */
+  --sidebar-foreground: oklch(0.1 0 0); /* Texto preto para sidebar */
+  --sidebar-accent: oklch(0.95 0 0); /* Cinza claro para hover */
+  --sidebar-accent-foreground: oklch(0.1 0 0); /* Texto preto no hover */
   --sidebar-border: oklch(0.92 0.004 286.32);
   --sidebar-ring: oklch(0.623 0.214 259.815);
 }

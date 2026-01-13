@@ -491,3 +491,13 @@
 - [x] Alterado tema para texto preto no conteúdo principal
 - [x] Mantida sidebar escura com texto branco
 - [x] Ajustado contraste para melhor legibilidade
+
+## Sidebar com Fundo Claro e Texto Preto
+- [ ] Alterar fundo da sidebar de escuro para claro
+- [ ] Alterar texto e ícones do menu para preto
+- [ ] Ajustar hover states para fundo claro
+
+- [x] Alterado fundo da sidebar de escuro para claro
+- [x] Alterado texto e ícones do menu para preto
+- [x] Removidas todas as classes de cor forçada (bg-[#111827], text-white)
+- [x] Ajustado hover states para fundo claro
