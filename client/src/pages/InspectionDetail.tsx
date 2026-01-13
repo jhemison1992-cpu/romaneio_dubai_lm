@@ -98,6 +98,12 @@ export default function InspectionDetail() {
   
   const utils = trpc.useUtils();
   
+  const autoCreateItemsMutation = trpc.inspections.autoCreateItems.useMutation({
+    onSuccess: () => {
+      refetchItems();
+    },
+  });
+  
   const upsertMutation = trpc.inspectionItems.upsert.useMutation({
     onSuccess: (data, variables) => {
       toast.success("Dados salvos com sucesso!");
@@ -157,6 +163,16 @@ export default function InspectionDetail() {
     ...(environments || []),
     ...(inspectionEnvs || []),
   ];
+  
+  // Auto-criar inspection_items para todos os ambientes ao carregar
+  useEffect(() => {
+    if (inspection?.id && inspection?.projectId && allEnvironments.length > 0) {
+      autoCreateItemsMutation.mutate({
+        inspectionId: inspection.id,
+        projectId: inspection.projectId,
+      });
+    }
+  }, [inspection?.id, inspection?.projectId, allEnvironments.length]);
   
   useEffect(() => {
     if (allEnvironments.length > 0 && items) {
