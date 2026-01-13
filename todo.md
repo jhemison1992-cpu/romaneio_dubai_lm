@@ -296,3 +296,33 @@
 - [x] Criar função updateEnvironment no db.ts
 - [x] Garantir que ambientes criados sejam 100% funcionais e editáveis
 - [x] Testar criação, edição e exclusão de ambientes
+
+## Melhoria: Upload de Projeto do Caixilho na Edição
+- [x] Adicionar campo de upload de projeto (PDF) no dialog de edição de ambiente
+- [x] Implementar lógica de upload e atualização no backend
+- [x] Permitir visualizar projeto atual se já existir
+- [x] Testar upload e substituição de projeto
+
+## Funcionalidades Completas: Edição e Exclusão para Todas as Entidades
+
+### Obras
+- [x] Adicionar botão de editar no card de obra
+- [x] Criar dialog de edição de obra com todos os campos
+- [x] Implementar router projects.update no backend
+- [x] Adicionar botão de excluir no card de obra
+- [x] Implementar confirmação antes de excluir obra
+- [x] Testar edição e exclusão de obras
+
+### Vistorias
+- [x] Adicionar botão de editar na lista de vistorias
+- [x] Criar dialog de edição de vistoria (nome, status)
+- [x] Implementar router inspections.update no backend
+- [x] Adicionar botão de excluir na lista de vistorias
+- [x] Implementar confirmação antes de excluir vistoria
+- [x] Testar edição e exclusão de vistorias
+
+### Usuários
+- [x] Adicionar botão de editar na lista de usuários
+- [x] Criar dialog de edição de usuário (nome, senha, foto, role)
+- [x] Implementar router users.update no backend
+- [x] Testar edição de usuários

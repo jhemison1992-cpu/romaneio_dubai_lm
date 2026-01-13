@@ -6,7 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { trpc } from "@/lib/trpc";
-import { Building2, Plus, Settings, Trash2, ClipboardList, MapPin, User, Briefcase } from "lucide-react";
+import { Building2, Edit2, Plus, Settings, Trash2, ClipboardList, MapPin, User, Briefcase } from "lucide-react";
 import { useState } from "react";
 import { useLocation } from "wouter";
 import { toast } from "sonner";
@@ -14,6 +14,8 @@ import { toast } from "sonner";
 export default function Projects() {
   const [, setLocation] = useLocation();
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+  const [editingProject, setEditingProject] = useState<any>(null);
   const [formData, setFormData] = useState({
     name: "",
     address: "",
@@ -38,6 +40,25 @@ export default function Projects() {
     },
     onError: (error) => {
       toast.error("Erro ao criar obra: " + error.message);
+    },
+  });
+
+  const updateProject = trpc.projects.update.useMutation({
+    onSuccess: () => {
+      toast.success("Obra atualizada com sucesso!");
+      setIsEditDialogOpen(false);
+      setEditingProject(null);
+      setFormData({
+        name: "",
+        address: "",
+        contractor: "",
+        technicalManager: "",
+        supplier: "ALUMINC Esquadrias Metálicas Indústria e Comércio Ltda.",
+      });
+      refetch();
+    },
+    onError: (error) => {
+      toast.error("Erro ao atualizar obra: " + error.message);
     },
   });
 
@@ -236,6 +257,23 @@ export default function Projects() {
                     <Button
                       variant="outline"
                       size="icon"
+                      onClick={() => {
+                        setEditingProject(project);
+                        setFormData({
+                          name: project.name,
+                          address: project.address || "",
+                          contractor: project.contractor || "",
+                          technicalManager: project.technicalManager || "",
+                          supplier: project.supplier || "ALUMINC Esquadrias Metálicas Indústria e Comércio Ltda.",
+                        });
+                        setIsEditDialogOpen(true);
+                      }}
+                    >
+                      <Edit2 className="h-4 w-4" />
+                    </Button>
+                    <Button
+                      variant="outline"
+                      size="icon"
                       onClick={() => handleDelete(project.id, project.name)}
                       disabled={deleteProject.isPending}
                     >
@@ -248,6 +286,85 @@ export default function Projects() {
           ))}
         </div>
       )}
+
+      {/* Dialog de Edição de Obra */}
+      <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
+        <DialogContent className="max-w-2xl">
+          <DialogHeader>
+            <DialogTitle>Editar Obra</DialogTitle>
+            <DialogDescription>
+              Atualize as informações da obra
+            </DialogDescription>
+          </DialogHeader>
+          <form onSubmit={(e) => {
+            e.preventDefault();
+            if (!formData.name.trim()) {
+              toast.error("Nome da obra é obrigatório");
+              return;
+            }
+            updateProject.mutate({
+              id: editingProject.id,
+              ...formData,
+            });
+          }} className="space-y-4 mt-4">
+            <div className="space-y-2">
+              <Label htmlFor="edit-name">Nome da Obra *</Label>
+              <Input
+                id="edit-name"
+                value={formData.name}
+                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                placeholder="Ex: DUBAI LM"
+                required
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="edit-address">Endereço</Label>
+              <Textarea
+                id="edit-address"
+                value={formData.address}
+                onChange={(e) => setFormData({ ...formData, address: e.target.value })}
+                placeholder="Ex: Avenida Lucianinho Melli, nº 444 – Vila Osasco – Osasco/SP"
+                rows={2}
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="edit-contractor">Contratante</Label>
+              <Input
+                id="edit-contractor"
+                value={formData.contractor}
+                onChange={(e) => setFormData({ ...formData, contractor: e.target.value })}
+                placeholder="Ex: DUBAI LM EMPREENDIMENTOS IMOBILIÁRIOS LTDA"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="edit-technicalManager">Responsável Técnico</Label>
+              <Input
+                id="edit-technicalManager"
+                value={formData.technicalManager}
+                onChange={(e) => setFormData({ ...formData, technicalManager: e.target.value })}
+                placeholder="Ex: Eng. William"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="edit-supplier">Fornecedor</Label>
+              <Input
+                id="edit-supplier"
+                value={formData.supplier}
+                onChange={(e) => setFormData({ ...formData, supplier: e.target.value })}
+                placeholder="ALUMINC Esquadrias Metálicas Indústria e Comércio Ltda."
+              />
+            </div>
+            <div className="flex justify-end gap-3 pt-4">
+              <Button type="button" variant="outline" onClick={() => setIsEditDialogOpen(false)}>
+                Cancelar
+              </Button>
+              <Button type="submit" disabled={updateProject.isPending}>
+                {updateProject.isPending ? "Salvando..." : "Salvar Alterações"}
+              </Button>
+            </div>
+          </form>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

@@ -26,7 +26,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { trpc } from "@/lib/trpc";
-import { Loader2, Plus, Shield, ShieldAlert, Trash2, UserCog } from "lucide-react";
+import { Edit2, Loader2, Plus, Shield, ShieldAlert, Trash2, UserCog } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 import DashboardLayout from "@/components/DashboardLayout";
@@ -34,7 +34,16 @@ import { ProfilePhotoUpload } from "@/components/ProfilePhotoUpload";
 
 export default function Users() {
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+  const [editingUser, setEditingUser] = useState<any>(null);
   const [newUser, setNewUser] = useState({
+    username: "",
+    password: "",
+    name: "",
+    role: "user" as "user" | "admin",
+    profilePhoto: null as string | null,
+  });
+  const [editUser, setEditUser] = useState({
     username: "",
     password: "",
     name: "",
@@ -52,6 +61,19 @@ export default function Users() {
     },
     onError: (error) => {
       toast.error(`Erro ao criar usuário: ${error.message}`);
+    },
+  });
+
+  const updateMutation = trpc.users.update.useMutation({
+    onSuccess: () => {
+      toast.success("Usuário atualizado com sucesso!");
+      setIsEditDialogOpen(false);
+      setEditingUser(null);
+      setEditUser({ username: "", password: "", name: "", role: "user", profilePhoto: null });
+      refetch();
+    },
+    onError: (error) => {
+      toast.error(`Erro ao atualizar usuário: ${error.message}`);
     },
   });
 
@@ -78,6 +100,40 @@ export default function Users() {
       role: newUser.role,
       profilePhoto: newUser.profilePhoto,
     });
+  };
+
+  const handleEditUser = (user: any) => {
+    setEditingUser(user);
+    setEditUser({
+      username: user.username,
+      password: "",
+      name: user.name,
+      role: user.role,
+      profilePhoto: user.profilePhoto,
+    });
+    setIsEditDialogOpen(true);
+  };
+
+  const handleUpdateUser = () => {
+    if (!editUser.username || !editUser.name) {
+      toast.error("Preencha todos os campos obrigatórios");
+      return;
+    }
+
+    const updateData: any = {
+      id: editingUser.id,
+      username: editUser.username,
+      fullName: editUser.name,
+      role: editUser.role,
+      profilePhoto: editUser.profilePhoto,
+    };
+
+    // Só atualiza senha se foi fornecida
+    if (editUser.password) {
+      updateData.password = editUser.password;
+    }
+
+    updateMutation.mutate(updateData);
   };
 
   const handleDeleteUser = (id: number, username: string) => {
@@ -169,14 +225,23 @@ export default function Users() {
                         )}
                       </TableCell>
                       <TableCell className="text-right">
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          onClick={() => handleDeleteUser(user.id, user.username)}
-                          disabled={deleteMutation.isPending}
-                        >
-                          <Trash2 className="h-4 w-4 text-destructive" />
-                        </Button>
+                        <div className="flex justify-end gap-1">
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => handleEditUser(user)}
+                          >
+                            <Edit2 className="h-4 w-4" />
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => handleDeleteUser(user.id, user.username)}
+                            disabled={deleteMutation.isPending}
+                          >
+                            <Trash2 className="h-4 w-4 text-destructive" />
+                          </Button>
+                        </div>
                       </TableCell>
                     </TableRow>
                   ))}
@@ -277,6 +342,100 @@ export default function Users() {
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                 )}
                 Criar Usuário
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+
+        {/* Dialog de Edição de Usuário */}
+        <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Editar Usuário</DialogTitle>
+              <DialogDescription>
+                Atualize os dados do usuário
+              </DialogDescription>
+            </DialogHeader>
+
+            <div className="space-y-4 py-4">
+              <div className="space-y-2">
+                <Label htmlFor="edit-photo">Foto de Perfil</Label>
+                <ProfilePhotoUpload
+                  currentPhotoUrl={editUser.profilePhoto}
+                  onPhotoChange={(url: string | null) => setEditUser({ ...editUser, profilePhoto: url })}
+                  userName={editUser.name || "Usuário"}
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="edit-name">Nome Completo *</Label>
+                <Input
+                  id="edit-name"
+                  value={editUser.name}
+                  onChange={(e) => setEditUser({ ...editUser, name: e.target.value })}
+                  placeholder="Ex: João Silva"
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="edit-username">Username *</Label>
+                <Input
+                  id="edit-username"
+                  value={editUser.username}
+                  onChange={(e) => setEditUser({ ...editUser, username: e.target.value })}
+                  placeholder="Ex: joao.silva"
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="edit-password">Nova Senha (deixe em branco para manter a atual)</Label>
+                <Input
+                  id="edit-password"
+                  type="password"
+                  value={editUser.password}
+                  onChange={(e) => setEditUser({ ...editUser, password: e.target.value })}
+                  placeholder="Digite a nova senha (opcional)"
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="edit-role">Tipo de Usuário *</Label>
+                <Select
+                  value={editUser.role}
+                  onValueChange={(value: "user" | "admin") =>
+                    setEditUser({ ...editUser, role: value })
+                  }
+                >
+                  <SelectTrigger id="edit-role">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="user">
+                      <div className="flex items-center gap-2">
+                        <Shield className="h-4 w-4 text-blue-500" />
+                        <span>Usuário Padrão</span>
+                      </div>
+                    </SelectItem>
+                    <SelectItem value="admin">
+                      <div className="flex items-center gap-2">
+                        <ShieldAlert className="h-4 w-4 text-orange-500" />
+                        <span>Administrador</span>
+                      </div>
+                    </SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+
+            <DialogFooter>
+              <Button variant="outline" onClick={() => setIsEditDialogOpen(false)}>
+                Cancelar
+              </Button>
+              <Button onClick={handleUpdateUser} disabled={updateMutation.isPending}>
+                {updateMutation.isPending && (
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                )}
+                Salvar Alterações
               </Button>
             </DialogFooter>
           </DialogContent>

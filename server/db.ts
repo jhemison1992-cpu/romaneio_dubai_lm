@@ -310,6 +310,33 @@ export async function createUser(data: {
   return result[0].insertId;
 }
 
+export async function updateUser(id: number, data: {
+  username?: string;
+  password?: string;
+  fullName?: string;
+  role?: "user" | "admin";
+  profilePhoto?: string | null;
+}) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  const { appUsers } = await import("../drizzle/schema");
+  const { hashPassword } = await import("./auth");
+  
+  const updateData: any = {};
+  
+  if (data.username !== undefined) updateData.username = data.username;
+  if (data.fullName !== undefined) updateData.name = data.fullName;
+  if (data.role !== undefined) updateData.role = data.role;
+  if (data.profilePhoto !== undefined) updateData.profilePhoto = data.profilePhoto;
+  
+  // Se senha foi fornecida, fazer hash
+  if (data.password) {
+    updateData.passwordHash = await hashPassword(data.password);
+  }
+  
+  await db.update(appUsers).set(updateData).where(eq(appUsers.id, id));
+}
+
 export async function deleteUser(id: number) {
   const db = await getDb();
   if (!db) throw new Error("Database not available");

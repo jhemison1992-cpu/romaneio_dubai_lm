@@ -365,6 +365,10 @@ export const appRouter = router({
         caixilhoCode: z.string().optional(),
         caixilhoType: z.string().optional(),
         quantity: z.number().optional(),
+        plantaFileKey: z.string().optional(),
+        plantaFileUrl: z.string().optional(),
+        projectFileKey: z.string().optional(),
+        projectFileUrl: z.string().optional(),
       }).parse(val))
       .mutation(async ({ input }) => {
         const { id, ...data } = input;
@@ -397,6 +401,22 @@ export const appRouter = router({
         const { createUser } = await import("./db");
         const id = await createUser(input);
         return { id };
+      }),
+    
+    update: publicProcedure
+      .input((val: unknown) => z.object({
+        id: z.number(),
+        username: z.string().optional(),
+        password: z.string().optional(),
+        fullName: z.string().optional(),
+        role: z.enum(["user", "admin"]).optional(),
+        profilePhoto: z.string().nullable().optional(),
+      }).parse(val))
+      .mutation(async ({ input }) => {
+        const { updateUser } = await import("./db");
+        const { id, ...data } = input;
+        await updateUser(id, data);
+        return { success: true };
       }),
     
     delete: publicProcedure

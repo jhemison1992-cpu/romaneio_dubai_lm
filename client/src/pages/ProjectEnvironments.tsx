@@ -25,6 +25,7 @@ export default function ProjectEnvironments() {
     quantity: 1,
   });
   const [plantaFile, setPlantaFile] = useState<File | null>(null);
+  const [projectFile, setProjectFile] = useState<File | null>(null);
   const [uploadingPlanta, setUploadingPlanta] = useState(false);
 
   const { data: project } = trpc.projects.get.useQuery({ id: projectId });
@@ -313,15 +314,67 @@ export default function ProjectEnvironments() {
               Atualize os dados do ambiente
             </DialogDescription>
           </DialogHeader>
-          <form onSubmit={(e) => {
+          <form onSubmit={async (e) => {
             e.preventDefault();
             if (!formData.name.trim() || !formData.caixilhoCode.trim() || !formData.caixilhoType.trim()) {
               toast.error("Preencha todos os campos obrigatórios");
               return;
             }
+            
+            let plantaFileKey: string | undefined;
+            let plantaFileUrl: string | undefined;
+            let projectFileKey: string | undefined;
+            let projectFileUrl: string | undefined;
+            
+            // Upload da planta se fornecida
+            if (plantaFile) {
+              setUploadingPlanta(true);
+              try {
+                const formData = new FormData();
+                formData.append('file', plantaFile);
+                const response = await fetch('/api/upload', {
+                  method: 'POST',
+                  body: formData,
+                });
+                if (!response.ok) throw new Error('Falha no upload da planta');
+                const data = await response.json();
+                plantaFileKey = data.key;
+                plantaFileUrl = data.url;
+              } catch (error) {
+                toast.error('Erro ao fazer upload da planta');
+                setUploadingPlanta(false);
+                return;
+              }
+              setUploadingPlanta(false);
+            }
+            
+            // Upload do projeto se fornecido
+            if (projectFile) {
+              setUploadingPlanta(true);
+              try {
+                const formData = new FormData();
+                formData.append('file', projectFile);
+                const response = await fetch('/api/upload', {
+                  method: 'POST',
+                  body: formData,
+                });
+                if (!response.ok) throw new Error('Falha no upload do projeto');
+                const data = await response.json();
+                projectFileKey = data.key;
+                projectFileUrl = data.url;
+              } catch (error) {
+                toast.error('Erro ao fazer upload do projeto');
+                setUploadingPlanta(false);
+                return;
+              }
+              setUploadingPlanta(false);
+            }
+            
             updateEnvironment.mutate({
               id: editingEnvironment.id,
               ...formData,
+              ...(plantaFileKey && { plantaFileKey, plantaFileUrl }),
+              ...(projectFileKey && { projectFileKey, projectFileUrl }),
             });
           }} className="space-y-4 mt-4">
             <div className="space-y-2">
@@ -365,6 +418,40 @@ export default function ProjectEnvironments() {
                 onChange={(e) => setFormData({ ...formData, quantity: parseInt(e.target.value) || 1 })}
                 required
               />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="edit-planta">Planta Técnica (PDF)</Label>
+              <Input
+                id="edit-planta"
+                type="file"
+                accept=".pdf"
+                onChange={(e) => {
+                  const file = e.target.files?.[0];
+                  if (file) {
+                    setPlantaFile(file);
+                  }
+                }}
+              />
+              {editingEnvironment?.plantaFileUrl && (
+                <p className="text-sm text-muted-foreground">Planta atual: {editingEnvironment.plantaFileUrl.split('/').pop()}</p>
+              )}
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="edit-project">Projeto do Caixilho (PDF)</Label>
+              <Input
+                id="edit-project"
+                type="file"
+                accept=".pdf"
+                onChange={(e) => {
+                  const file = e.target.files?.[0];
+                  if (file) {
+                    setProjectFile(file);
+                  }
+                }}
+              />
+              {editingEnvironment?.projectFileUrl && (
+                <p className="text-sm text-muted-foreground">Projeto atual: {editingEnvironment.projectFileUrl.split('/').pop()}</p>
+              )}
             </div>
             <div className="flex justify-end gap-3 pt-4">
               <Button type="button" variant="outline" onClick={() => setIsEditDialogOpen(false)}>
