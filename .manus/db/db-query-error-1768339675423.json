@@ -1,8 +1,0 @@
-{
-  "query": "\nSELECT \n  ii.environment_name,\n  ii.id as item_id,\n  COUNT(ist.id) as total_steps,\n  GROUP_CONCAT(CONCAT(ist.step_order, ':', ist.step_name) ORDER BY ist.step_order) as steps_detail\nFROM inspection_items ii\nLEFT JOIN installation_steps ist ON ii.id = ist.inspection_item_id\nGROUP BY ii.id, ii.environment_name\nORDER BY ii.environment_name;\n",
-  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway03.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 2RJ6pkiYcWrkG7s.7677514b54b3 --database AdJ4NUusdiWEA7xpHs45nc --execute \nSELECT \n  ii.environment_name,\n  ii.id as item_id,\n  COUNT(ist.id) as total_steps,\n  GROUP_CONCAT(CONCAT(ist.step_order, ':', ist.step_name) ORDER BY ist.step_order) as steps_detail\nFROM inspection_items ii\nLEFT JOIN installation_steps ist ON ii.id = ist.inspection_item_id\nGROUP BY ii.id, ii.environment_name\nORDER BY ii.environment_name;\n",
-  "returncode": 1,
-  "logs": [
-    "ERROR 1054 (42S22) at line 2: Unknown column 'ii.environment_name' in 'group statement'"
-  ]
-}

@@ -4,43 +4,15 @@ import NotFound from "@/pages/NotFound";
 import { Route, Switch } from "wouter";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
-import DashboardLayout from "./components/DashboardLayout";
-import Projects from "./pages/Projects";
-import ProjectEnvironments from "./pages/ProjectEnvironments";
-import Inspections from "./pages/Inspections";
-import InspectionDetail from "./pages/InspectionDetail";
-import Users from "./pages/Users";
+import Home from "./pages/Home";
 
 function Router() {
+  // make sure to consider if you need authentication for certain routes
   return (
     <Switch>
-      <Route path="/" component={() => (
-        <DashboardLayout>
-          <Projects />
-        </DashboardLayout>
-      )} />
-      <Route path="/projects" component={() => (
-        <DashboardLayout>
-          <Projects />
-        </DashboardLayout>
-      )} />
-      <Route path="/project/:id/environments" component={() => (
-        <DashboardLayout>
-          <ProjectEnvironments />
-        </DashboardLayout>
-      )} />
-      <Route path="/inspections" component={() => (
-        <DashboardLayout>
-          <Inspections />
-        </DashboardLayout>
-      )} />
-      <Route path="/inspection/:id" component={() => (
-        <DashboardLayout>
-          <InspectionDetail />
-        </DashboardLayout>
-      )} />
-      <Route path="/users" component={Users} />
-      <Route path="/404" component={NotFound} />
+      <Route path={"/"} component={Home} />
+      <Route path={"/404"} component={NotFound} />
+      {/* Final fallback route */}
       <Route component={NotFound} />
     </Switch>
   );

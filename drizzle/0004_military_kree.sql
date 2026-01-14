@@ -1,1 +1,0 @@
-ALTER TABLE `media_files` ADD `comment` text;
