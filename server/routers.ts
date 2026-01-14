@@ -85,19 +85,6 @@ export const appRouter = router({
         await deleteInspection(input.id);
         return { success: true };
       }),
-    
-    autoCreateItems: publicProcedure
-      .input((val: unknown) => {
-        return z.object({ 
-          inspectionId: z.number(),
-          projectId: z.number()
-        }).parse(val);
-      })
-      .mutation(async ({ input }) => {
-        const { autoCreateInspectionItems } = await import("./db-auto-create-items");
-        const created = await autoCreateInspectionItems(input.inspectionId, input.projectId);
-        return { created };
-      }),
   }),
 
   inspectionItems: router({
