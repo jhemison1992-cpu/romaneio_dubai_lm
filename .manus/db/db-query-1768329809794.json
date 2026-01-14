@@ -1,0 +1,9 @@
+{
+  "query": "CREATE TABLE IF NOT EXISTS `installation_steps` (\n  `id` int AUTO_INCREMENT NOT NULL,\n  `inspection_item_id` int NOT NULL,\n  `step_name` varchar(100) NOT NULL,\n  `step_order` int NOT NULL,\n  `is_completed` int NOT NULL DEFAULT 0,\n  `completed_at` timestamp NULL,\n  `notes` text,\n  `createdAt` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,\n  `updatedAt` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,\n  CONSTRAINT `installation_steps_id` PRIMARY KEY(`id`),\n  CONSTRAINT `installation_steps_inspection_item_id_inspection_items_id_fk` FOREIGN KEY (`inspection_item_id`) REFERENCES `inspection_items`(`id`) ON DELETE cascade ON UPDATE no action\n);",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway03.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 2RJ6pkiYcWrkG7s.7677514b54b3 --database AdJ4NUusdiWEA7xpHs45nc --execute CREATE TABLE IF NOT EXISTS `installation_steps` (\n  `id` int AUTO_INCREMENT NOT NULL,\n  `inspection_item_id` int NOT NULL,\n  `step_name` varchar(100) NOT NULL,\n  `step_order` int NOT NULL,\n  `is_completed` int NOT NULL DEFAULT 0,\n  `completed_at` timestamp NULL,\n  `notes` text,\n  `createdAt` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,\n  `updatedAt` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,\n  CONSTRAINT `installation_steps_id` PRIMARY KEY(`id`),\n  CONSTRAINT `installation_steps_inspection_item_id_inspection_items_id_fk` FOREIGN KEY (`inspection_item_id`) REFERENCES `inspection_items`(`id`) ON DELETE cascade ON UPDATE no action\n);",
+  "rows": [],
+  "messages": [],
+  "stdout": "",
+  "stderr": "",
+  "execution_time_ms": 310
+}

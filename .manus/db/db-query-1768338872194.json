@@ -1,0 +1,15 @@
+{
+  "query": "\nSELECT \n  (SELECT COUNT(*) FROM inspection_items) as total_items,\n  (SELECT COUNT(DISTINCT inspection_item_id) FROM installation_steps) as items_with_steps,\n  (SELECT COUNT(*) FROM installation_steps) as total_steps;\n",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway03.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 2RJ6pkiYcWrkG7s.7677514b54b3 --database AdJ4NUusdiWEA7xpHs45nc --execute \nSELECT \n  (SELECT COUNT(*) FROM inspection_items) as total_items,\n  (SELECT COUNT(DISTINCT inspection_item_id) FROM installation_steps) as items_with_steps,\n  (SELECT COUNT(*) FROM installation_steps) as total_steps;\n",
+  "rows": [
+    {
+      "total_items": "4",
+      "items_with_steps": "4",
+      "total_steps": "12"
+    }
+  ],
+  "messages": [],
+  "stdout": "total_items\titems_with_steps\ttotal_steps\n4\t4\t12\n",
+  "stderr": "",
+  "execution_time_ms": 58
+}
