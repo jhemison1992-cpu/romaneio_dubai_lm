@@ -1,0 +1,9 @@
+{
+  "query": "UPDATE environments SET name = 'Brinquedoteca' WHERE name = 'inventoria' OR name LIKE '%inventoria%';",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway03.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 2RJ6pkiYcWrkG7s.7677514b54b3 --database AdJ4NUusdiWEA7xpHs45nc --execute UPDATE environments SET name = 'Brinquedoteca' WHERE name = 'inventoria' OR name LIKE '%inventoria%';",
+  "rows": [],
+  "messages": [],
+  "stdout": "",
+  "stderr": "",
+  "execution_time_ms": 66
+}

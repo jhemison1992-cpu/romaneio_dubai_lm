@@ -1,0 +1,35 @@
+{
+  "query": "SELECT id, name, caixilho_code FROM environments WHERE project_id = 1 ORDER BY id DESC LIMIT 5;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway03.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 2RJ6pkiYcWrkG7s.7677514b54b3 --database AdJ4NUusdiWEA7xpHs45nc --execute SELECT id, name, caixilho_code FROM environments WHERE project_id = 1 ORDER BY id DESC LIMIT 5;",
+  "rows": [
+    {
+      "id": "90002",
+      "name": "Brinquedoteca",
+      "caixilho_code": "AL 009 (CA09)"
+    },
+    {
+      "id": "30002",
+      "name": "Espaço Fitnes",
+      "caixilho_code": "Al009 (CA090)"
+    },
+    {
+      "id": "24",
+      "name": "Shaft Hidráulica",
+      "caixilho_code": "AL 034 (PA6)"
+    },
+    {
+      "id": "23",
+      "name": "Sauna",
+      "caixilho_code": "AL 029 (PA4)"
+    },
+    {
+      "id": "22",
+      "name": "Casa de Bombas",
+      "caixilho_code": "AL 027 (VN11)"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\tname\tcaixilho_code\n90002\tBrinquedoteca\tAL 009 (CA09)\n30002\tEspaço Fitnes\tAl009 (CA090)\n24\tShaft Hidráulica\tAL 034 (PA6)\n23\tSauna\tAL 029 (PA4)\n22\tCasa de Bombas\tAL 027 (VN11)\n",
+  "stderr": "",
+  "execution_time_ms": 73
+}

@@ -1,6 +1,11 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
@@ -88,73 +93,7 @@ export default function ProjectEnvironments() {
       toast.error("Preencha todos os campos obrigatórios");
       return;
     }
-    
-    let plantaFileKey: string | undefined;
-    let plantaFileUrl: string | undefined;
-    let projectFileKey: string | undefined;
-    let projectFileUrl: string | undefined;
-    
-    // Upload da planta se fornecida
-    if (plantaFile) {
-      try {
-        setUploadingPlanta(true);
-        const formData = new FormData();
-        formData.append('file', plantaFile);
-        
-        // Upload para S3
-        const response = await fetch('/api/upload-planta', {
-          method: 'POST',
-          body: formData,
-        });
-        
-        if (!response.ok) throw new Error('Erro ao fazer upload da planta');
-        
-        const data = await response.json();
-        plantaFileKey = data.fileKey;
-        plantaFileUrl = data.fileUrl;
-      } catch (error) {
-        toast.error('Erro ao fazer upload da planta');
-        setUploadingPlanta(false);
-        return;
-      } finally {
-        setUploadingPlanta(false);
-      }
-    }
-    
-    // Upload do projeto se fornecido
-    if (projectFile) {
-      try {
-        setUploadingPlanta(true);
-        const formData = new FormData();
-        formData.append('file', projectFile);
-        
-        // Upload para S3
-        const response = await fetch('/api/upload-planta', {
-          method: 'POST',
-          body: formData,
-        });
-        
-        if (!response.ok) throw new Error('Erro ao fazer upload do projeto');
-        
-        const data = await response.json();
-        projectFileKey = data.fileKey;
-        projectFileUrl = data.fileUrl;
-      } catch (error) {
-        toast.error('Erro ao fazer upload do projeto');
-        setUploadingPlanta(false);
-        return;
-      } finally {
-        setUploadingPlanta(false);
-      }
-    }
-    
-    createEnvironment.mutate({
-      projectId,
-      ...formData,
-      technicalDrawingUrl: plantaFileUrl,
-      projectFileKey,
-      projectFileUrl,
-    });
+    createEnvironment.mutate({ projectId, ...formData });
   };
 
   const handleDelete = (id: number, name: string) => {
@@ -192,21 +131,18 @@ export default function ProjectEnvironments() {
             Gerencie os ambientes e caixilhos desta obra
           </p>
         </div>
-        <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
-          <DialogTrigger asChild>
-            <Button size="lg">
-              <Plus className="mr-2 h-5 w-5" />
-              Novo Ambiente
-            </Button>
-          </DialogTrigger>
-          <DialogContent className="max-w-2xl">
-            <DialogHeader>
-              <DialogTitle>Adicionar Novo Ambiente</DialogTitle>
-              <DialogDescription>
-                Preencha os dados do ambiente e seu caixilho
-              </DialogDescription>
-            </DialogHeader>
-            <form onSubmit={handleSubmit} className="space-y-4 mt-4">
+        <Button size="lg" onClick={() => setIsCreateDialogOpen(true)}>
+          <Plus className="mr-2 h-5 w-5" />
+          Novo Ambiente
+        </Button>
+      </div>
+
+      <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Adicionar Novo Ambiente</DialogTitle>
+          </DialogHeader>
+          <form onSubmit={handleSubmit} className="space-y-4">
               <div className="space-y-2">
                 <Label htmlFor="name">Nome do Ambiente *</Label>
                 <Input
@@ -295,14 +231,13 @@ export default function ProjectEnvironments() {
                 <Button type="button" variant="outline" onClick={() => setIsCreateDialogOpen(false)}>
                   Cancelar
                 </Button>
-                <Button type="submit" disabled={createEnvironment.isPending || uploadingPlanta}>
+                <Button type="submit" disabled={createEnvironment.isPending}>
                   {createEnvironment.isPending ? "Adicionando..." : "Adicionar Ambiente"}
                 </Button>
               </div>
             </form>
-          </DialogContent>
-        </Dialog>
-      </div>
+        </DialogContent>
+      </Dialog>
 
       {!environments || environments.length === 0 ? (
         <Card className="border-dashed">
@@ -419,12 +354,9 @@ export default function ProjectEnvironments() {
 
       {/* Dialog de Edição */}
       <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
-        <DialogContent className="max-w-2xl">
+        <DialogContent>
           <DialogHeader>
             <DialogTitle>Editar Ambiente</DialogTitle>
-            <DialogDescription>
-              Atualize os dados do ambiente
-            </DialogDescription>
           </DialogHeader>
           <form onSubmit={async (e) => {
             e.preventDefault();
@@ -488,7 +420,7 @@ export default function ProjectEnvironments() {
               ...(plantaFileKey && { plantaFileKey, plantaFileUrl }),
               ...(projectFileKey && { projectFileKey, projectFileUrl }),
             });
-          }} className="space-y-4 mt-4">
+          }} className="space-y-4">
             <div className="space-y-2">
               <Label htmlFor="edit-name">Nome do Ambiente *</Label>
               <Input

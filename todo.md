@@ -636,3 +636,12 @@
 - [x] Testar em todos os ambientes (SPA, Sauna, Entrada Social, etc)
 - [x] Corrigir deadlock de inicialização no componente React
 - [x] Garantir que etapas sejam criadas para todos os ambientes
+
+## Solução Alternativa: Modal Customizado para Adicionar Ambiente
+
+- [ ] Remover Dialog do Radix UI do formulário de adicionar ambiente
+- [ ] Criar componente de modal customizado simples
+- [ ] Implementar backdrop e animações básicas
+- [ ] Testar se eventos de clique funcionam corretamente
+- [ ] Garantir que formulário submete dados com sucesso
+- [ ] Aplicar mesma solução para dialog de edição se necessário
