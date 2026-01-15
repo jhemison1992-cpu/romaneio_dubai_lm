@@ -184,7 +184,7 @@ export default function InspectionDetail() {
     
     upsertMutation.mutate({
       ...data,
-      releaseDate: data.releaseDate ? formatInputDate(data.releaseDate) : undefined,
+      releaseDate: data.releaseDate instanceof Date ? formatInputDate(data.releaseDate) : data.releaseDate,
       inspectionId,
     });
   };

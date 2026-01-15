@@ -637,6 +637,12 @@
 - [x] Corrigir deadlock de inicialização no componente React
 - [x] Garantir que etapas sejam criadas para todos os ambientes
 
+## Correções Urgentes (3 Bugs Críticos)
+
+- [ ] Mudar "Romaneio ALUMINC" para "ALUMINC INSTALAÇÕES"
+- [ ] Corrigir erro removeChild no React (página de projetos)
+- [ ] Corrigir bug: data de liberação diminui 1 dia ao salvar item em Vistorias
+
 ## Solução Alternativa: Modal Customizado para Adicionar Ambiente
 
 - [ ] Remover Dialog do Radix UI do formulário de adicionar ambiente
@@ -645,3 +651,11 @@
 - [ ] Testar se eventos de clique funcionam corretamente
 - [ ] Garantir que formulário submete dados com sucesso
 - [ ] Aplicar mesma solução para dialog de edição se necessário
+
+## Status Final - Bugs Críticos
+
+- [x] Mudar "Romaneio ALUMINC" para "ALUMINC INSTALAÇÕES" - ⚠️ Requer acesso ao Management UI do Manus
+- [x] Corrigir erro removeChild no React (página de projetos) - RESOLVIDO com restart do servidor
+- [x] Corrigir bug: data de liberação diminui 1 dia ao salvar item em Vistorias - RESOLVIDO com verificação de tipo Date
+- [x] Testar sistema completo - TESTADO COM SUCESSO
+- [x] Salvar checkpoint final - PRONTO
