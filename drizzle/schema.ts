@@ -105,7 +105,7 @@ export const inspectionItems = mysqlTable("inspection_items", {
   id: int("id").autoincrement().primaryKey(),
   inspectionId: int("inspection_id").notNull().references(() => inspections.id, { onDelete: "cascade" }),
   environmentId: int("environment_id").notNull().references(() => environments.id),
-  releaseDate: timestamp("release_date"),
+  releaseDate: timestamp("release_date", { mode: "string" }),
   responsibleConstruction: varchar("responsible_construction", { length: 255 }),
   responsibleSupplier: varchar("responsible_supplier", { length: 255 }),
   observations: text("observations"),

@@ -209,7 +209,7 @@ export async function upsertInspectionItem(data: {
   id?: number;
   inspectionId: number;
   environmentId: number;
-  releaseDate?: Date | null;
+  releaseDate?: string | null;
   responsibleConstruction?: string | null;
   responsibleSupplier?: string | null;
   observations?: string | null;

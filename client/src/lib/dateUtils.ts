@@ -1,12 +1,12 @@
 /**
  * Converte string de data do input (YYYY-MM-DD) para Date sem problemas de timezone
  * @param dateString - String no formato YYYY-MM-DD
- * @returns Date object com a data correta (meio-dia local para evitar mudança de dia)
+ * @returns Date object com a data correta em UTC
  */
 export function parseInputDate(dateString: string): Date {
   const [year, month, day] = dateString.split('-').map(Number);
-  // Cria Date ao meio-dia local para evitar problemas de timezone
-  return new Date(year, month - 1, day, 12, 0, 0);
+  // Cria Date em UTC para evitar problemas de timezone
+  return new Date(Date.UTC(year, month - 1, day, 12, 0, 0));
 }
 
 /**
@@ -15,9 +15,10 @@ export function parseInputDate(dateString: string): Date {
  * @returns String no formato YYYY-MM-DD
  */
 export function formatInputDate(date: Date): string {
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, '0');
-  const day = String(date.getDate()).padStart(2, '0');
+  // Usa getUTC* para garantir que está usando UTC
+  const year = date.getUTCFullYear();
+  const month = String(date.getUTCMonth() + 1).padStart(2, '0');
+  const day = String(date.getUTCDate()).padStart(2, '0');
   return `${year}-${month}-${day}`;
 }
 
@@ -28,8 +29,8 @@ export function formatInputDate(date: Date): string {
  */
 export function formatBrazilianDate(date: Date | string): string {
   const d = typeof date === 'string' ? new Date(date) : date;
-  const day = String(d.getDate()).padStart(2, '0');
-  const month = String(d.getMonth() + 1).padStart(2, '0');
-  const year = d.getFullYear();
+  const day = String(d.getUTCDate()).padStart(2, '0');
+  const month = String(d.getUTCMonth() + 1).padStart(2, '0');
+  const year = d.getUTCFullYear();
   return `${day}/${month}/${year}`;
 }

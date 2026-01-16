@@ -5,6 +5,13 @@ import { publicProcedure, router } from "./_core/trpc";
 import { z } from "zod";
 import * as dbProjects from "./db-projects";
 
+// Helper para converter string ISO para Date sem problemas de timezone
+function parseInputDate(dateStr: string): Date {
+  const [year, month, day] = dateStr.split('-').map(Number);
+  // Cria Date em UTC para evitar problemas de timezone
+  return new Date(Date.UTC(year, month - 1, day, 12, 0, 0));
+}
+
 export const appRouter = router({
     // if you need to use socket.io, read and register route in server/_core/index.ts, all api should start with '/api/' so that the gateway can route correctly
   system: systemRouter,
@@ -126,7 +133,7 @@ export const appRouter = router({
           id: input.id,
           inspectionId: input.inspectionId,
           environmentId: input.environmentId,
-          releaseDate: input.releaseDate ? new Date(input.releaseDate) : null,
+          releaseDate: input.releaseDate || null,
           responsibleConstruction: input.responsibleConstruction || null,
           responsibleSupplier: input.responsibleSupplier || null,
           observations: input.observations || null,

@@ -24,13 +24,12 @@ import { Link, useParams } from "wouter";
 interface InspectionItemData {
   id?: number;
   environmentId: number;
-  releaseDate?: Date;
-  responsibleConstruction?: string;
-  responsibleSupplier?: string;
-  observations?: string;
-  signatureConstruction?: string;
-  signatureSupplier?: string;
-  quantity?: number;
+  releaseDate?: string | null;
+  responsibleConstruction: string;
+  responsibleSupplier: string;
+  observations: string;
+  signatureConstruction: string;
+  signatureSupplier: string;
 }
 
 function GeneratePDFButton({ inspectionId }: { inspectionId: number }) {
@@ -163,10 +162,16 @@ export default function InspectionDetail() {
       const initialData: Record<number, InspectionItemData> = {};
       allEnvironments.forEach((env) => {
         const existingItem = items.find((item) => item.environmentId === env.id);
+        let releaseDate: string | undefined = undefined;
+        if (existingItem?.releaseDate) {
+          // Se for string ISO, pegar apenas YYYY-MM-DD
+          const releaseDateValue = existingItem.releaseDate as string;
+          releaseDate = releaseDateValue.split('T')[0]; // Pegar apenas YYYY-MM-DD
+        }
         initialData[env.id] = {
           id: existingItem?.id,
           environmentId: env.id,
-          releaseDate: existingItem?.releaseDate ? new Date(existingItem.releaseDate) : undefined,
+          releaseDate: releaseDate,
           responsibleConstruction: existingItem?.responsibleConstruction || "",
           responsibleSupplier: existingItem?.responsibleSupplier || "",
           observations: existingItem?.observations || "",
@@ -184,7 +189,7 @@ export default function InspectionDetail() {
     
     upsertMutation.mutate({
       ...data,
-      releaseDate: data.releaseDate instanceof Date ? formatInputDate(data.releaseDate) : data.releaseDate,
+      releaseDate: data.releaseDate ? (typeof data.releaseDate === 'string' ? data.releaseDate : formatInputDate(data.releaseDate)) : undefined,
       inspectionId,
     });
   };
@@ -371,10 +376,18 @@ export default function InspectionDetail() {
                           <p><span className="font-medium">Tipo:</span> {env.caixilhoType}</p>
                           <p><span className="font-medium">Quantidade:</span> {env.quantity} peça(s)</p>
                           {env.startDate && (
-                            <p><span className="font-medium">Data de Liberação:</span> {new Date(env.startDate).toLocaleDateString('pt-BR')}</p>
+                            <p><span className="font-medium">Data de Liberação:</span> {(() => {
+                              const dateStr = typeof env.startDate === 'string' ? env.startDate.split('T')[0] : formatInputDate(new Date(env.startDate));
+                              const date = parseInputDate(dateStr);
+                              return date.toLocaleDateString('pt-BR');
+                            })()}</p>
                           )}
                           {env.endDate && (
-                            <p><span className="font-medium">Data de Finalização:</span> {new Date(env.endDate).toLocaleDateString('pt-BR')}</p>
+                            <p><span className="font-medium">Data de Finalização:</span> {(() => {
+                              const dateStr = typeof env.endDate === 'string' ? env.endDate.split('T')[0] : formatInputDate(new Date(env.endDate));
+                              const date = parseInputDate(dateStr);
+                              return date.toLocaleDateString('pt-BR');
+                            })()}</p>
                           )}
                         </div>
                       </CardDescription>
@@ -423,8 +436,8 @@ export default function InspectionDetail() {
                       <Input
                         id={`releaseDate-${env.id}`}
                         type="date"
-                        value={data.releaseDate ? formatInputDate(data.releaseDate) : ""}
-                        onChange={(e) => handleChange(env.id, "releaseDate", e.target.value ? parseInputDate(e.target.value) : undefined)}
+                        value={data.releaseDate || ""}
+                        onChange={(e) => handleChange(env.id, "releaseDate", e.target.value || undefined)}
                       />
                     </div>
                     
@@ -491,7 +504,7 @@ export default function InspectionDetail() {
                         inspectionItemId={data.id}
                         environmentId={data.environmentId}
                         environmentName={env.name}
-                        totalQuantity={data.quantity || 1}
+                        totalQuantity={env.quantity || 1}
                       />
                     </div>
                   )}
