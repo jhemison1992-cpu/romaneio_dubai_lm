@@ -24,7 +24,7 @@ import { Link, useParams } from "wouter";
 interface InspectionItemData {
   id?: number;
   environmentId: number;
-  releaseDate?: string | null;
+  releaseDate?: Date | string | null;
   responsibleConstruction: string;
   responsibleSupplier: string;
   observations: string;
@@ -162,11 +162,16 @@ export default function InspectionDetail() {
       const initialData: Record<number, InspectionItemData> = {};
       allEnvironments.forEach((env) => {
         const existingItem = items.find((item) => item.environmentId === env.id);
-        let releaseDate: string | undefined = undefined;
+        let releaseDate: Date | undefined = undefined;
         if (existingItem?.releaseDate) {
-          // Se for string ISO, pegar apenas YYYY-MM-DD
-          const releaseDateValue = existingItem.releaseDate as string;
-          releaseDate = releaseDateValue.split('T')[0]; // Pegar apenas YYYY-MM-DD
+          // Se for Date, usar diretamente
+          if (existingItem.releaseDate instanceof Date) {
+            releaseDate = existingItem.releaseDate;
+          } else {
+            // Se for string ISO, converter para Date
+            const releaseDateValue = existingItem.releaseDate as string;
+            releaseDate = new Date(releaseDateValue);
+          }
         }
         initialData[env.id] = {
           id: existingItem?.id,
@@ -187,21 +192,20 @@ export default function InspectionDetail() {
     const data = formData[environmentId];
     if (!data) return;
     
-    // Converter releaseDate para string YYYY-MM-DD
-    let releaseDateStr: string | undefined = undefined;
+    // Converter releaseDate para Date
+    let releaseDateValue: Date | undefined = undefined;
     if (data.releaseDate) {
-      if (typeof data.releaseDate === 'string') {
-        // Se já é string, verificar se está no formato correto
-        releaseDateStr = data.releaseDate.length === 10 ? data.releaseDate : undefined;
-      } else {
-        // Se é Date, converter para YYYY-MM-DD
-        releaseDateStr = formatInputDate(data.releaseDate as Date);
+      if (data.releaseDate instanceof Date) {
+        releaseDateValue = data.releaseDate;
+      } else if (typeof data.releaseDate === 'string') {
+        // Se é string YYYY-MM-DD, converter para Date
+        releaseDateValue = parseInputDate(data.releaseDate);
       }
     }
     
     upsertMutation.mutate({
       ...data,
-      releaseDate: releaseDateStr,
+      releaseDate: releaseDateValue as any,
       inspectionId,
     });
   };
@@ -448,7 +452,7 @@ export default function InspectionDetail() {
                       <Input
                         id={`releaseDate-${env.id}`}
                         type="date"
-                        value={data.releaseDate || ""}
+                        value={data.releaseDate instanceof Date ? formatInputDate(data.releaseDate) : (data.releaseDate || "")}
                         onChange={(e) => handleChange(env.id, "releaseDate", e.target.value || undefined)}
                       />
                     </div>

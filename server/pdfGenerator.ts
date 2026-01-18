@@ -9,7 +9,7 @@ interface InspectionItemData {
   caixilhoCode: string;
   caixilhoType: string;
   quantity: number;
-  releaseDate: string | null;
+  releaseDate: Date | null;
   responsibleConstruction: string | null;
   responsibleSupplier: string | null;
   observations: string | null;

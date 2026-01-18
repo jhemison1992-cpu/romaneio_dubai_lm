@@ -129,11 +129,23 @@ export const appRouter = router({
       })
       .mutation(async ({ input }) => {
         const { upsertInspectionItem } = await import("./db");
+        
+        // Converter releaseDate de string YYYY-MM-DD para Date
+        let releaseDateValue: Date | null = null;
+        if (input.releaseDate) {
+          if (typeof input.releaseDate === 'string' && input.releaseDate.length === 10) {
+            const parts = input.releaseDate.split('-').map(Number);
+            releaseDateValue = new Date(Date.UTC(parts[0], parts[1] - 1, parts[2]));
+          } else if (typeof input.releaseDate === 'string') {
+            releaseDateValue = new Date(input.releaseDate);
+          }
+        }
+        
         const data = {
           id: input.id,
           inspectionId: input.inspectionId,
           environmentId: input.environmentId,
-          releaseDate: input.releaseDate || null,
+          releaseDate: releaseDateValue,
           responsibleConstruction: input.responsibleConstruction || null,
           responsibleSupplier: input.responsibleSupplier || null,
           observations: input.observations || null,

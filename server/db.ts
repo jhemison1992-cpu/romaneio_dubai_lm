@@ -209,7 +209,7 @@ export async function upsertInspectionItem(data: {
   id?: number;
   inspectionId: number;
   environmentId: number;
-  releaseDate?: string | null;
+  releaseDate?: Date | string | null;
   responsibleConstruction?: string | null;
   responsibleSupplier?: string | null;
   observations?: string | null;
@@ -221,8 +221,18 @@ export async function upsertInspectionItem(data: {
   const { inspectionItems } = await import("../drizzle/schema");
   
   if (data.id) {
+    // Converter releaseDate se for string
+    let releaseDateValue: Date | null = null;
+    if (data.releaseDate) {
+      if (data.releaseDate instanceof Date) {
+        releaseDateValue = data.releaseDate;
+      } else if (typeof data.releaseDate === 'string') {
+        releaseDateValue = new Date(data.releaseDate);
+      }
+    }
+    
     await db.update(inspectionItems).set({
-      releaseDate: data.releaseDate,
+      releaseDate: releaseDateValue,
       responsibleConstruction: data.responsibleConstruction,
       responsibleSupplier: data.responsibleSupplier,
       observations: data.observations,
@@ -231,10 +241,20 @@ export async function upsertInspectionItem(data: {
     }).where(eq(inspectionItems.id, data.id));
     return data.id;
   } else {
+    // Converter releaseDate se for string
+    let releaseDateValue: Date | null = null;
+    if (data.releaseDate) {
+      if (data.releaseDate instanceof Date) {
+        releaseDateValue = data.releaseDate;
+      } else if (typeof data.releaseDate === 'string') {
+        releaseDateValue = new Date(data.releaseDate);
+      }
+    }
+    
     const result = await db.insert(inspectionItems).values({
       inspectionId: data.inspectionId,
       environmentId: data.environmentId,
-      releaseDate: data.releaseDate ?? null,
+      releaseDate: releaseDateValue,
       responsibleConstruction: data.responsibleConstruction ?? null,
       responsibleSupplier: data.responsibleSupplier ?? null,
       observations: data.observations ?? null,
