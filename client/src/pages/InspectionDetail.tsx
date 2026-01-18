@@ -187,9 +187,21 @@ export default function InspectionDetail() {
     const data = formData[environmentId];
     if (!data) return;
     
+    // Converter releaseDate para string YYYY-MM-DD
+    let releaseDateStr: string | undefined = undefined;
+    if (data.releaseDate) {
+      if (typeof data.releaseDate === 'string') {
+        // Se já é string, verificar se está no formato correto
+        releaseDateStr = data.releaseDate.length === 10 ? data.releaseDate : undefined;
+      } else {
+        // Se é Date, converter para YYYY-MM-DD
+        releaseDateStr = formatInputDate(data.releaseDate as Date);
+      }
+    }
+    
     upsertMutation.mutate({
       ...data,
-      releaseDate: data.releaseDate ? (typeof data.releaseDate === 'string' ? data.releaseDate : formatInputDate(data.releaseDate)) : undefined,
+      releaseDate: releaseDateStr,
       inspectionId,
     });
   };

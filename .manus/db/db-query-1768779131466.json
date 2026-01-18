@@ -1,0 +1,112 @@
+{
+  "query": "SELECT id, inspection_id, environment_id, release_date FROM inspection_items;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway03.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 2RJ6pkiYcWrkG7s.7677514b54b3 --database AdJ4NUusdiWEA7xpHs45nc --execute SELECT id, inspection_id, environment_id, release_date FROM inspection_items;",
+  "rows": [
+    {
+      "id": "1",
+      "inspection_id": "1",
+      "environment_id": "23",
+      "release_date": "2026-01-07 00:00:00"
+    },
+    {
+      "id": "2",
+      "inspection_id": "1",
+      "environment_id": "13",
+      "release_date": "2026-01-06 00:00:00"
+    },
+    {
+      "id": "60017",
+      "inspection_id": "1",
+      "environment_id": "30002",
+      "release_date": "2026-01-06 00:00:00"
+    },
+    {
+      "id": "60018",
+      "inspection_id": "1",
+      "environment_id": "14",
+      "release_date": "2026-01-07 00:00:00"
+    },
+    {
+      "id": "90001",
+      "inspection_id": "1",
+      "environment_id": "15",
+      "release_date": "NULL"
+    },
+    {
+      "id": "90002",
+      "inspection_id": "1",
+      "environment_id": "16",
+      "release_date": "NULL"
+    },
+    {
+      "id": "90003",
+      "inspection_id": "1",
+      "environment_id": "17",
+      "release_date": "NULL"
+    },
+    {
+      "id": "90004",
+      "inspection_id": "1",
+      "environment_id": "18",
+      "release_date": "NULL"
+    },
+    {
+      "id": "90005",
+      "inspection_id": "1",
+      "environment_id": "19",
+      "release_date": "NULL"
+    },
+    {
+      "id": "90006",
+      "inspection_id": "1",
+      "environment_id": "20",
+      "release_date": "NULL"
+    },
+    {
+      "id": "90007",
+      "inspection_id": "1",
+      "environment_id": "21",
+      "release_date": "2026-01-06 00:00:00"
+    },
+    {
+      "id": "90008",
+      "inspection_id": "1",
+      "environment_id": "22",
+      "release_date": "NULL"
+    },
+    {
+      "id": "90009",
+      "inspection_id": "1",
+      "environment_id": "24",
+      "release_date": "NULL"
+    },
+    {
+      "id": "150003",
+      "inspection_id": "1",
+      "environment_id": "90003",
+      "release_date": "2026-01-06 00:00:00"
+    },
+    {
+      "id": "150010",
+      "inspection_id": "1",
+      "environment_id": "90004",
+      "release_date": "2026-01-06 00:00:00"
+    },
+    {
+      "id": "150012",
+      "inspection_id": "1",
+      "environment_id": "90008",
+      "release_date": "2026-01-06 00:00:00"
+    },
+    {
+      "id": "210001",
+      "inspection_id": "1",
+      "environment_id": "90007",
+      "release_date": "2026-01-12 00:00:00"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\tinspection_id\tenvironment_id\trelease_date\n1\t1\t23\t2026-01-07 00:00:00\n2\t1\t13\t2026-01-06 00:00:00\n60017\t1\t30002\t2026-01-06 00:00:00\n60018\t1\t14\t2026-01-07 00:00:00\n90001\t1\t15\tNULL\n90002\t1\t16\tNULL\n90003\t1\t17\tNULL\n90004\t1\t18\tNULL\n90005\t1\t19\tNULL\n90006\t1\t20\tNULL\n90007\t1\t21\t2026-01-06 00:00:00\n90008\t1\t22\tNULL\n90009\t1\t24\tNULL\n150003\t1\t90003\t2026-01-06 00:00:00\n150010\t1\t90004\t2026-01-06 00:00:00\n150012\t1\t90008\t2026-01-06 00:00:00\n210001\t1\t90007\t2026-01-12 00:00:00\n",
+  "stderr": "",
+  "execution_time_ms": 61
+}

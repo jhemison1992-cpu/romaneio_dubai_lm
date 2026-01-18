@@ -1,0 +1,45 @@
+{
+  "query": "SELECT id, inspection_id, environment_id, release_date, responsible_construction FROM inspection_items LIMIT 5;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway03.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 2RJ6pkiYcWrkG7s.7677514b54b3 --database AdJ4NUusdiWEA7xpHs45nc --execute SELECT id, inspection_id, environment_id, release_date, responsible_construction FROM inspection_items LIMIT 5;",
+  "rows": [
+    {
+      "id": "1",
+      "inspection_id": "1",
+      "environment_id": "23",
+      "release_date": "2026-01-07 00:00:00",
+      "responsible_construction": "Eng.William"
+    },
+    {
+      "id": "2",
+      "inspection_id": "1",
+      "environment_id": "13",
+      "release_date": "NULL",
+      "responsible_construction": "Eng. William"
+    },
+    {
+      "id": "60017",
+      "inspection_id": "1",
+      "environment_id": "30002",
+      "release_date": "2026-01-05 00:00:00",
+      "responsible_construction": "Eng. William"
+    },
+    {
+      "id": "60018",
+      "inspection_id": "1",
+      "environment_id": "14",
+      "release_date": "2026-01-07 00:00:00",
+      "responsible_construction": "Eng. William"
+    },
+    {
+      "id": "90001",
+      "inspection_id": "1",
+      "environment_id": "15",
+      "release_date": "NULL",
+      "responsible_construction": ""
+    }
+  ],
+  "messages": [],
+  "stdout": "id\tinspection_id\tenvironment_id\trelease_date\tresponsible_construction\n1\t1\t23\t2026-01-07 00:00:00\tEng.William\n2\t1\t13\tNULL\tEng. William\n60017\t1\t30002\t2026-01-05 00:00:00\tEng. William\n60018\t1\t14\t2026-01-07 00:00:00\tEng. William\n90001\t1\t15\tNULL\t\n",
+  "stderr": "",
+  "execution_time_ms": 65
+}

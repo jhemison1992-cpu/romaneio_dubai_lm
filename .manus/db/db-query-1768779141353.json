@@ -1,0 +1,25 @@
+{
+  "query": "SELECT * FROM inspection_items WHERE id = 1;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway03.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 2RJ6pkiYcWrkG7s.7677514b54b3 --database AdJ4NUusdiWEA7xpHs45nc --execute SELECT * FROM inspection_items WHERE id = 1;",
+  "rows": [
+    {
+      "id": "1",
+      "inspection_id": "1",
+      "environment_id": "23",
+      "release_date": "2026-01-07 00:00:00",
+      "responsible_construction": "Eng.William",
+      "responsible_supplier": "Eng.Jhemison",
+      "observations": "- FALTA A PINTURA DO COLARINHO PARA A INSTALÇÃO DOS CAIXILHOS.",
+      "createdAt": "2026-01-12 15:37:57",
+      "updatedAt": "2026-01-13 18:02:13",
+      "signature_construction": "NULL",
+      "signature_supplier": "NULL",
+      "delivery_term_signature": "NULL",
+      "delivery_term_responsible": "NULL"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\tinspection_id\tenvironment_id\trelease_date\tresponsible_construction\tresponsible_supplier\tobservations\tcreatedAt\tupdatedAt\tsignature_construction\tsignature_supplier\tdelivery_term_signature\tdelivery_term_responsible\n1\t1\t23\t2026-01-07 00:00:00\tEng.William\tEng.Jhemison\t- FALTA A PINTURA DO COLARINHO PARA A INSTALÇÃO DOS CAIXILHOS.\t2026-01-12 15:37:57\t2026-01-13 18:02:13\tNULL\tNULL\tNULL\tNULL\n",
+  "stderr": "",
+  "execution_time_ms": 53
+}
