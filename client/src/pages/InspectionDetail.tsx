@@ -168,11 +168,9 @@ export default function InspectionDetail() {
           if (existingItem.releaseDate instanceof Date) {
             releaseDate = existingItem.releaseDate;
           } else {
-            // Se for string ISO, converter para Date usando parseInputDate
+            // Se for string ISO, converter para Date
             const releaseDateValue = existingItem.releaseDate as string;
-            // Extrair apenas a data (YYYY-MM-DD) da string ISO
-            const dateOnly = releaseDateValue.split('T')[0];
-            releaseDate = parseInputDate(dateOnly);
+            releaseDate = new Date(releaseDateValue);
           }
         }
         initialData[env.id] = {
