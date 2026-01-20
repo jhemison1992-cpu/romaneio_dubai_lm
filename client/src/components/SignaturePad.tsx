@@ -15,9 +15,17 @@ export function SignaturePad({ value, onChange, label }: SignaturePadProps) {
 
   useEffect(() => {
     if (value && sigCanvas.current) {
-      sigCanvas.current.fromDataURL(value);
+      try {
+        sigCanvas.current.fromDataURL(value);
+      } catch (error) {
+        console.error('Erro ao carregar assinatura:', error);
+      }
     }
-  }, [value]);
+    
+    return () => {
+      // Cleanup: não fazer nada aqui, apenas garantir que não há vazamento de memória
+    };
+  }, [value, sigCanvas]);
 
   const handleClear = () => {
     sigCanvas.current?.clear();

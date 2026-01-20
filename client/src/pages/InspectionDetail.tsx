@@ -108,7 +108,10 @@ export default function InspectionDetail() {
           id: data.id,
         },
       }));
-      refetchItems();
+      // Aguardar um pouco antes de recarregar para evitar race condition
+      setTimeout(() => {
+        refetchItems();
+      }, 500);
     },
     onError: (error) => {
       toast.error("Erro ao salvar: " + error.message);
@@ -168,9 +171,11 @@ export default function InspectionDetail() {
           if (existingItem.releaseDate instanceof Date) {
             releaseDate = existingItem.releaseDate;
           } else {
-            // Se for string ISO, converter para Date
+            // Se for string ISO (YYYY-MM-DD HH:MM:SS), extrair apenas a data e converter
             const releaseDateValue = existingItem.releaseDate as string;
-            releaseDate = new Date(releaseDateValue);
+            // Extrair apenas a parte da data (YYYY-MM-DD)
+            const datePart = releaseDateValue.split(' ')[0];
+            releaseDate = parseInputDate(datePart);
           }
         }
         initialData[env.id] = {
