@@ -1,0 +1,15 @@
+{
+  "query": "\nSELECT u.email, cu.role, c.name as company_name\nFROM company_users cu\nJOIN users u ON cu.user_id = u.id\nJOIN companies c ON cu.company_id = c.id\nWHERE c.id = 1 AND u.email LIKE '%jhemison%'\nORDER BY u.email;\n",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway03.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 2RJ6pkiYcWrkG7s.7677514b54b3 --database AdJ4NUusdiWEA7xpHs45nc --execute \nSELECT u.email, cu.role, c.name as company_name\nFROM company_users cu\nJOIN users u ON cu.user_id = u.id\nJOIN companies c ON cu.company_id = c.id\nWHERE c.id = 1 AND u.email LIKE '%jhemison%'\nORDER BY u.email;\n",
+  "rows": [
+    {
+      "email": "jhemison-@hotmail.com",
+      "role": "admin",
+      "company_name": "ALUMINC"
+    }
+  ],
+  "messages": [],
+  "stdout": "email\trole\tcompany_name\njhemison-@hotmail.com\tadmin\tALUMINC\n",
+  "stderr": "",
+  "execution_time_ms": 78
+}

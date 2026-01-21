@@ -12,6 +12,7 @@ import InspectionDetail from "./pages/InspectionDetail";
 import Users from "./pages/Users";
 import Pricing from "./pages/Pricing";
 import CompanySignup from "./pages/CompanySignup";
+import CompanyLogin from "./pages/CompanyLogin";
 
 function Router() {
   return (
@@ -44,6 +45,7 @@ function Router() {
       <Route path="/users" component={Users} />
       <Route path="/pricing" component={Pricing} />
       <Route path="/signup" component={CompanySignup} />
+      <Route path="/select-company" component={CompanyLogin} />
       <Route path="/404" component={NotFound} />
       <Route component={NotFound} />
     </Switch>
