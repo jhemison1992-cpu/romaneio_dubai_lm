@@ -756,3 +756,26 @@
 - O sistema mantém compatibilidade com dados legados
 - Próximas fases devem implementar UI para multi-tenancy
 - Arquitetura documentada em SAAS_ARCHITECTURE.md
+
+
+## Implementação de Planos de Preço ✅ CONCLUÍDA
+
+- [x] Pesquisar preços de mercado para plataformas SaaS similares
+- [x] Definir planos: PRO ($49/mês, $499/ano) e ENTERPRISE ($199/mês, $2.039/ano)
+- [x] Remover plano FREE
+- [x] Criar tabelas `pricing_plans` e `subscription_history` no banco de dados
+- [x] Inserir planos PRO e ENTERPRISE com desconto de 15% anual
+- [x] Criar funções de banco de dados em `db-pricing.ts`
+- [x] Criar procedures tRPC para gerenciar planos (pricing.list, pricing.getBySlug, pricing.getCompanyPlan, pricing.getPlanLimits)
+- [x] Criar página de Pricing com toggle mensal/anual
+- [x] Adicionar rota `/pricing` ao App.tsx
+- [x] Implementar cálculo automático de desconto anual (15%)
+- [x] Adicionar FAQ na página de preços
+
+### Próximas Etapas
+
+- [ ] Integrar Stripe para pagamentos
+- [ ] Criar checkout flow
+- [ ] Implementar webhooks do Stripe
+- [ ] Adicionar validação de limites de plano (obras, usuários, tamanho de mídia)
+- [ ] Criar página de Billing/Gerenciamento de Assinatura

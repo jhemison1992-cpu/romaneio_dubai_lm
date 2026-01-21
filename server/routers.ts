@@ -4,6 +4,7 @@ import { systemRouter } from "./_core/systemRouter";
 import { publicProcedure, router } from "./_core/trpc";
 import { z } from "zod";
 import * as dbProjects from "./db-projects";
+import * as dbPricing from "./db-pricing";
 
 // Helper para converter string ISO para Date sem problemas de timezone
 function parseInputDate(dateStr: string): Date {
@@ -571,6 +572,30 @@ export const appRouter = router({
         const { createDefaultSteps } = await import("./db-installation-steps");
         await createDefaultSteps(input.inspectionItemId);
         return { success: true };
+      }),
+  }),
+
+  pricing: router({
+    list: publicProcedure.query(async () => {
+      return await dbPricing.getAllPricingPlans();
+    }),
+    
+    getBySlug: publicProcedure
+      .input((val: unknown) => z.object({ slug: z.string() }).parse(val))
+      .query(async ({ input }) => {
+        return await dbPricing.getPricingPlanBySlug(input.slug);
+      }),
+    
+    getCompanyPlan: publicProcedure
+      .input((val: unknown) => z.object({ companyId: z.number() }).parse(val))
+      .query(async ({ input }) => {
+        return await dbPricing.getCompanyPricingPlan(input.companyId);
+      }),
+    
+    getPlanLimits: publicProcedure
+      .input((val: unknown) => z.object({ planSlug: z.string() }).parse(val))
+      .query(async ({ input }) => {
+        return await dbPricing.getPlanLimits(input.planSlug);
       }),
   }),
 });
