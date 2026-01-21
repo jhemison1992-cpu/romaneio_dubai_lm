@@ -779,3 +779,16 @@
 - [ ] Implementar webhooks do Stripe
 - [ ] Adicionar validação de limites de plano (obras, usuários, tamanho de mídia)
 - [ ] Criar página de Billing/Gerenciamento de Assinatura
+
+
+## Implementação de Multi-Tenancy ✅ EM PROGRESSO
+
+- [x] Criar funções de banco de dados para gerenciar empresas (db-companies.ts)
+- [x] Implementar procedures tRPC para empresas (companies.create, companies.getById, companies.getBySlug, companies.getUserCompanies, companies.getUsers)
+- [x] Criar página de Signup para novas empresas
+- [x] Adicionar rota /signup ao App.tsx
+- [ ] Criar página de Login com seleção de empresa
+- [ ] Implementar middleware de isolamento de dados
+- [ ] Criar página de gerenciamento de usuários da empresa
+- [ ] Adicionar validação de limites de plano
+- [ ] Testar multi-tenancy completo

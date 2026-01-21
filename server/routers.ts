@@ -5,6 +5,7 @@ import { publicProcedure, router } from "./_core/trpc";
 import { z } from "zod";
 import * as dbProjects from "./db-projects";
 import * as dbPricing from "./db-pricing";
+import * as dbCompanies from "./db-companies";
 
 // Helper para converter string ISO para Date sem problemas de timezone
 function parseInputDate(dateStr: string): Date {
@@ -572,6 +573,59 @@ export const appRouter = router({
         const { createDefaultSteps } = await import("./db-installation-steps");
         await createDefaultSteps(input.inspectionItemId);
         return { success: true };
+      }),
+  }),
+
+  companies: router({
+    create: publicProcedure
+      .input((val: unknown) => z.object({
+        name: z.string().min(1),
+        slug: z.string().min(1).optional(),
+        logoUrl: z.string().optional(),
+        subscriptionPlan: z.enum(["pro", "enterprise"]).optional(),
+      }).parse(val))
+      .mutation(async ({ input }) => {
+        let slug = input.slug || dbCompanies.generateSlug(input.name);
+        let counter = 1;
+        const originalSlug = slug;
+        
+        while (await dbCompanies.slugExists(slug)) {
+          slug = `${originalSlug}-${counter}`;
+          counter++;
+        }
+        
+        const id = await dbCompanies.createCompany({
+          name: input.name,
+          slug,
+          logoUrl: input.logoUrl,
+          subscriptionPlan: input.subscriptionPlan,
+        });
+        
+        return { id, slug };
+      }),
+    
+    getById: publicProcedure
+      .input((val: unknown) => z.object({ id: z.number() }).parse(val))
+      .query(async ({ input }) => {
+        return await dbCompanies.getCompanyById(input.id);
+      }),
+    
+    getBySlug: publicProcedure
+      .input((val: unknown) => z.object({ slug: z.string() }).parse(val))
+      .query(async ({ input }) => {
+        return await dbCompanies.getCompanyBySlug(input.slug);
+      }),
+    
+    getUserCompanies: publicProcedure
+      .input((val: unknown) => z.object({ userId: z.number() }).parse(val))
+      .query(async ({ input }) => {
+        return await dbCompanies.getUserCompanies(input.userId);
+      }),
+    
+    getUsers: publicProcedure
+      .input((val: unknown) => z.object({ companyId: z.number() }).parse(val))
+      .query(async ({ input }) => {
+        return await dbCompanies.getCompanyUsers(input.companyId);
       }),
   }),
 
