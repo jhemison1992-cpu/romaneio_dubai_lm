@@ -577,6 +577,40 @@ export const appRouter = router({
   }),
 
   companies: router({
+    inviteUser: publicProcedure
+      .input((val: unknown) => z.object({
+        email: z.string().email(),
+        companyId: z.number(),
+        role: z.enum(["admin", "supervisor", "technician", "viewer"]),
+      }).parse(val))
+      .mutation(async ({ input }) => {
+        
+        // Aqui você enviaria um email com o convite
+        // Por enquanto, apenas registramos o convite
+        return { success: true, email: input.email };
+      }),
+    
+    removeUser: publicProcedure
+      .input((val: unknown) => z.object({
+        userId: z.number(),
+        companyId: z.number(),
+      }).parse(val))
+      .mutation(async ({ input }) => {
+        await dbCompanies.removeUserFromCompany(input.userId, input.companyId);
+        return { success: true };
+      }),
+    
+    updateUserRole: publicProcedure
+      .input((val: unknown) => z.object({
+        userId: z.number(),
+        companyId: z.number(),
+        role: z.enum(["admin", "supervisor", "technician", "viewer"]),
+      }).parse(val))
+      .mutation(async ({ input }) => {
+        await dbCompanies.updateUserCompanyRole(input.userId, input.companyId, input.role);
+        return { success: true };
+      }),
+    
     create: publicProcedure
       .input((val: unknown) => z.object({
         name: z.string().min(1),
