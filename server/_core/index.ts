@@ -42,6 +42,11 @@ async function startServer() {
   // Upload planta route
   app.post("/api/upload-planta", upload.single("file"), handleUploadPlanta);
   
+  // Stripe routes
+  const stripeRoutes = await import("../stripe-routes");
+  app.use("/api/stripe", express.raw({ type: "application/json" }), stripeRoutes.default);
+  app.use("/api/stripe", express.json(), stripeRoutes.default);
+  
   // Generate delivery term PDF route
   app.get("/api/generate-delivery-term-pdf/:inspectionItemId", async (req, res) => {
     try {

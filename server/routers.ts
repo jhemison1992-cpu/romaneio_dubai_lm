@@ -663,6 +663,23 @@ export const appRouter = router({
       }),
   }),
 
+  stripe: router({
+    createCheckoutSession: publicProcedure
+      .input((val: unknown) => z.object({
+        companyId: z.number(),
+        plan: z.enum(["pro", "enterprise"]),
+        billingPeriod: z.enum(["monthly", "annual"]),
+        email: z.string().email(),
+      }).parse(val))
+      .mutation(async ({ input, ctx }) => {
+        // Aqui voce chamaria a rota de checkout do Stripe
+        // Por enquanto, retornamos um URL de exemplo
+        const origin = ctx.req?.headers.origin || "http://localhost:3000";
+        const checkoutUrl = `${origin}/checkout?plan=${input.plan}&period=${input.billingPeriod}`;
+        return { sessionId: "test_session", url: checkoutUrl };
+      }),
+  }),
+
   pricing: router({
     list: publicProcedure.query(async () => {
       return await dbPricing.getAllPricingPlans();

@@ -832,3 +832,19 @@
 - Isolamento de dados por empresa
 - Sistema de preços com planos PRO e ENTERPRISE
 - Papéis e permissões configuráveis
+
+
+## Implementação de Pagamentos Stripe ✅ EM PROGRESSO
+
+- [x] Instalar pacote Stripe
+- [x] Criar arquivo de configuração de produtos (stripe-products.ts)
+- [x] Criar funções de banco de dados para assinaturas (db-stripe.ts)
+- [x] Criar rotas Stripe para checkout e webhooks (stripe-routes.ts)
+- [x] Integrar rotas Stripe ao servidor Express
+- [x] Criar página de checkout (Checkout.tsx)
+- [x] Adicionar procedure tRPC para createCheckoutSession
+- [x] Adicionar rota /checkout ao App.tsx
+- [ ] Testar fluxo completo de pagamento
+- [ ] Implementar middleware de validação de assinatura
+- [ ] Criar página de gerenciamento de assinatura
+- [ ] Implementar bloqueio de acesso para empresas sem assinatura

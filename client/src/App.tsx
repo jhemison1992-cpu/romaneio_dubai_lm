@@ -14,6 +14,7 @@ import Pricing from "./pages/Pricing";
 import CompanySignup from "./pages/CompanySignup";
 import CompanyLogin from "./pages/CompanyLogin";
 import CompanyUsers from "./pages/CompanyUsers";
+import Checkout from "./pages/Checkout";
 
 function Router() {
   return (
@@ -48,6 +49,7 @@ function Router() {
       <Route path="/signup" component={CompanySignup} />
       <Route path="/select-company" component={CompanyLogin} />
       <Route path="/company/users" component={CompanyUsers} />
+      <Route path="/checkout" component={Checkout} />
       <Route path="/404" component={NotFound} />
       <Route component={NotFound} />
     </Switch>
