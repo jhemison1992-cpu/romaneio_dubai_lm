@@ -14,7 +14,7 @@ export const DEFAULT_STEPS = [
 /**
  * Criar etapas padrão para um item de vistoria
  */
-export async function createDefaultSteps(inspectionItemId: number) {
+export async function createDefaultSteps(inspectionItemId: number, companyId: number = 1) {
   const db = await getDb();
   if (!db) throw new Error("Database not available");
   
@@ -30,6 +30,7 @@ export async function createDefaultSteps(inspectionItemId: number) {
   }
   
   const steps = DEFAULT_STEPS.map((step) => ({
+    companyId,
     inspectionItemId,
     stepName: step.name,
     stepOrder: step.order,

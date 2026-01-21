@@ -39,12 +39,14 @@ export async function createProject(data: {
   contractor?: string;
   technicalManager?: string;
   supplier?: string;
+  companyId?: number;
 }) {
   const db = await getDb();
   if (!db) throw new Error("Database not available");
   const { projects } = await import("../drizzle/schema");
   
   const result = await db.insert(projects).values({
+    companyId: data.companyId ?? 1,
     name: data.name,
     address: data.address || null,
     contractor: data.contractor || null,

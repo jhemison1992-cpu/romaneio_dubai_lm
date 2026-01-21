@@ -6,7 +6,7 @@
 export function parseInputDate(dateString: string): Date {
   const [year, month, day] = dateString.split('-').map(Number);
   // Cria Date em UTC para evitar problemas de timezone
-  return new Date(Date.UTC(year, month - 1, day, 12, 0, 0));
+  return new Date(Date.UTC(year, month - 1, day, 0, 0, 0));
 }
 
 /**

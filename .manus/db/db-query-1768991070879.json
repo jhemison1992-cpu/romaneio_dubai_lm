@@ -1,0 +1,9 @@
+{
+  "query": "\nALTER TABLE `projects` ADD CONSTRAINT `fk_projects_company_id` FOREIGN KEY (`company_id`) REFERENCES `companies`(`id`) ON DELETE CASCADE;\nALTER TABLE `inspections` ADD CONSTRAINT `fk_inspections_company_id` FOREIGN KEY (`company_id`) REFERENCES `companies`(`id`) ON DELETE CASCADE;\nALTER TABLE `inspection_items` ADD CONSTRAINT `fk_inspection_items_company_id` FOREIGN KEY (`company_id`) REFERENCES `companies`(`id`) ON DELETE CASCADE;\nALTER TABLE `inspection_environments` ADD CONSTRAINT `fk_inspection_environments_company_id` FOREIGN KEY (`company_id`) REFERENCES `companies`(`id`) ON DELETE CASCADE;\nALTER TABLE `installation_steps` ADD CONSTRAINT `fk_installation_steps_company_id` FOREIGN KEY (`company_id`) REFERENCES `companies`(`id`) ON DELETE CASCADE;\n",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway03.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 2RJ6pkiYcWrkG7s.7677514b54b3 --database AdJ4NUusdiWEA7xpHs45nc --execute \nALTER TABLE `projects` ADD CONSTRAINT `fk_projects_company_id` FOREIGN KEY (`company_id`) REFERENCES `companies`(`id`) ON DELETE CASCADE;\nALTER TABLE `inspections` ADD CONSTRAINT `fk_inspections_company_id` FOREIGN KEY (`company_id`) REFERENCES `companies`(`id`) ON DELETE CASCADE;\nALTER TABLE `inspection_items` ADD CONSTRAINT `fk_inspection_items_company_id` FOREIGN KEY (`company_id`) REFERENCES `companies`(`id`) ON DELETE CASCADE;\nALTER TABLE `inspection_environments` ADD CONSTRAINT `fk_inspection_environments_company_id` FOREIGN KEY (`company_id`) REFERENCES `companies`(`id`) ON DELETE CASCADE;\nALTER TABLE `installation_steps` ADD CONSTRAINT `fk_installation_steps_company_id` FOREIGN KEY (`company_id`) REFERENCES `companies`(`id`) ON DELETE CASCADE;\n",
+  "rows": [],
+  "messages": [],
+  "stdout": "",
+  "stderr": "",
+  "execution_time_ms": 3696
+}

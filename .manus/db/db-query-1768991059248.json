@@ -1,0 +1,9 @@
+{
+  "query": "\nALTER TABLE `inspections` ADD COLUMN `company_id` int NOT NULL DEFAULT 1 AFTER `id`;\nALTER TABLE `inspection_items` ADD COLUMN `company_id` int NOT NULL DEFAULT 1 AFTER `id`;\nALTER TABLE `inspection_environments` ADD COLUMN `company_id` int NOT NULL DEFAULT 1 AFTER `id`;\nALTER TABLE `installation_steps` ADD COLUMN `company_id` int NOT NULL DEFAULT 1 AFTER `id`;\n",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway03.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 2RJ6pkiYcWrkG7s.7677514b54b3 --database AdJ4NUusdiWEA7xpHs45nc --execute \nALTER TABLE `inspections` ADD COLUMN `company_id` int NOT NULL DEFAULT 1 AFTER `id`;\nALTER TABLE `inspection_items` ADD COLUMN `company_id` int NOT NULL DEFAULT 1 AFTER `id`;\nALTER TABLE `inspection_environments` ADD COLUMN `company_id` int NOT NULL DEFAULT 1 AFTER `id`;\nALTER TABLE `installation_steps` ADD COLUMN `company_id` int NOT NULL DEFAULT 1 AFTER `id`;\n",
+  "rows": [],
+  "messages": [],
+  "stdout": "",
+  "stderr": "",
+  "execution_time_ms": 1653
+}

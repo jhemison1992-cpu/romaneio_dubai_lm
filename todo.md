@@ -659,3 +659,100 @@
 - [x] Corrigir bug: data de liberação diminui 1 dia ao salvar item em Vistorias - RESOLVIDO com verificação de tipo Date
 - [x] Testar sistema completo - TESTADO COM SUCESSO
 - [x] Salvar checkpoint final - PRONTO
+
+
+---
+
+## Transformação SaaS - Plataforma Multi-Empresa
+
+### Fase 1: Fundação da Arquitetura SaaS ✅ CONCLUÍDA
+
+- [x] Documentar arquitetura multi-tenant (SAAS_ARCHITECTURE.md)
+- [x] Estender schema do banco de dados com tabelas `companies`, `company_users`, `invoices`
+- [x] Adicionar colunas `company_id` às tabelas existentes (projects, inspections, inspection_items, inspection_environments, installation_steps)
+- [x] Criar empresa ALUMINC padrão (ID=1) para migração de dados
+- [x] Adicionar foreign keys para isolamento de dados
+- [x] Atualizar funções de banco de dados para incluir `company_id` (createProject, upsertInspectionItem, createInspectionEnvironment, createDefaultSteps)
+- [x] Corrigir erros de TypeScript relacionados a company_id
+- [x] Reiniciar servidor
+
+### Fase 2: Autenticação e Gestão de Empresas ⏳ PRÓXIMA
+
+- [ ] Criar tRPC procedures para autenticação multi-empresa
+  - [ ] `auth.signup` - Registrar nova empresa
+  - [ ] `auth.login` - Login com seleção de empresa
+  - [ ] `auth.logout` - Logout
+- [ ] Criar tRPC procedures para gestão de empresas
+  - [ ] `companies.create` - Criar nova empresa
+  - [ ] `companies.getBySlug` - Buscar empresa por slug
+  - [ ] `companies.update` - Atualizar dados da empresa
+  - [ ] `companies.delete` - Deletar empresa
+- [ ] Criar tRPC procedures para gestão de usuários da empresa
+  - [ ] `companyUsers.invite` - Convidar novo usuário
+  - [ ] `companyUsers.list` - Listar usuários
+  - [ ] `companyUsers.updateRole` - Atualizar papel do usuário
+  - [ ] `companyUsers.remove` - Remover usuário
+- [ ] Implementar middleware de isolamento de dados
+- [ ] Atualizar contexto do tRPC para incluir `companyId`
+
+### Fase 3: Interface de Dashboard ⏳ PLANEJADA
+
+- [ ] Criar página de Signup (registro de empresa)
+- [ ] Criar página de Login com seleção de empresa
+- [ ] Criar Dashboard principal da empresa
+- [ ] Criar página de Gerenciamento de Usuários
+- [ ] Criar página de Configurações da Empresa
+- [ ] Atualizar navegação para refletir multi-tenancy
+
+### Fase 4: Dashboard Administrativo ⏳ PLANEJADA
+
+- [ ] Criar página de Admin Dashboard
+- [ ] Criar página de Gerenciamento de Empresas (admin only)
+- [ ] Criar página de Gerenciamento de Faturas (admin only)
+- [ ] Criar página de Relatórios (admin only)
+- [ ] Implementar controle de acesso (admin only)
+
+### Fase 5: Integração Stripe ⏳ PLANEJADA
+
+- [ ] Configurar Stripe API
+- [ ] Criar tRPC procedures para pagamentos
+  - [ ] `billing.createCheckoutSession` - Criar sessão de checkout
+  - [ ] `billing.getSubscription` - Obter informações de assinatura
+  - [ ] `billing.cancelSubscription` - Cancelar assinatura
+- [ ] Implementar webhooks do Stripe
+  - [ ] `customer.subscription.created`
+  - [ ] `customer.subscription.updated`
+  - [ ] `customer.subscription.deleted`
+  - [ ] `invoice.payment_failed`
+- [ ] Criar página de Billing/Upgrade Plan
+
+### Fase 6: Migração de Dados ALUMINC ⏳ PLANEJADA
+
+- [ ] Verificar integridade dos dados existentes
+- [ ] Confirmar que todos os dados estão associados à empresa ALUMINC (ID=1)
+- [ ] Testar isolamento de dados
+- [ ] Criar script de backup dos dados
+
+### Fase 7: Testes e Validação ⏳ PLANEJADA
+
+- [ ] Testar isolamento de dados entre empresas
+- [ ] Testar controle de permissões (RBAC)
+- [ ] Testar fluxo de autenticação multi-empresa
+- [ ] Testar planos de assinatura
+- [ ] Testar webhooks do Stripe
+- [ ] Testar migração de dados ALUMINC
+- [ ] Testes de segurança (SQL injection, XSS, etc.)
+
+### Bugs Conhecidos - SaaS
+
+- [ ] Bug da data: Data de liberação não está sendo salva corretamente (retorna para data original após salvar)
+  - Investigação: Problema pode estar na conversão de timezone ou na forma como o tRPC está enviando os dados
+  - Status: Pausado para focar na transformação SaaS
+
+### Notas Importantes - SaaS
+
+- ALUMINC é o cliente de referência/demo com ID de empresa = 1
+- Todos os dados existentes foram migrados para company_id = 1
+- O sistema mantém compatibilidade com dados legados
+- Próximas fases devem implementar UI para multi-tenancy
+- Arquitetura documentada em SAAS_ARCHITECTURE.md

@@ -124,11 +124,11 @@ export async function seedEnvironments() {
 }
 
 // Inspections queries
-export async function createInspection(projectId: number, userId: number, title: string) {
+export async function createInspection(projectId: number, userId: number, title: string, companyId: number = 1) {
   const db = await getDb();
   if (!db) throw new Error("Database not available");
   const { inspections } = await import("../drizzle/schema");
-  const result = await db.insert(inspections).values({ projectId, userId, title });
+  const result = await db.insert(inspections).values({ companyId, projectId, userId, title });
   return result[0].insertId;
 }
 
@@ -209,6 +209,7 @@ export async function upsertInspectionItem(data: {
   id?: number;
   inspectionId: number;
   environmentId: number;
+  companyId?: number;
   releaseDate?: Date | string | null;
   responsibleConstruction?: string | null;
   responsibleSupplier?: string | null;
@@ -226,6 +227,10 @@ export async function upsertInspectionItem(data: {
     if (data.releaseDate) {
       if (data.releaseDate instanceof Date) {
         releaseDateValue = data.releaseDate;
+      } else if (typeof data.releaseDate === 'string' && data.releaseDate.length === 10) {
+        // Converter YYYY-MM-DD para Date usando UTC
+        const parts = data.releaseDate.split('-').map(Number);
+        releaseDateValue = new Date(Date.UTC(parts[0], parts[1] - 1, parts[2]));
       } else if (typeof data.releaseDate === 'string') {
         releaseDateValue = new Date(data.releaseDate);
       }
@@ -246,12 +251,17 @@ export async function upsertInspectionItem(data: {
     if (data.releaseDate) {
       if (data.releaseDate instanceof Date) {
         releaseDateValue = data.releaseDate;
+      } else if (typeof data.releaseDate === 'string' && data.releaseDate.length === 10) {
+        // Converter YYYY-MM-DD para Date usando UTC
+        const parts = data.releaseDate.split('-').map(Number);
+        releaseDateValue = new Date(Date.UTC(parts[0], parts[1] - 1, parts[2]));
       } else if (typeof data.releaseDate === 'string') {
         releaseDateValue = new Date(data.releaseDate);
       }
     }
     
     const result = await db.insert(inspectionItems).values({
+      companyId: data.companyId ?? 1,
       inspectionId: data.inspectionId,
       environmentId: data.environmentId,
       releaseDate: releaseDateValue,
@@ -413,6 +423,7 @@ export async function getInspectionEnvironments(inspectionId: number) {
 
 export async function createInspectionEnvironment(data: {
   inspectionId: number;
+  companyId?: number;
   name: string;
   caixilhoCode: string;
   caixilhoType: string;
@@ -431,6 +442,7 @@ export async function createInspectionEnvironment(data: {
   // Converter strings de data para Date
   const values: any = {
     ...data,
+    companyId: data.companyId ?? 1,
     startDate: data.startDate ? new Date(data.startDate) : undefined,
     endDate: data.endDate ? new Date(data.endDate) : undefined,
   };

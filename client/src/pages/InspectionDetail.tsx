@@ -99,6 +99,7 @@ export default function InspectionDetail() {
   
   const upsertMutation = trpc.inspectionItems.upsert.useMutation({
     onSuccess: (data, variables) => {
+      console.log('Upsert sucesso:', { data, variables });
       toast.success("Dados salvos com sucesso!");
       // Atualizar formData com o ID retornado para permitir upload de mídia
       setFormData((prev) => ({
@@ -111,6 +112,7 @@ export default function InspectionDetail() {
       refetchItems();
     },
     onError: (error) => {
+      console.error('Erro upsert:', error);
       toast.error("Erro ao salvar: " + error.message);
     },
   });
@@ -168,9 +170,11 @@ export default function InspectionDetail() {
           if (existingItem.releaseDate instanceof Date) {
             releaseDate = existingItem.releaseDate;
           } else {
-            // Se for string ISO, converter para Date
+            // Se for string ISO, converter para Date usando parseInputDate
             const releaseDateValue = existingItem.releaseDate as string;
-            releaseDate = new Date(releaseDateValue);
+            // Extrair apenas a data (YYYY-MM-DD) da string ISO
+            const datePart = releaseDateValue.split('T')[0];
+            releaseDate = parseInputDate(datePart);
           }
         }
         initialData[env.id] = {
@@ -189,23 +193,29 @@ export default function InspectionDetail() {
   }, [allEnvironments.length, items]);
   
   const handleSave = (environmentId: number) => {
+    console.log('handleSave chamado com environmentId:', environmentId);
     const data = formData[environmentId];
-    if (!data) return;
+    console.log('formData[environmentId]:', data);
+    if (!data) {
+      console.log('Sem dados para este ambiente');
+      return;
+    }
     
-    // Converter releaseDate para Date
-    let releaseDateValue: Date | undefined = undefined;
+    // Converter releaseDate para string YYYY-MM-DD
+    let releaseDateString: string | undefined = undefined;
     if (data.releaseDate) {
       if (data.releaseDate instanceof Date) {
-        releaseDateValue = data.releaseDate;
+        // Se é Date, converter para string YYYY-MM-DD
+        releaseDateString = formatInputDate(data.releaseDate);
       } else if (typeof data.releaseDate === 'string') {
-        // Se é string YYYY-MM-DD, converter para Date
-        releaseDateValue = parseInputDate(data.releaseDate);
+        // Se é string, manter como está
+        releaseDateString = data.releaseDate;
       }
     }
     
     upsertMutation.mutate({
       ...data,
-      releaseDate: releaseDateValue as any,
+      releaseDate: releaseDateString,
       inspectionId,
     });
   };
@@ -453,7 +463,15 @@ export default function InspectionDetail() {
                         id={`releaseDate-${env.id}`}
                         type="date"
                         value={data.releaseDate instanceof Date ? formatInputDate(data.releaseDate) : (data.releaseDate || "")}
-                        onChange={(e) => handleChange(env.id, "releaseDate", e.target.value || undefined)}
+                        onChange={(e) => {
+                          if (e.target.value) {
+                            // Converter string YYYY-MM-DD para Date
+                            const dateValue = parseInputDate(e.target.value);
+                            handleChange(env.id, "releaseDate", dateValue);
+                          } else {
+                            handleChange(env.id, "releaseDate", undefined);
+                          }
+                        }}
                       />
                     </div>
                     
