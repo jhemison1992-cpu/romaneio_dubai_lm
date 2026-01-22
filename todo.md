@@ -848,3 +848,13 @@
 - [ ] Implementar middleware de validação de assinatura
 - [ ] Criar página de gerenciamento de assinatura
 - [ ] Implementar bloqueio de acesso para empresas sem assinatura
+
+
+## Correção de Geração de PDF com Mídias 🐛 PRIORIDADE
+
+- [x] Diagnosticar erro "NotFoundError: removeChild" na geração de PDF
+- [x] Refatorar deliveryTermPdfGenerator.ts para evitar manipulação de DOM
+- [x] Implementar inclusão de fotos no PDF
+- [x] Instalar pacote sharp para otimização de imagens
+- [x] Otimizar tamanho de imagens para PDF
+- [ ] Testar geração de PDF com múltiplas mídias
