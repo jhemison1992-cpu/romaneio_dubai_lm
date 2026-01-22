@@ -858,3 +858,13 @@
 - [x] Instalar pacote sharp para otimização de imagens
 - [x] Otimizar tamanho de imagens para PDF
 - [ ] Testar geração de PDF com múltiplas mídias
+
+
+## PDF Individual por Ambiente com Todas as Fotos 📄 NOVO
+
+- [x] Criar função environmentPdfGenerator.ts para gerar PDF por ambiente
+- [x] Implementar rota /api/generate-environment-pdf/:environmentId
+- [x] Criar layout em grid para múltiplas fotos (3 por linha)
+- [x] Implementar paginação automática com cabeçalho em cada página
+- [x] Adicionar resumo de fotos no início do PDF
+- [ ] Testar com ambiente que tem muitas fotos

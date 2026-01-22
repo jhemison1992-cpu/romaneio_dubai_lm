@@ -47,6 +47,90 @@ async function startServer() {
   app.use("/api/stripe", express.raw({ type: "application/json" }), stripeRoutes.default);
   app.use("/api/stripe", express.json(), stripeRoutes.default);
   
+  // Generate environment photos PDF route
+  app.get("/api/generate-environment-pdf/:environmentId", async (req, res) => {
+    try {
+      const environmentId = parseInt(req.params.environmentId);
+      const { generateEnvironmentPDF } = await import("../environmentPdfGenerator");
+      const { getDb } = await import("../db");
+      
+      const db = await getDb();
+      if (!db) throw new Error("Database not available");
+      
+      const { environments, inspectionItems, projects, mediaFiles } = await import("../../drizzle/schema");
+      const { eq, inArray } = await import("drizzle-orm");
+      
+      // Buscar dados do ambiente
+      const envResult = await db
+        .select({
+          environment: environments,
+          project: projects,
+        })
+        .from(environments)
+        .leftJoin(projects, eq(environments.projectId, projects.id))
+        .where(eq(environments.id, environmentId))
+        .limit(1);
+      
+      if (!envResult[0]) {
+        res.status(404).json({ error: "Ambiente não encontrado" });
+        return;
+      }
+      
+      const { environment, project } = envResult[0];
+      
+      // Buscar todos os inspection items do ambiente
+      const itemsResult = await db
+        .select({ id: inspectionItems.id })
+        .from(inspectionItems)
+        .where(eq(inspectionItems.environmentId, environmentId));
+      
+      const itemIds = itemsResult.map((item) => item.id);
+      
+      // Buscar TODAS as fotos desses items
+      let photos: any[] = [];
+      if (itemIds.length > 0) {
+        photos = await db
+          .select()
+          .from(mediaFiles)
+          .where(inArray(mediaFiles.inspectionItemId, itemIds));
+      }
+      
+      // Preparar dados para o PDF
+      const pdfData = {
+        environment: {
+          id: environment?.id || 0,
+          name: environment?.name || "",
+          caixilhoCode: environment?.caixilhoCode || "",
+          caixilhoType: environment?.caixilhoType || "",
+          quantity: environment?.quantity || 0,
+          startDate: environment?.startDate || null,
+          endDate: environment?.endDate || null,
+        },
+        project: {
+          name: project?.name || "",
+          address: project?.address || "",
+          contractor: project?.contractor || "",
+          technicalManager: project?.technicalManager || "",
+        },
+        photos: photos.map((photo) => ({
+          fileUrl: photo.fileUrl || "",
+          fileName: photo.fileName || "",
+          comment: photo.comment || null,
+          uploadedAt: photo.createdAt || null,
+        })),
+      };
+      
+      const pdfBuffer = await generateEnvironmentPDF(pdfData);
+      
+      res.setHeader("Content-Type", "application/pdf");
+      res.setHeader("Content-Disposition", `attachment; filename=fotos-${environment?.name || 'ambiente'}.pdf`);
+      res.send(pdfBuffer);
+    } catch (error) {
+      console.error("Erro ao gerar PDF do ambiente:", error);
+      res.status(500).json({ error: "Erro ao gerar PDF" });
+    }
+  });
+  
   // Generate delivery term PDF route
   app.get("/api/generate-delivery-term-pdf/:inspectionItemId", async (req, res) => {
     try {
