@@ -880,3 +880,21 @@
 - [x] Implementar assinaturas digitais com badges "Aprovado"
 - [x] Integrar novo gerador na rota de PDF
 - [ ] Testar e validar novo layout de PDF com dados reais
+
+
+## Correção de Erro removeChild 🔴 CRÍTICO
+
+- [ ] Diagnosticar erro "NotFoundError: removeChild" na página de inspeção
+- [ ] Identificar qual componente está causando o erro
+- [ ] Corrigir manipulação de DOM
+- [ ] Testar carregamento da página de inspeção
+
+
+## Funcionalidades Principais Solicitadas 🎯
+
+- [x] Implementar botão "Gerar PDF" funcional na página de inspeção (já existe)
+- [x] Implementar envio automático de PDF por email (email-service.ts criado)
+- [x] Criar dashboard de analytics para acompanhar progresso das obras
+- [ ] Implementar validação de limites de plano (10 obras PRO, ilimitado ENTERPRISE)
+- [x] Criar página de gerenciamento de assinatura
+- [ ] Testar todas as funcionalidades

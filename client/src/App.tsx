@@ -15,6 +15,8 @@ import CompanySignup from "./pages/CompanySignup";
 import CompanyLogin from "./pages/CompanyLogin";
 import CompanyUsers from "./pages/CompanyUsers";
 import Checkout from "./pages/Checkout";
+import Dashboard from "./pages/Dashboard";
+import SubscriptionManagement from "./pages/SubscriptionManagement";
 
 function Router() {
   return (
@@ -50,6 +52,16 @@ function Router() {
       <Route path="/select-company" component={CompanyLogin} />
       <Route path="/company/users" component={CompanyUsers} />
       <Route path="/checkout" component={Checkout} />
+      <Route path="/dashboard" component={() => (
+        <DashboardLayout>
+          <Dashboard />
+        </DashboardLayout>
+      )} />
+      <Route path="/subscription" component={() => (
+        <DashboardLayout>
+          <SubscriptionManagement />
+        </DashboardLayout>
+      )} />
       <Route path="/404" component={NotFound} />
       <Route component={NotFound} />
     </Switch>
