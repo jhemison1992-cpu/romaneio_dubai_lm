@@ -237,19 +237,34 @@ async function addPhotosGrid(doc: PDFKit.PDFDocument, data: AlumincPDFData) {
   doc.fontSize(12).fillColor("#333").font("Helvetica-Bold").text("Fotos");
   doc.moveDown(0.5);
 
-  const photoWidth = (doc.page.width - 80) / 2 - 5;
-  const photoHeight = 250;
+  const photoWidth = (doc.page.width - 80) / 3 - 8; // 3 photos per row
+  const photoHeight = 180;
   let x = 40;
   let y = doc.y;
   let photoIndex = 0;
+  const pageHeight = doc.page.height - 80; // Account for margins
 
   for (const photo of data.photos) {
-    if (photoIndex >= 4) break; // Max 4 photos per page
+    // Check if we need a new page
+    if (y + photoHeight + 30 > pageHeight) {
+      doc.addPage();
+      doc.fontSize(12).fillColor("#333").font("Helvetica-Bold").text("Fotos (continuação)");
+      doc.moveDown(0.5);
+      x = 40;
+      y = doc.y;
+    }
 
     try {
-      const response = await axios.get(photo.fileUrl, { responseType: "arraybuffer" });
+      console.log(`Loading photo: ${photo.fileUrl}`);
+      const response = await axios.get(photo.fileUrl, { 
+        responseType: "arraybuffer",
+        timeout: 10000 
+      });
       const buffer = response.data;
-      const optimized = await sharp(buffer).resize(photoWidth - 10, photoHeight - 40, { fit: "inside", withoutEnlargement: true }).jpeg({ quality: 85 }).toBuffer();
+      const optimized = await sharp(buffer)
+        .resize(photoWidth - 10, photoHeight - 40, { fit: "inside", withoutEnlargement: true })
+        .jpeg({ quality: 85 })
+        .toBuffer();
       
       // Photo frame
       doc.rect(x, y, photoWidth, photoHeight).stroke("#999");
@@ -257,19 +272,33 @@ async function addPhotosGrid(doc: PDFKit.PDFDocument, data: AlumincPDFData) {
       // Add photo
       doc.image(optimized, x + 5, y + 5, { width: photoWidth - 10, height: photoHeight - 45 });
 
-      // Photo identifier
-      doc.fontSize(9).fillColor("#333").font("Helvetica-Bold").text(photo.identifier, x + 5, y + photoHeight - 25, { width: photoWidth - 10 });
+      // Photo identifier and comment
+      doc.fontSize(8).fillColor("#333").font("Helvetica-Bold").text(photo.identifier, x + 5, y + photoHeight - 30, { width: photoWidth - 10, height: 15 });
+      if (photo.comment) {
+        doc.fontSize(7).fillColor("#666").font("Helvetica").text(photo.comment, x + 5, y + photoHeight - 15, { width: photoWidth - 10, height: 12 });
+      }
 
       // Move to next position
       photoIndex++;
-      if (photoIndex % 2 === 0) {
+      if (photoIndex % 3 === 0) {
         x = 40;
         y += photoHeight + 10;
       } else {
         x += photoWidth + 10;
       }
     } catch (error) {
-      console.error(`Error processing photo ${photo.identifier}:`, error);
+      console.error(`Error processing photo ${photo.identifier}:`, error instanceof Error ? error.message : String(error));
+      // Draw placeholder for failed photo
+      doc.rect(x, y, photoWidth, photoHeight).stroke("#ccc");
+      doc.fontSize(8).fillColor("#999").text("Foto não disponível", x + 5, y + photoHeight / 2 - 10, { width: photoWidth - 10, align: "center" });
+      
+      photoIndex++;
+      if (photoIndex % 3 === 0) {
+        x = 40;
+        y += photoHeight + 10;
+      } else {
+        x += photoWidth + 10;
+      }
     }
   }
 

@@ -1,0 +1,60 @@
+{
+  "query": "SELECT e.id, e.name, COUNT(mf.id) as photo_count FROM environments e LEFT JOIN inspection_items ii ON e.id = ii.environment_id LEFT JOIN media_files mf ON ii.id = mf.inspection_item_id GROUP BY e.id, e.name ORDER BY photo_count DESC LIMIT 10;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway03.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 2RJ6pkiYcWrkG7s.7677514b54b3 --database AdJ4NUusdiWEA7xpHs45nc --execute SELECT e.id, e.name, COUNT(mf.id) as photo_count FROM environments e LEFT JOIN inspection_items ii ON e.id = ii.environment_id LEFT JOIN media_files mf ON ii.id = mf.inspection_item_id GROUP BY e.id, e.name ORDER BY photo_count DESC LIMIT 10;",
+  "rows": [
+    {
+      "id": "30002",
+      "name": "Espaço Fitnes",
+      "photo_count": "4"
+    },
+    {
+      "id": "90007",
+      "name": "Sala De Massagem ",
+      "photo_count": "1"
+    },
+    {
+      "id": "90004",
+      "name": "SPORTS BAR ",
+      "photo_count": "1"
+    },
+    {
+      "id": "21",
+      "name": "Aquecedor Piscina",
+      "photo_count": "1"
+    },
+    {
+      "id": "13",
+      "name": "Piscina Coberta - Editado",
+      "photo_count": "1"
+    },
+    {
+      "id": "23",
+      "name": "Sauna",
+      "photo_count": "1"
+    },
+    {
+      "id": "120001",
+      "name": "ESPAÇO FITNESS",
+      "photo_count": "0"
+    },
+    {
+      "id": "16",
+      "name": "Entrada Serviço",
+      "photo_count": "0"
+    },
+    {
+      "id": "90003",
+      "name": "BRINQUEDOTECA ",
+      "photo_count": "0"
+    },
+    {
+      "id": "8",
+      "name": "Aquecedor Piscina",
+      "photo_count": "0"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\tname\tphoto_count\n30002\tEspaço Fitnes\t4\n90007\tSala De Massagem \t1\n90004\tSPORTS BAR \t1\n21\tAquecedor Piscina\t1\n13\tPiscina Coberta - Editado\t1\n23\tSauna\t1\n120001\tESPAÇO FITNESS\t0\n16\tEntrada Serviço\t0\n90003\tBRINQUEDOTECA \t0\n8\tAquecedor Piscina\t0\n",
+  "stderr": "",
+  "execution_time_ms": 67
+}

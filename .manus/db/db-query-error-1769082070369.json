@@ -1,0 +1,8 @@
+{
+  "query": "SELECT ie.id, ie.name, COUNT(mf.id) as photo_count FROM inspection_environments ie LEFT JOIN inspection_items ii ON ie.id = ii.inspection_environment_id LEFT JOIN media_files mf ON ii.id = mf.inspection_item_id GROUP BY ie.id, ie.name ORDER BY photo_count DESC LIMIT 10;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway03.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 2RJ6pkiYcWrkG7s.7677514b54b3 --database AdJ4NUusdiWEA7xpHs45nc --execute SELECT ie.id, ie.name, COUNT(mf.id) as photo_count FROM inspection_environments ie LEFT JOIN inspection_items ii ON ie.id = ii.inspection_environment_id LEFT JOIN media_files mf ON ii.id = mf.inspection_item_id GROUP BY ie.id, ie.name ORDER BY photo_count DESC LIMIT 10;",
+  "returncode": 1,
+  "logs": [
+    "ERROR 1054 (42S22) at line 1: Unknown column 'ii.inspection_environment_id' in 'on clause'"
+  ]
+}

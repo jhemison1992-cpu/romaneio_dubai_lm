@@ -906,4 +906,5 @@
 - [x] Instalar axios para fazer requisições HTTP no servidor
 - [x] Corrigir função addPhotosGrid para usar axios
 - [x] Corrigir erro de loop duplicado
+- [x] Incluir fotos tiradas em cada ambiente no PDF (corrigida função addPhotosGrid)
 - [ ] Testar geração de PDF com múltiplas fotos
