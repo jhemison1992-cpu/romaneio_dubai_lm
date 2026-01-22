@@ -898,3 +898,12 @@
 - [ ] Implementar validação de limites de plano (10 obras PRO, ilimitado ENTERPRISE)
 - [x] Criar página de gerenciamento de assinatura
 - [ ] Testar todas as funcionalidades
+
+
+## Correção de Fotos no PDF 📈 PRIORIDADE
+
+- [x] Diagnosticar por que fotos não estão carregando no PDF (fetch não funciona no Node.js)
+- [x] Instalar axios para fazer requisições HTTP no servidor
+- [x] Corrigir função addPhotosGrid para usar axios
+- [x] Corrigir erro de loop duplicado
+- [ ] Testar geração de PDF com múltiplas fotos

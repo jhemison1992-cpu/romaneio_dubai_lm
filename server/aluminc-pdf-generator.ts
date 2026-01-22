@@ -1,5 +1,6 @@
 import PDFDocument from "pdfkit";
 import sharp from "sharp";
+import axios from "axios";
 
 interface AlumincPDFData {
   reportNumber: string;
@@ -246,13 +247,10 @@ async function addPhotosGrid(doc: PDFKit.PDFDocument, data: AlumincPDFData) {
     if (photoIndex >= 4) break; // Max 4 photos per page
 
     try {
-      // Download and optimize image
-      const response = await fetch(photo.fileUrl);
-      if (!response.ok) throw new Error("Failed to fetch image");
-
-      const buffer = await response.arrayBuffer();
+      const response = await axios.get(photo.fileUrl, { responseType: "arraybuffer" });
+      const buffer = response.data;
       const optimized = await sharp(buffer).resize(photoWidth - 10, photoHeight - 40, { fit: "inside", withoutEnlargement: true }).jpeg({ quality: 85 }).toBuffer();
-
+      
       // Photo frame
       doc.rect(x, y, photoWidth, photoHeight).stroke("#999");
 
