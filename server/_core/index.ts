@@ -131,11 +131,11 @@ async function startServer() {
     }
   });
   
-  // Generate delivery term PDF route
+  // Generate delivery term PDF route (ALUMINC Model)
   app.get("/api/generate-delivery-term-pdf/:inspectionItemId", async (req, res) => {
     try {
       const inspectionItemId = parseInt(req.params.inspectionItemId);
-      const { generateDeliveryTermPDF } = await import("../deliveryTermPdfGenerator");
+      const { generateAlumincPDF } = await import("../aluminc-pdf-generator");
       const { getDb, getMediaFilesByItem } = await import("../db");
       const { getInstallationSteps } = await import("../db-installation-steps");
       
@@ -197,7 +197,39 @@ async function startServer() {
         },
       };
       
-      const pdfBuffer = await generateDeliveryTermPDF(pdfData);
+      // Converter dados para formato ALUMINC
+      const alumincData = {
+        reportNumber: inspectionItemId.toString(),
+        reportDate: new Date().toLocaleDateString("pt-BR"),
+        dayOfWeek: new Date().toLocaleDateString("pt-BR", { weekday: "long" }),
+        contract: project?.contractor || "",
+        contractualDeadline: 0,
+        elapsedDeadline: 0,
+        remainingDeadline: 0,
+        project: {
+          name: project?.name || "",
+          address: project?.address || "",
+          contractor: project?.contractor || "",
+          responsibleName: project?.technicalManager || "",
+        },
+        photos: media.map((m) => ({
+          fileUrl: m.fileUrl,
+          fileName: m.fileName,
+          identifier: m.fileName,
+          comment: m.comment || undefined,
+        })),
+        signatures: [
+          {
+            name: item.deliveryTermResponsible || project?.technicalManager || "Responsável",
+            email: "",
+            role: "Responsável Técnico",
+            timestamp: new Date().toLocaleString("pt-BR"),
+            status: "approved" as const,
+          },
+        ],
+      };
+      
+      const pdfBuffer = await generateAlumincPDF(alumincData);
       
       res.setHeader("Content-Type", "application/pdf");
       res.setHeader("Content-Disposition", `attachment; filename=termo-entrega-${environment?.name || 'ambiente'}.pdf`);

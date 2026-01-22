@@ -868,3 +868,15 @@
 - [x] Implementar paginação automática com cabeçalho em cada página
 - [x] Adicionar resumo de fotos no início do PDF
 - [ ] Testar com ambiente que tem muitas fotos
+
+
+## Refatoração de PDF com Modelo ALUMINC 📋 PRIORIDADE
+
+- [x] Analisar modelo de PDF ALUMINC e extrair especificações
+- [x] Criar novo gerador aluminc-pdf-generator.ts com layout profissional
+- [x] Implementar tabelas de informações estruturadas
+- [x] Implementar grid de fotos 2x2 com identificação
+- [x] Adicionar seção de anexos com tamanho de arquivo
+- [x] Implementar assinaturas digitais com badges "Aprovado"
+- [x] Integrar novo gerador na rota de PDF
+- [ ] Testar e validar novo layout de PDF com dados reais
