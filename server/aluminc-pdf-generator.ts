@@ -87,7 +87,7 @@ export async function generateAlumincPDF(data: AlumincPDFData): Promise<Buffer> 
 
       // Page 2: Photos and Attachments
       doc.addPage();
-      addPhotosGrid(doc, data);
+      await addPhotosGrid(doc, data);
       addAttachmentsSection(doc, data, primaryColor, borderColor);
       addSignatures(doc, data, accentColor);
 
