@@ -274,11 +274,12 @@ export const appRouter = router({
     generatePDF: publicProcedure
       .input((val: unknown) => {
 
-        return z.object({ inspectionId: z.number() }).parse(val);
+        return z.object({ inspectionId: z.number(), format: z.enum(["standard", "abnt"]).optional().default("standard") }).parse(val);
       })
       .mutation(async ({ input }) => {
         const { getInspectionById, getInspectionItems, getMediaFilesByItem } = await import("./db");
         const { generateInspectionPDF } = await import("./pdfGenerator");
+        const { generateABNTPDF } = await import("./abntPdfGenerator");
         console.log("[generatePDF] Starting PDF generation for inspectionId:", input.inspectionId);
         const { storagePut } = await import("./storage");
         const { nanoid } = await import("nanoid");
@@ -325,12 +326,25 @@ export const appRouter = router({
         );
         
         console.log("[generatePDF] Items with media:", JSON.stringify(itemsWithMedia, null, 2));
-        const pdfBuffer = await generateInspectionPDF({
-          title: inspection.title,
-          status: inspection.status,
-          createdAt: inspection.createdAt,
-          items: itemsWithMedia,
-        });
+        
+        let pdfBuffer;
+        if (input.format === "abnt") {
+          console.log("[generatePDF] Generating ABNT format PDF");
+          pdfBuffer = await generateABNTPDF({
+            title: inspection.title,
+            status: inspection.status,
+            createdAt: inspection.createdAt,
+            items: itemsWithMedia,
+          });
+        } else {
+          console.log("[generatePDF] Generating standard format PDF");
+          pdfBuffer = await generateInspectionPDF({
+            title: inspection.title,
+            status: inspection.status,
+            createdAt: inspection.createdAt,
+            items: itemsWithMedia,
+          });
+        }
         
         const fileKey = `reports/${input.inspectionId}/${nanoid()}-relatorio.pdf`;
         const { url } = await storagePut(fileKey, pdfBuffer, "application/pdf");

@@ -44,14 +44,25 @@ function GeneratePDFButton({ inspectionId }: { inspectionId: number }) {
   });
 
   return (
-    <Button
-      onClick={() => generatePDFMutation.mutate({ inspectionId })}
-      disabled={generatePDFMutation.isPending}
-      className="gap-2"
-    >
-      <Download className="h-4 w-4" />
-      {generatePDFMutation.isPending ? "Gerando..." : "Gerar PDF"}
-    </Button>
+    <div className="flex gap-2">
+      <Button
+        onClick={() => generatePDFMutation.mutate({ inspectionId, format: "standard" })}
+        disabled={generatePDFMutation.isPending}
+        className="gap-2"
+      >
+        <Download className="h-4 w-4" />
+        {generatePDFMutation.isPending ? "Gerando..." : "Gerar PDF"}
+      </Button>
+      <Button
+        onClick={() => generatePDFMutation.mutate({ inspectionId, format: "abnt" })}
+        disabled={generatePDFMutation.isPending}
+        variant="outline"
+        className="gap-2"
+      >
+        <Download className="h-4 w-4" />
+        {generatePDFMutation.isPending ? "Gerando..." : "Gerar PDF ABNT"}
+      </Button>
+    </div>
   );
 }
 
