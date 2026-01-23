@@ -172,6 +172,8 @@ async function startServer() {
       
       // Buscar mídias
       const media = await getMediaFilesByItem(inspectionItemId);
+      console.log(`[PDF Route] Found ${media.length} media files for inspectionItemId ${inspectionItemId}`);
+      media.forEach((m, i) => console.log(`  [${i}] ${m.fileName} - URL: ${m.fileUrl}`));
       
       // Preparar dados para o PDF
       const pdfData = {
@@ -212,12 +214,16 @@ async function startServer() {
           contractor: project?.contractor || "",
           responsibleName: project?.technicalManager || "",
         },
-        photos: media.map((m) => ({
-          fileUrl: m.fileUrl,
-          fileName: m.fileName,
-          identifier: m.fileName,
-          comment: m.comment || undefined,
-        })),
+        photos: media.map((m) => {
+          const photo = {
+            fileUrl: m.fileUrl,
+            fileName: m.fileName,
+            identifier: m.fileName,
+            comment: m.comment || undefined,
+          };
+          console.log(`[PDF Route] Photo mapped: ${photo.fileName} -> ${photo.fileUrl}`);
+          return photo;
+        }),
         signatures: [
           {
             name: item.deliveryTermResponsible || project?.technicalManager || "Responsável",

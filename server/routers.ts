@@ -279,17 +279,25 @@ export const appRouter = router({
       .mutation(async ({ input }) => {
         const { getInspectionById, getInspectionItems, getMediaFilesByItem } = await import("./db");
         const { generateInspectionPDF } = await import("./pdfGenerator");
+        console.log("[generatePDF] Starting PDF generation for inspectionId:", input.inspectionId);
         const { storagePut } = await import("./storage");
         const { nanoid } = await import("nanoid");
         
         const inspection = await getInspectionById(input.inspectionId);
-        if (!inspection) throw new Error("Vistoria não encontrada");
+        if (!inspection) {
+          console.error("[generatePDF] Inspection not found:", input.inspectionId);
+          throw new Error("Vistoria não encontrada");
+        }
+        console.log("[generatePDF] Found inspection:", inspection.title);
         
         const items = await getInspectionItems(input.inspectionId);
+        console.log("[generatePDF] Found items:", items.length);
         
         const itemsWithMedia = await Promise.all(
           items.map(async (item) => {
             const media = await getMediaFilesByItem(item.id);
+            const photos = media.filter((m) => m.mediaType === "photo");
+            const videos = media.filter((m) => m.mediaType === "video");
             return {
               id: item.id,
               environmentName: item.environmentName || "",
@@ -302,12 +310,21 @@ export const appRouter = router({
               observations: item.observations,
               signatureConstruction: (item as any).signatureConstruction,
               signatureSupplier: (item as any).signatureSupplier,
-              photos: media.filter((m) => m.mediaType === "photo").length,
-              videos: media.filter((m) => m.mediaType === "video").length,
+              photos: photos.map((p) => ({
+                fileUrl: p.fileUrl,
+                fileName: p.fileName,
+                identifier: p.fileName,
+                comment: p.comment || undefined,
+              })),
+              videos: videos.map((v) => ({
+                fileUrl: v.fileUrl,
+                fileName: v.fileName,
+              })),
             };
           })
         );
         
+        console.log("[generatePDF] Items with media:", JSON.stringify(itemsWithMedia, null, 2));
         const pdfBuffer = await generateInspectionPDF({
           title: inspection.title,
           status: inspection.status,
@@ -317,6 +334,7 @@ export const appRouter = router({
         
         const fileKey = `reports/${input.inspectionId}/${nanoid()}-relatorio.pdf`;
         const { url } = await storagePut(fileKey, pdfBuffer, "application/pdf");
+        console.log("[generatePDF] PDF saved to:", fileKey);
         
         return { url };
       }),

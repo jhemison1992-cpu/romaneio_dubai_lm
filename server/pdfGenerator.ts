@@ -15,8 +15,16 @@ interface InspectionItemData {
   observations: string | null;
   signatureConstruction?: string | null;
   signatureSupplier?: string | null;
-  photos: number;
-  videos: number;
+  photos: Array<{
+    fileUrl: string;
+    fileName: string;
+    identifier: string;
+    comment?: string;
+  }>;
+  videos: Array<{
+    fileUrl: string;
+    fileName: string;
+  }>;
 }
 
 interface InspectionData {
@@ -66,7 +74,8 @@ export async function generateInspectionPDF(data: InspectionData): Promise<Buffe
     doc.moveDown(1.5);
 
     // Items
-    data.items.forEach((item, index) => {
+    for (let index = 0; index < data.items.length; index++) {
+      const item = data.items[index];
       // Verificar se precisa de nova página
       if (doc.y > 650) {
         doc.addPage();
@@ -102,10 +111,55 @@ export async function generateInspectionPDF(data: InspectionData): Promise<Buffe
       }
 
       // Mídias anexadas
-      if (item.photos > 0 || item.videos > 0) {
+      if (item.photos.length > 0 || item.videos.length > 0) {
         doc.moveDown(0.3);
         doc.font("Helvetica-Bold").text("Mídias Anexadas: ", { continued: true });
-        doc.font("Helvetica").text(`${item.photos} foto(s), ${item.videos} vídeo(s)`);
+        doc.font("Helvetica").text(`${item.photos.length} foto(s), ${item.videos.length} vídeo(s)`);
+        
+        if (item.photos.length > 0) {
+          doc.moveDown(0.5);
+          doc.font("Helvetica-Bold").fontSize(10).text("Fotos:");
+          doc.moveDown(0.3);
+          
+          const photoWidth = 80;
+          const photoHeight = 60;
+          let x = doc.page.margins.left;
+          let y = doc.y;
+          
+          for (const photo of item.photos) {
+            try {
+              const axios = await import("axios");
+              const response = await axios.default.get(photo.fileUrl, { 
+                responseType: "arraybuffer",
+                timeout: 10000 
+              });
+              const buffer = response.data;
+              
+              if (x + photoWidth + 10 > doc.page.width - doc.page.margins.right) {
+                x = doc.page.margins.left;
+                y += photoHeight + 20;
+              }
+              
+              if (y + photoHeight + 30 > doc.page.height - doc.page.margins.bottom) {
+                doc.addPage();
+                x = doc.page.margins.left;
+                y = doc.page.margins.top;
+              }
+              
+              doc.image(buffer, x, y, { width: photoWidth, height: photoHeight });
+              doc.fontSize(7).text(photo.identifier, x, y + photoHeight + 2, { width: photoWidth, align: "center" });
+              
+              x += photoWidth + 10;
+            } catch (error) {
+              console.error(`Erro ao carregar foto ${photo.fileName}:`, error);
+              doc.rect(x, y, photoWidth, photoHeight).stroke("#ccc");
+              doc.fontSize(7).fillColor("#999").text("Foto nao disponivel", x, y + photoHeight / 2 - 5, { width: photoWidth, align: "center" });
+              x += photoWidth + 10;
+            }
+          }
+          
+          doc.y = y + photoHeight + 20;
+        }
       }
 
       // Assinaturas
@@ -193,7 +247,7 @@ export async function generateInspectionPDF(data: InspectionData): Promise<Buffe
           .stroke();
         doc.moveDown(1);
       }
-    });
+    }
 
     // Footer com QR Code
     const footerY = doc.page.height - 80;

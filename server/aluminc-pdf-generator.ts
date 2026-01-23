@@ -232,7 +232,11 @@ function addContentSections(doc: PDFKit.PDFDocument, data: AlumincPDFData, prima
 }
 
 async function addPhotosGrid(doc: PDFKit.PDFDocument, data: AlumincPDFData) {
-  if (!data.photos || data.photos.length === 0) return;
+  console.log(`[PDF] addPhotosGrid called with ${data.photos?.length || 0} photos`);
+  if (!data.photos || data.photos.length === 0) {
+    console.log("[PDF] No photos to add");
+    return;
+  }
 
   doc.fontSize(12).fillColor("#333").font("Helvetica-Bold").text("Fotos");
   doc.moveDown(0.5);
