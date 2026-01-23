@@ -351,6 +351,7 @@ async function generateDesenvolvimento(
       .fontSize(12)
       .text(`2.${index + 1} ${item.environmentName}`, {
         width: doc.page.width - MARGIN_LEFT - MARGIN_RIGHT,
+        align: "justify",
       });
 
     doc.moveDown(0.5);
@@ -358,36 +359,36 @@ async function generateDesenvolvimento(
     // Informações do caixilho
     doc.font("Helvetica").fontSize(11);
 
-    doc.text(`Caixilho: ${item.caixilhoCode}`);
+    doc.text(`Caixilho: ${item.caixilhoCode}`, { align: "justify" });
     doc.moveDown(0.3);
 
-    doc.text(`Tipo: ${item.caixilhoType}`);
+    doc.text(`Tipo: ${item.caixilhoType}`, { align: "justify" });
     doc.moveDown(0.3);
 
-    doc.text(`Quantidade: ${item.quantity} peça(s)`);
+    doc.text(`Quantidade: ${item.quantity} peça(s)`, { align: "justify" });
     doc.moveDown(0.5);
 
     // Data de liberação
     if (item.releaseDate) {
       const dataLiberacao = format(item.releaseDate, "dd/MM/yyyy");
-      doc.text(`Data de Liberação: ${dataLiberacao}`);
+      doc.text(`Data de Liberação: ${dataLiberacao}`, { align: "justify" });
       doc.moveDown(0.3);
     }
 
     // Responsáveis
     if (item.responsibleConstruction) {
-      doc.text(`Responsável da Obra: ${item.responsibleConstruction}`);
+      doc.text(`Responsável da Obra: ${item.responsibleConstruction}`, { align: "justify" });
       doc.moveDown(0.3);
     }
 
     if (item.responsibleSupplier) {
-      doc.text(`Responsável do Fornecedor: ${item.responsibleSupplier}`);
+      doc.text(`Responsável do Fornecedor: ${item.responsibleSupplier}`, { align: "justify" });
       doc.moveDown(0.3);
     }
 
     // Observações
     if (item.observations) {
-      doc.font("Helvetica-Bold").text("Observações:");
+      doc.font("Helvetica-Bold").text("Observações:", { align: "justify" });
       doc.font("Helvetica").text(item.observations, {
         width: doc.page.width - MARGIN_LEFT - MARGIN_RIGHT,
         align: "justify",
@@ -399,12 +400,12 @@ async function generateDesenvolvimento(
     if (item.photos.length > 0 || item.videos.length > 0) {
       doc
         .font("Helvetica-Bold")
-        .text(`Mídias Anexadas: ${item.photos.length} foto(s), ${item.videos.length} vídeo(s)`);
+        .text(`Mídias Anexadas: ${item.photos.length} foto(s), ${item.videos.length} vídeo(s)`, { align: "justify" });
       doc.moveDown(0.5);
 
       // Renderizar fotos
       if (item.photos.length > 0) {
-        doc.font("Helvetica").fontSize(10).text("Fotografias:");
+        doc.font("Helvetica").fontSize(10).text("Fotografias:", { align: "justify" });
         doc.moveDown(0.3);
 
         const photoWidth = 60;
