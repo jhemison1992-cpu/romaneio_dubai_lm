@@ -218,26 +218,28 @@ async function generateFolhaDeRosto(
   doc.moveDown(2);
 
   // Informações do documento
-  doc.font("Helvetica").fontSize(12);
-
-  doc.text("Título: Romaneio de Liberação de Ambientes");
+  doc
+    .font("Helvetica")
+    .fontSize(12)
+    .text("Título: Romaneio de Liberação de Ambientes", { align: "justify" });
   doc.moveDown(0.5);
 
-  doc.text("Tipo: Relatório Técnico de Inspeção");
+  doc.text("Tipo: Relatório Técnico de Inspeção", { align: "justify" });
   doc.moveDown(0.5);
 
   doc.text(
-    `Data: ${format(data.createdAt, "dd 'de' MMMM 'de' yyyy", { locale: ptBR })}`
+    `Data: ${format(data.createdAt, "dd 'de' MMMM 'de' yyyy", { locale: ptBR })}`,
+    { align: "justify" }
   );
   doc.moveDown(0.5);
 
-  doc.text(`Status: ${getStatusLabel(data.status)}`);
+  doc.text(`Status: ${getStatusLabel(data.status)}`, { align: "justify" });
   doc.moveDown(0.5);
 
-  doc.text(`Obra: ${data.title}`);
+  doc.text(`Obra: ${data.title}`, { align: "justify" });
   doc.moveDown(0.5);
 
-  doc.text(`Total de Ambientes: ${data.items.length}`);
+  doc.text(`Total de Ambientes: ${data.items.length}`, { align: "justify" });
   doc.moveDown(2);
 
   // Responsáveis
@@ -245,10 +247,10 @@ async function generateFolhaDeRosto(
   doc.font("Helvetica").fontSize(11);
   doc.moveDown(0.5);
 
-  doc.text("Responsável Técnico da Obra: Eng. William");
+  doc.text("Responsável Técnico da Obra: Eng. William", { align: "justify" });
   doc.moveDown(0.5);
 
-  doc.text("Fornecedor: ALUMINC Esquadrias Metálicas");
+  doc.text("Fornecedor: ALUMINC Esquadrias Metálicas", { align: "justify" });
   doc.moveDown(2);
 
   // Resumo
