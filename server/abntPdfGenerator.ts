@@ -359,36 +359,36 @@ async function generateDesenvolvimento(
     // Informações do caixilho
     doc.font("Helvetica").fontSize(11);
 
-    doc.text(`Caixilho: ${item.caixilhoCode}`, { align: "justify" });
+    doc.text(`Caixilho: ${item.caixilhoCode}`, { align: "left" });
     doc.moveDown(0.3);
 
-    doc.text(`Tipo: ${item.caixilhoType}`, { align: "justify" });
+    doc.text(`Tipo: ${item.caixilhoType}`, { align: "left" });
     doc.moveDown(0.3);
 
-    doc.text(`Quantidade: ${item.quantity} peça(s)`, { align: "justify" });
+    doc.text(`Quantidade: ${item.quantity} peça(s)`, { align: "left" });
     doc.moveDown(0.5);
 
     // Data de liberação
     if (item.releaseDate) {
       const dataLiberacao = format(item.releaseDate, "dd/MM/yyyy");
-      doc.text(`Data de Liberação: ${dataLiberacao}`, { align: "justify" });
+      doc.text(`Data de Liberação: ${dataLiberacao}`, { align: "left" });
       doc.moveDown(0.3);
     }
 
     // Responsáveis
     if (item.responsibleConstruction) {
-      doc.text(`Responsável da Obra: ${item.responsibleConstruction}`, { align: "justify" });
+      doc.text(`Responsável da Obra: ${item.responsibleConstruction}`, { align: "left" });
       doc.moveDown(0.3);
     }
 
     if (item.responsibleSupplier) {
-      doc.text(`Responsável do Fornecedor: ${item.responsibleSupplier}`, { align: "justify" });
+      doc.text(`Responsável do Fornecedor: ${item.responsibleSupplier}`, { align: "left" });
       doc.moveDown(0.3);
     }
 
     // Observações
     if (item.observations) {
-      doc.font("Helvetica-Bold").text("Observações:", { align: "justify" });
+      doc.font("Helvetica-Bold").text("Observações:", { align: "left" });
       doc.font("Helvetica").text(item.observations, {
         width: doc.page.width - MARGIN_LEFT - MARGIN_RIGHT,
         align: "justify",
@@ -400,12 +400,12 @@ async function generateDesenvolvimento(
     if (item.photos.length > 0 || item.videos.length > 0) {
       doc
         .font("Helvetica-Bold")
-        .text(`Mídias Anexadas: ${item.photos.length} foto(s), ${item.videos.length} vídeo(s)`, { align: "justify" });
+        .text(`Mídias Anexadas: ${item.photos.length} foto(s), ${item.videos.length} vídeo(s)`, { align: "left" });
       doc.moveDown(0.5);
 
       // Renderizar fotos
       if (item.photos.length > 0) {
-        doc.font("Helvetica").fontSize(10).text("Fotografias:", { align: "justify" });
+        doc.font("Helvetica").fontSize(10).text("Fotografias:", { align: "left" });
         doc.moveDown(0.3);
 
         const photoWidth = 60;
