@@ -349,6 +349,11 @@
 - [x] Investigar componente que renderiza o dropdown de status
 - [x] Corrigir conflito de DOM ao renderizar dropdown
 
+## Bug: Erro NotFoundError ao navegar para "Obras" de uma vistoria
+- [x] Erro "NotFoundError: removeChild" ao clicar em "Obras" após estar em uma vistoria
+- [x] Procurar por todos os Selects com valores dinâmicos
+- [x] Corrigir todos os Selects com estado local para evitar conflito de DOM
+
 ## Nova Funcionalidade: Datas de Início e Término nos Ambientes
 - [x] Adicionar campos startDate e endDate no schema de environments
 - [x] Executar migração do banco de dados

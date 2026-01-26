@@ -210,7 +210,7 @@ export default function Inspections() {
             <div className="space-y-4 py-4">
               <div className="space-y-2">
                 <Label htmlFor="project">Obra *</Label>
-                <Select value={selectedProjectId} onValueChange={setSelectedProjectId}>
+                <Select value={selectedProjectId || ""} onValueChange={setSelectedProjectId}>
                   <SelectTrigger id="project">
                     <SelectValue placeholder="Selecione a obra" />
                   </SelectTrigger>
