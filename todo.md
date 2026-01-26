@@ -344,6 +344,11 @@
 - [x] Corrigir conversão de timezone para salvar data correta
 - [x] Testar salvamento de datas em vistorias e ambientes
 
+## Bug: Erro NotFoundError ao clicar em dropdown "Em Andamento"
+- [x] Erro "NotFoundError: removeChild" ao clicar em dropdown de status na página de inspeção
+- [x] Investigar componente que renderiza o dropdown de status
+- [x] Corrigir conflito de DOM ao renderizar dropdown
+
 ## Nova Funcionalidade: Datas de Início e Término nos Ambientes
 - [x] Adicionar campos startDate e endDate no schema de environments
 - [x] Executar migração do banco de dados

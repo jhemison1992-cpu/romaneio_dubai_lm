@@ -91,6 +91,7 @@ export default function InspectionDetail() {
   
   const [formData, setFormData] = useState<Record<number, InspectionItemData>>({});
   const [activeTab, setActiveTab] = useState<string>("0");
+  const [statusValue, setStatusValue] = useState<string>(inspection?.status || "draft");
   
   // Estados para dialog de novo ambiente
   const [openNewEnv, setOpenNewEnv] = useState(false);
@@ -368,7 +369,10 @@ export default function InspectionDetail() {
               <Plus className="h-4 w-4" />
               Adicionar Ambiente
             </Button>
-            <Select value={inspection.status} onValueChange={(value) => handleStatusChange(value as any)}>
+            <Select value={statusValue || "draft"} onValueChange={(value) => {
+              setStatusValue(value);
+              handleStatusChange(value as any);
+            }}>
               <SelectTrigger className="w-[180px]">
                 <SelectValue />
               </SelectTrigger>
