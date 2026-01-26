@@ -350,8 +350,7 @@ async function generateDesenvolvimento(
       .font("Helvetica-Bold")
       .fontSize(12)
       .text(`2.${index + 1} ${item.environmentName}`, {
-        width: doc.page.width - MARGIN_LEFT - MARGIN_RIGHT,
-        align: "justify",
+        align: "left",
       });
 
     doc.moveDown(0.5);
