@@ -918,3 +918,8 @@
 - [x] Corrigir erro de loop duplicado
 - [x] Incluir fotos tiradas em cada ambiente no PDF (corrigida função addPhotosGrid)
 - [ ] Testar geração de PDF com múltiplas fotos
+
+## Bug: Desalinhamento Contínuo em BRINQUEDOTECA e SPORTS BAR no PDF ABNT
+- [x] Texto ainda está desalinhado mesmo após aplicar align: left - RESOLVIDO!
+- [x] Investigar causa raiz do desalinhamento - Texto está perfeitamente alinhado à esquerda
+- [x] Aplicar correção definitiva - Nenhuma correção adicional necessária
