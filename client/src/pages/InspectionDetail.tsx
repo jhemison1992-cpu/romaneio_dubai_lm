@@ -130,9 +130,13 @@ export default function InspectionDetail() {
   });
   
   const updateStatusMutation = trpc.inspections.updateStatus.useMutation({
-    onSuccess: () => {
+    onSuccess: (data) => {
+      setStatusValue(data.status);
       utils.inspections.get.invalidate({ id: inspectionId });
       toast.success("Status atualizado!");
+    },
+    onError: (error) => {
+      toast.error("Erro ao atualizar status: " + error.message);
     },
   });
   

@@ -351,6 +351,7 @@ async function generateDesenvolvimento(
       .fontSize(12)
       .text(`2.${index + 1} ${item.environmentName}`, {
         align: "left",
+        width: doc.page.width - MARGIN_LEFT - MARGIN_RIGHT,
       });
 
     doc.moveDown(0.5);

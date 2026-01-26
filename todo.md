@@ -362,6 +362,10 @@
 - [ ] Exibir datas nos cards de ambiente
 - [x] Testar criação e edição com datas
 
+## Bugs Críticos Reportados - 26/01/2026
+- [x] Corrigir erro "NotFoundError: removeChild" ao clicar em "Rascunho" no dropdown de status
+- [x] Corrigir desalinhamento de títulos "BRINQUEDOTECA" e "SPORTS BAR" no PDF ABNT
+
 ## Nova Funcionalidade: Acompanhamento da Evolução da Instalação
 - [ ] Criar tabela installation_progress no schema
 - [ ] Definir etapas padrão da instalação (ex: medição, fabricação, instalação, acabamento)

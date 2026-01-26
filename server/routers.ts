@@ -67,7 +67,7 @@ export const appRouter = router({
       .mutation(async ({ input }) => {
         const { updateInspectionStatus } = await import("./db");
         await updateInspectionStatus(input.id, input.status);
-        return { success: true };
+        return { success: true, status: input.status };
       }),
     
     updateTitle: publicProcedure
