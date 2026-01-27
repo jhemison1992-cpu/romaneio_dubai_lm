@@ -1,6 +1,7 @@
 import { COOKIE_NAME } from "@shared/const";
 import { getSessionCookieOptions } from "./_core/cookies";
 import { systemRouter } from "./_core/systemRouter";
+import { subscriptionsRouter } from "./subscriptions-router";
 import { publicProcedure, router } from "./_core/trpc";
 import { z } from "zod";
 import * as dbProjects from "./db-projects";
@@ -711,6 +712,8 @@ export const appRouter = router({
         return { sessionId: "test_session", url: checkoutUrl };
       }),
   }),
+
+  subscriptions: subscriptionsRouter,
 
   pricing: router({
     list: publicProcedure.query(async () => {

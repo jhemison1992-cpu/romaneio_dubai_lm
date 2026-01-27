@@ -948,3 +948,35 @@
 - [ ] Testar fluxo completo de compra e subscrição
 - [x] Criar página de FAQ sobre planos e preços (já existe na página de pricing)
 - [ ] Implementar trial period (primeiro mês grátis)
+
+
+## Integração com Stripe (27/01/2026)
+- [ ] Criar procedimento tRPC para criar checkout session
+- [ ] Implementar webhook /api/stripe/webhook para sincronizar subscrições
+- [ ] Atualizar página de Pricing com botões de compra
+- [ ] Criar página de sucesso após checkout
+- [ ] Criar página de gerenciamento de subscrições
+- [ ] Implementar cancelamento de subscrição
+- [ ] Testar fluxo completo com cartão de teste Stripe
+
+
+## ✅ INTEGRAÇÃO STRIPE CONCLUÍDA (27/01/2026)
+- [x] Criar procedimentos tRPC para checkout com Stripe
+- [x] Implementar webhook do Stripe para sincronizar subscrições  
+- [x] Atualizar página de Pricing com botões de compra
+- [x] Criar página de gerenciamento de subscrições (Billing.tsx)
+- [x] Criar página de sucesso após checkout (BillingSuccess.tsx)
+- [x] Testar fluxo completo de checkout
+- [x] Criar documentação da integração Stripe (STRIPE_INTEGRATION.md)
+- [x] Registrar rotas de Pricing e Billing no App.tsx
+
+### Arquivos Criados:
+- server/stripe-helpers.ts - Helpers para Stripe
+- server/subscriptions-router.ts - Router tRPC de subscrições
+- server/stripe-webhook.ts - Processamento de webhooks
+- client/src/pages/Pricing.tsx - Página de planos com checkout
+- client/src/pages/Billing.tsx - Gerenciamento de faturamento
+- client/src/pages/BillingSuccess.tsx - Página de sucesso
+- STRIPE_INTEGRATION.md - Documentação completa
+
+### Status: ✅ PRONTO PARA PUBLICAÇÃO

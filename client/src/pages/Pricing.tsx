@@ -2,12 +2,41 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Check } from "lucide-react";
+import { Check, Loader2 } from "lucide-react";
 import { trpc } from "@/lib/trpc";
+import { useAuth } from "@/_core/hooks/useAuth";
 
 export default function Pricing() {
   const [billingCycle, setBillingCycle] = useState<"monthly" | "annual">("monthly");
+  const [loadingPlan, setLoadingPlan] = useState<string | null>(null);
   const { data: plans, isLoading } = trpc.pricing.list.useQuery();
+  const { user } = useAuth();
+  const createCheckoutMutation = trpc.subscriptions.createCheckoutSession.useMutation();
+
+  const handleCheckout = async (planSlug: string) => {
+    if (!user) {
+      alert("Você precisa estar logado para assinar um plano");
+      return;
+    }
+
+    setLoadingPlan(planSlug);
+    try {
+      const result = await createCheckoutMutation.mutateAsync({
+        planSlug,
+        billingCycle,
+        successUrl: `${window.location.origin}/billing/success`,
+        cancelUrl: `${window.location.origin}/pricing`,
+      });
+
+      if (result.url) {
+        window.open(result.url, "_blank");
+      }
+    } catch (error: any) {
+      alert(error.message || "Falha ao criar sessão de checkout");
+    } finally {
+      setLoadingPlan(null);
+    }
+  };
 
   if (isLoading) {
     return (
@@ -117,8 +146,17 @@ export default function Pricing() {
                   size="lg"
                   className="w-full"
                   variant={plan.slug === "enterprise" ? "default" : "outline"}
+                  disabled={loadingPlan === plan.slug}
+                  onClick={() => handleCheckout(plan.slug)}
                 >
-                  Começar Agora
+                  {loadingPlan === plan.slug ? (
+                    <>
+                      <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                      Redirecionando...
+                    </>
+                  ) : (
+                    "Começar Agora"
+                  )}
                 </Button>
               </CardContent>
             </Card>

@@ -11,6 +11,8 @@ import Inspections from "./pages/Inspections";
 import InspectionDetail from "./pages/InspectionDetail";
 import Users from "./pages/Users";
 import Pricing from "./pages/Pricing";
+import BillingSuccess from "./pages/BillingSuccess";
+import Billing from "./pages/Billing";
 import CompanySignup from "./pages/CompanySignup";
 import CompanyLogin from "./pages/CompanyLogin";
 import CompanyUsers from "./pages/CompanyUsers";
@@ -48,6 +50,12 @@ function Router() {
       )} />
       <Route path="/users" component={Users} />
       <Route path="/pricing" component={Pricing} />
+      <Route path="/billing/success" component={BillingSuccess} />
+      <Route path="/billing" component={() => (
+        <DashboardLayout>
+          <Billing />
+        </DashboardLayout>
+      )} />
       <Route path="/signup" component={CompanySignup} />
       <Route path="/select-company" component={CompanyLogin} />
       <Route path="/company/users" component={CompanyUsers} />
