@@ -933,3 +933,18 @@
 - [x] Investigar por que assets JavaScript não estão sendo carregados corretamente
 - [x] Verificar configuração de cache e versionamento de assets
 - [x] Testar acesso no Firefox e Chrome após correção
+
+
+## Sistema de Pacotes de Preços SaaS (27/01/2026)
+- [x] Criar tabelas de subscrição no banco de dados (subscriptions, pricing_plans)
+- [x] Implementar página de pricing com os 3 planos (Básico, Profissional, Empresarial)
+- [ ] Integrar Stripe para pagamento de subscrições
+- [x] Criar sistema de gerenciamento de subscrições (helpers criados)
+- [ ] Implementar verificação de limite de recursos por plano (obras, usuários, armazenamento)
+- [ ] Criar dashboard de gerenciamento de subscrições para admin
+- [ ] Implementar webhooks do Stripe para sincronizar subscrições
+- [ ] Criar página de faturamento e histórico de pagamentos
+- [ ] Adicionar verificação de plano antes de criar recursos
+- [ ] Testar fluxo completo de compra e subscrição
+- [x] Criar página de FAQ sobre planos e preços (já existe na página de pricing)
+- [ ] Implementar trial period (primeiro mês grátis)

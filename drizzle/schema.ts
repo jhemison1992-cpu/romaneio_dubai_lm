@@ -221,24 +221,7 @@ export const installationSteps = mysqlTable("installation_steps", {
 export type InstallationStep = typeof installationSteps.$inferSelect;
 export type InsertInstallationStep = typeof installationSteps.$inferInsert;
 
-/**
- * Faturas e historico de pagamentos
- */
-export const invoices = mysqlTable("invoices", {
-  id: int("id").autoincrement().primaryKey(),
-  companyId: int("company_id").notNull().references(() => companies.id, { onDelete: "cascade" }),
-  stripeInvoiceId: varchar("stripe_invoice_id", { length: 255 }).unique(),
-  amount: int("amount").notNull(),
-  currency: varchar("currency", { length: 3 }).default("USD").notNull(),
-  status: mysqlEnum("status", ["draft", "open", "paid", "void", "uncollectible"]).default("draft").notNull(),
-  paidAt: timestamp("paid_at"),
-  dueDate: timestamp("due_date"),
-  createdAt: timestamp("createdAt").defaultNow().notNull(),
-  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
-});
 
-export type Invoice = typeof invoices.$inferSelect;
-export type InsertInvoice = typeof invoices.$inferInsert;
 
 /**
  * Planos de assinatura disponiveis
@@ -282,3 +265,87 @@ export const subscriptionHistory = mysqlTable("subscription_history", {
 
 export type SubscriptionHistory = typeof subscriptionHistory.$inferSelect;
 export type InsertSubscriptionHistory = typeof subscriptionHistory.$inferInsert;
+
+
+/**
+ * Tabela de subscrições ativas
+ */
+export const subscriptions = mysqlTable("subscriptions", {
+  id: int("id").autoincrement().primaryKey(),
+  companyId: int("company_id").notNull().references(() => companies.id, { onDelete: "cascade" }),
+  planId: int("plan_id").notNull().references(() => pricingPlans.id),
+  billingCycle: mysqlEnum("billing_cycle", ["monthly", "annual"]).default("monthly").notNull(),
+  status: mysqlEnum("status", ["active", "paused", "cancelled", "expired"]).default("active").notNull(),
+  stripeSubscriptionId: varchar("stripe_subscription_id", { length: 255 }).unique(),
+  stripeCustomerId: varchar("stripe_customer_id", { length: 255 }),
+  currentPeriodStart: timestamp("current_period_start").notNull(),
+  currentPeriodEnd: timestamp("current_period_end").notNull(),
+  cancelledAt: timestamp("cancelled_at"),
+  trialEndDate: timestamp("trial_end_date"),
+  isTrialActive: int("is_trial_active").default(1).notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type Subscription = typeof subscriptions.$inferSelect;
+export type InsertSubscription = typeof subscriptions.$inferInsert;
+
+/**
+ * Tabela de pagamentos/faturas
+ */
+export const invoices = mysqlTable("invoices", {
+  id: int("id").autoincrement().primaryKey(),
+  subscriptionId: int("subscription_id").notNull().references(() => subscriptions.id, { onDelete: "cascade" }),
+  companyId: int("company_id").notNull().references(() => companies.id, { onDelete: "cascade" }),
+  stripeInvoiceId: varchar("stripe_invoice_id", { length: 255 }).unique(),
+  amount: int("amount").notNull(),
+  currency: varchar("currency", { length: 3 }).default("USD").notNull(),
+  status: mysqlEnum("status", ["draft", "open", "paid", "void", "uncollectible"]).default("draft").notNull(),
+  paidAt: timestamp("paid_at"),
+  dueDate: timestamp("due_date"),
+  invoiceNumber: varchar("invoice_number", { length: 50 }).unique(),
+  description: text("description"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type Invoice = typeof invoices.$inferSelect;
+export type InsertInvoice = typeof invoices.$inferInsert;
+
+/**
+ * Tabela de métodos de pagamento
+ */
+export const paymentMethods = mysqlTable("payment_methods", {
+  id: int("id").autoincrement().primaryKey(),
+  companyId: int("company_id").notNull().references(() => companies.id, { onDelete: "cascade" }),
+  stripePaymentMethodId: varchar("stripe_payment_method_id", { length: 255 }).unique().notNull(),
+  type: mysqlEnum("type", ["card", "bank_account", "pix"]).notNull(),
+  cardBrand: varchar("card_brand", { length: 50 }),
+  cardLast4: varchar("card_last4", { length: 4 }),
+  cardExpMonth: int("card_exp_month"),
+  cardExpYear: int("card_exp_year"),
+  isDefault: int("is_default").default(0).notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type PaymentMethod = typeof paymentMethods.$inferSelect;
+export type InsertPaymentMethod = typeof paymentMethods.$inferInsert;
+
+/**
+ * Tabela de uso de recursos
+ */
+export const usageTracking = mysqlTable("usage_tracking", {
+  id: int("id").autoincrement().primaryKey(),
+  companyId: int("company_id").notNull().references(() => companies.id, { onDelete: "cascade" }),
+  month: varchar("month", { length: 7 }).notNull(),
+  projectsCount: int("projects_count").default(0).notNull(),
+  usersCount: int("users_count").default(0).notNull(),
+  storageUsedMB: int("storage_used_mb").default(0).notNull(),
+  apiCallsCount: int("api_calls_count").default(0).notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type UsageTracking = typeof usageTracking.$inferSelect;
+export type InsertUsageTracking = typeof usageTracking.$inferInsert;
