@@ -50,7 +50,7 @@ export async function setupVite(app: Express, server: Server) {
 export function serveStatic(app: Express) {
   const distPath =
     process.env.NODE_ENV === "development"
-      ? path.resolve(import.meta.dirname, "../..", "dist", "public")
+      ? path.resolve(import.meta.dirname, "../\..", "dist", "public")
       : path.resolve(import.meta.dirname, "public");
   if (!fs.existsSync(distPath)) {
     console.error(
@@ -58,10 +58,32 @@ export function serveStatic(app: Express) {
     );
   }
 
+  // Middleware para definir headers de cache apropriados
+  app.use((req, res, next) => {
+    // index.html: sem cache, sempre verificar versão mais recente
+    if (req.path === '/' || req.path.endsWith('.html')) {
+      res.set('Cache-Control', 'no-cache, no-store, must-revalidate');
+      res.set('Pragma', 'no-cache');
+      res.set('Expires', '0');
+    }
+    // Assets com hash (JS, CSS): cache agressivo por 1 ano
+    else if (req.path.match(/\.(js|css|png|jpg|jpeg|gif|svg|woff|woff2|ttf|eot)$/)) {
+      res.set('Cache-Control', 'public, max-age=31536000, immutable');
+    }
+    // Outros arquivos: cache por 1 hora
+    else {
+      res.set('Cache-Control', 'public, max-age=3600');
+    }
+    next();
+  });
+
   app.use(express.static(distPath));
 
   // fall through to index.html if the file doesn't exist
   app.use("*", (_req, res) => {
+    res.set('Cache-Control', 'no-cache, no-store, must-revalidate');
+    res.set('Pragma', 'no-cache');
+    res.set('Expires', '0');
     res.sendFile(path.resolve(distPath, "index.html"));
   });
 }

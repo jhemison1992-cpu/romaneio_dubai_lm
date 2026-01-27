@@ -927,3 +927,9 @@
 - [x] Texto ainda está desalinhado mesmo após aplicar align: left - RESOLVIDO!
 - [x] Investigar causa raiz do desalinhamento - Texto está perfeitamente alinhado à esquerda
 - [x] Aplicar correção definitiva - Nenhuma correção adicional necessária
+
+## Bug Crítico - Assets Faltando no Domínio Publicado (26/01/2026)
+- [x] Corrigir erro "NotFoundError: removeChild" ao carregar no Firefox/Chrome pelo domínio publicado
+- [x] Investigar por que assets JavaScript não estão sendo carregados corretamente
+- [x] Verificar configuração de cache e versionamento de assets
+- [x] Testar acesso no Firefox e Chrome após correção
