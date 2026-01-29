@@ -988,3 +988,13 @@
 - [x] Limpar cache de build e fazer rebuild completo
 - [x] Verificar configuração de assets estáticos no servidor
 - [x] Testar acesso no domínio publicado após correção
+
+
+## ✅ CORRIGIDO - Erro NotFoundError ao Navegar (29/01/2026)
+- [x] Corrigir erro "NotFoundError: removeChild" ao clicar em Select de status
+- [x] Corrigir erro ao navegar de Vistorias para Obras
+- [x] Adicionar useEffect para sincronizar statusValue quando inspection muda
+- [x] Adicionar proteção contra erro de removeChild no componente Select
+- [x] Testar navegação entre páginas - SEM ERROS
+- [x] Testar mudança de status - SEM ERROS
+- [x] Testar console do navegador - LIMPO

@@ -93,6 +93,13 @@ export default function InspectionDetail() {
   const [activeTab, setActiveTab] = useState<string>("0");
   const [statusValue, setStatusValue] = useState<string>(inspection?.status || "draft");
   
+  // Sincronizar statusValue quando inspection muda
+  useEffect(() => {
+    if (inspection?.status) {
+      setStatusValue(inspection.status);
+    }
+  }, [inspection?.status]);
+  
   // Estados para dialog de novo ambiente
   const [openNewEnv, setOpenNewEnv] = useState(false);
   const [newEnvName, setNewEnvName] = useState("");
