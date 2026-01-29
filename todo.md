@@ -980,3 +980,11 @@
 - STRIPE_INTEGRATION.md - Documentação completa
 
 ### Status: ✅ PRONTO PARA PUBLICAÇÃO
+
+
+## Bug Crítico - Assets Faltando no Domínio Publicado (27/01/2026 - Recorrente)
+- [x] Resolver erro "NotFoundError: removeChild" ao carregar no domínio publicado
+- [x] Investigar por que hashes de assets não correspondem entre index.html e arquivos reais
+- [x] Limpar cache de build e fazer rebuild completo
+- [x] Verificar configuração de assets estáticos no servidor
+- [x] Testar acesso no domínio publicado após correção
