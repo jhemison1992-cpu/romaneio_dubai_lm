@@ -59,9 +59,10 @@ export function serveStatic(app: Express) {
   app.use((req, res, next) => {
     // index.html: sem cache, sempre verificar versão mais recente
     if (req.path === '/' || req.path.endsWith('.html')) {
-      res.set('Cache-Control', 'no-cache, no-store, must-revalidate');
+      res.set('Cache-Control', 'no-cache, no-store, must-revalidate, max-age=0');
       res.set('Pragma', 'no-cache');
       res.set('Expires', '0');
+      res.set('ETag', 'W/"' + Date.now() + '"');
     }
     // Assets com hash (JS, CSS): cache agressivo por 1 ano
     else if (req.path.match(/\.(js|css|png|jpg|jpeg|gif|svg|woff|woff2|ttf|eot)$/)) {

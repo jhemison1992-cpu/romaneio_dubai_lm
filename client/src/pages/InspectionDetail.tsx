@@ -380,12 +380,12 @@ export default function InspectionDetail() {
               <Plus className="h-4 w-4" />
               Adicionar Ambiente
             </Button>
-            <Select value={statusValue || "draft"} onValueChange={(value) => {
+            <Select value={statusValue} onValueChange={(value) => {
               setStatusValue(value);
               handleStatusChange(value as any);
             }}>
               <SelectTrigger className="w-[180px]">
-                <SelectValue />
+                <SelectValue placeholder="Selecione um status" />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="draft">Rascunho</SelectItem>
