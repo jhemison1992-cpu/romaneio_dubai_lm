@@ -59,10 +59,11 @@ export function serveStatic(app: Express) {
   app.use((req, res, next) => {
     // index.html: sem cache, sempre verificar versão mais recente
     if (req.path === '/' || req.path.endsWith('.html')) {
-      res.set('Cache-Control', 'no-cache, no-store, must-revalidate, max-age=0');
+      res.set('Cache-Control', 'no-cache, no-store, must-revalidate, max-age=0, s-maxage=0');
       res.set('Pragma', 'no-cache');
       res.set('Expires', '0');
-      res.set('ETag', 'W/"' + Date.now() + '"');
+      res.set('ETag', '"' + Date.now() + '"');
+      res.set('Last-Modified', new Date().toUTCString());
     }
     // Assets com hash (JS, CSS): cache agressivo por 1 ano
     else if (req.path.match(/\.(js|css|png|jpg|jpeg|gif|svg|woff|woff2|ttf|eot)$/)) {
@@ -79,9 +80,11 @@ export function serveStatic(app: Express) {
 
   // fall through to index.html if the file doesn't exist
   app.use("*", (_req, res) => {
-    res.set('Cache-Control', 'no-cache, no-store, must-revalidate');
+    res.set('Cache-Control', 'no-cache, no-store, must-revalidate, max-age=0, s-maxage=0');
     res.set('Pragma', 'no-cache');
     res.set('Expires', '0');
+    res.set('ETag', '"' + Date.now() + '"');
+    res.set('Last-Modified', new Date().toUTCString());
     res.sendFile(path.resolve(distPath, "index.html"));
   });
 }
