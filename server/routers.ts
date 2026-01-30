@@ -2,7 +2,7 @@ import { COOKIE_NAME } from "@shared/const";
 import { getSessionCookieOptions } from "./_core/cookies";
 import { systemRouter } from "./_core/systemRouter";
 import { subscriptionsRouter } from "./subscriptions-router";
-import { publicProcedure, router } from "./_core/trpc";
+import { publicProcedure, protectedProcedure, router } from "./_core/trpc";
 import { z } from "zod";
 import * as dbProjects from "./db-projects";
 import * as dbPricing from "./db-pricing";
@@ -272,7 +272,7 @@ export const appRouter = router({
   }),
 
   reports: router({
-    generatePDF: publicProcedure
+    generatePDF: protectedProcedure
       .input((val: unknown) => {
 
         return z.object({ inspectionId: z.number(), format: z.enum(["standard", "abnt"]).optional().default("standard") }).parse(val);

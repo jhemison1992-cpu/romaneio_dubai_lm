@@ -410,8 +410,11 @@ async function generateDesenvolvimento(
 
         const photoWidth = 60;
         const photoHeight = 45;
+        const gapBetweenPhotos = 10;
+        const gapBetweenRows = 15;
         let x = MARGIN_LEFT;
         let y = doc.y;
+        let maxY = y;
 
         for (const photo of item.photos) {
           try {
@@ -422,15 +425,18 @@ async function generateDesenvolvimento(
             });
             const buffer = response.data;
 
-            if (x + photoWidth + 10 > doc.page.width - MARGIN_RIGHT) {
+            // Verificar se precisa quebrar linha
+            if (x + photoWidth + gapBetweenPhotos > doc.page.width - MARGIN_RIGHT) {
               x = MARGIN_LEFT;
-              y += photoHeight + 15;
+              y = maxY + photoHeight + gapBetweenRows;
             }
 
-            if (y + photoHeight + 20 > doc.page.height - MARGIN_BOTTOM) {
+            // Verificar se precisa de nova página
+            if (y + photoHeight + 30 > doc.page.height - MARGIN_BOTTOM) {
               doc.addPage();
               x = MARGIN_LEFT;
               y = MARGIN_TOP;
+              maxY = y;
             }
 
             doc.image(buffer, x, y, { width: photoWidth, height: photoHeight });
@@ -439,13 +445,15 @@ async function generateDesenvolvimento(
               align: "center",
             });
 
-            x += photoWidth + 10;
+            maxY = Math.max(maxY, y);
+            x += photoWidth + gapBetweenPhotos;
           } catch (error) {
             console.error(`Erro ao carregar foto ${photo.fileName}:`, error);
           }
         }
 
-        doc.y = y + photoHeight + 20;
+        // Resetar posição Y corretamente após as fotos
+        doc.y = maxY + photoHeight + 25;
       }
     }
 
