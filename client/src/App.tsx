@@ -19,11 +19,13 @@ import CompanyUsers from "./pages/CompanyUsers";
 import Checkout from "./pages/Checkout";
 import Dashboard from "./pages/Dashboard";
 import SubscriptionManagement from "./pages/SubscriptionManagement";
+import Landing from "./pages/Landing";
 
 function Router() {
   return (
     <Switch>
-      <Route path="/" component={() => (
+      <Route path="/" component={Landing} />
+      <Route path="/app" component={() => (
         <DashboardLayout>
           <Projects />
         </DashboardLayout>

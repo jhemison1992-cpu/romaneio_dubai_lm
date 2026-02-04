@@ -998,3 +998,12 @@
 - [x] Testar navegação entre páginas - SEM ERROS
 - [x] Testar mudança de status - SEM ERROS
 - [x] Testar console do navegador - LIMPO
+
+
+## Versão de Venda - Múltiplos Clientes (Em Desenvolvimento)
+- [x] Criar página de Landing para novos usuários
+- [x] Redirecionar usuários logados para dashboard
+- [ ] Implementar fluxo de onboarding com seleção de plano
+- [ ] Criar dados de demonstração em branco para novo usuário
+- [ ] Testar fluxo completo de novo usuário
+- [ ] Publicar versão com suporte a múltiplos clientes
