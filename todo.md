@@ -1007,3 +1007,35 @@
 - [ ] Criar dados de demonstração em branco para novo usuário
 - [ ] Testar fluxo completo de novo usuário
 - [ ] Publicar versão com suporte a múltiplos clientes
+
+
+## Modificação de Assinatura para Foto do Responsável (Em Desenvolvimento)
+- [ ] Investigar estrutura atual de assinatura no banco de dados
+- [ ] Modificar schema para suportar foto do responsável
+- [ ] Atualizar componente de assinatura para upload de foto
+- [ ] Atualizar geração de PDF para incluir foto do responsável
+- [ ] Testar fluxo completo de upload e geração de PDF
+
+
+## Modificação de Assinatura para Foto do Responsável (Em Desenvolvimento)
+- [x] Investigar estrutura atual de assinatura no banco de dados
+- [x] Modificar schema para suportar foto do responsável
+- [x] Adicionar colunas de foto ao banco de dados via SQL
+- [x] Criar componente ResponsiblePhotoPad para upload de foto
+- [ ] Integrar ResponsiblePhotoPad na página InspectionDetail
+- [ ] Atualizar geração de PDF para incluir foto do responsável
+- [ ] Testar fluxo completo de upload e geração de PDF
+
+## Versão de Venda - Múltiplos Clientes
+- [x] Criar página de Landing para novos usuários
+- [x] Redirecionar usuários logados para dashboard
+- [ ] Implementar fluxo de onboarding com seleção de plano
+- [ ] Criar dados de demonstração em branco para novo usuário
+- [ ] Testar fluxo completo de novo usuário
+- [ ] Publicar versão com suporte a múltiplos clientes
+
+## Correção de Erros TypeScript
+- [x] Comentar arquivo stripe-helpers.ts (tabelas não implementadas)
+- [x] Comentar arquivo stripe-webhook.ts (tabelas não implementadas)
+- [x] Comentar arquivo db-subscriptions.ts (tabelas não implementadas)
+- [x] Verificar servidor funcionando sem erros TypeScript

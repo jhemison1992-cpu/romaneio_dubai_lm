@@ -1,1 +1,0 @@
-ALTER TABLE `installation_steps` ADD `completed_quantity` int DEFAULT 0 NOT NULL;

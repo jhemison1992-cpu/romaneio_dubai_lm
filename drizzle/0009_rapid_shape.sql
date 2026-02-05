@@ -1,1 +1,0 @@
-ALTER TABLE `app_users` ADD `profile_photo` text;

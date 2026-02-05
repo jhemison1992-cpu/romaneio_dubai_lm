@@ -1,0 +1,9 @@
+{
+  "query": "ALTER TABLE inspection_items ADD COLUMN IF NOT EXISTS responsible_construction_photo_url VARCHAR(1000);\nALTER TABLE inspection_items ADD COLUMN IF NOT EXISTS responsible_construction_photo_key VARCHAR(500);\nALTER TABLE inspection_items ADD COLUMN IF NOT EXISTS responsible_supplier_photo_url VARCHAR(1000);\nALTER TABLE inspection_items ADD COLUMN IF NOT EXISTS responsible_supplier_photo_key VARCHAR(500);\nALTER TABLE inspection_items ADD COLUMN IF NOT EXISTS delivery_term_responsible_photo_url VARCHAR(1000);\nALTER TABLE inspection_items ADD COLUMN IF NOT EXISTS delivery_term_responsible_photo_key VARCHAR(500);",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway03.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 2RJ6pkiYcWrkG7s.7677514b54b3 --database AdJ4NUusdiWEA7xpHs45nc --execute ALTER TABLE inspection_items ADD COLUMN IF NOT EXISTS responsible_construction_photo_url VARCHAR(1000);\nALTER TABLE inspection_items ADD COLUMN IF NOT EXISTS responsible_construction_photo_key VARCHAR(500);\nALTER TABLE inspection_items ADD COLUMN IF NOT EXISTS responsible_supplier_photo_url VARCHAR(1000);\nALTER TABLE inspection_items ADD COLUMN IF NOT EXISTS responsible_supplier_photo_key VARCHAR(500);\nALTER TABLE inspection_items ADD COLUMN IF NOT EXISTS delivery_term_responsible_photo_url VARCHAR(1000);\nALTER TABLE inspection_items ADD COLUMN IF NOT EXISTS delivery_term_responsible_photo_key VARCHAR(500);",
+  "rows": [],
+  "messages": [],
+  "stdout": "",
+  "stderr": "",
+  "execution_time_ms": 2739
+}
