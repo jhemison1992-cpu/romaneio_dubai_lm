@@ -1,7 +1,7 @@
 import { COOKIE_NAME } from "@shared/const";
 import { getSessionCookieOptions } from "./_core/cookies";
 import { systemRouter } from "./_core/systemRouter";
-import { subscriptionsRouter } from "./subscriptions-router";
+// import { subscriptionsRouter } from "./subscriptions-router"; // Comentado: arquivo com tabelas não implementadas
 import { publicProcedure, protectedProcedure, router } from "./_core/trpc";
 import { z } from "zod";
 import * as dbProjects from "./db-projects";
@@ -713,31 +713,31 @@ export const appRouter = router({
       }),
   }),
 
-  subscriptions: subscriptionsRouter,
-
-  pricing: router({
-    list: publicProcedure.query(async () => {
-      return await dbPricing.getAllPricingPlans();
-    }),
-    
-    getBySlug: publicProcedure
-      .input((val: unknown) => z.object({ slug: z.string() }).parse(val))
-      .query(async ({ input }) => {
-        return await dbPricing.getPricingPlanBySlug(input.slug);
-      }),
-    
-    getCompanyPlan: publicProcedure
-      .input((val: unknown) => z.object({ companyId: z.number() }).parse(val))
-      .query(async ({ input }) => {
-        return await dbPricing.getCompanyPricingPlan(input.companyId);
-      }),
-    
-    getPlanLimits: publicProcedure
-      .input((val: unknown) => z.object({ planSlug: z.string() }).parse(val))
-      .query(async ({ input }) => {
-        return await dbPricing.getPlanLimits(input.planSlug);
-      }),
-  }),
+//   subscriptions: subscriptionsRouter,
+// 
+//   pricing: router({
+//     list: publicProcedure.query(async () => {
+//       return await dbPricing.getAllPricingPlans();
+//     }),
+//     
+//     getBySlug: publicProcedure
+//       .input((val: unknown) => z.object({ slug: z.string() }).parse(val))
+//       .query(async ({ input }) => {
+//         return await dbPricing.getPricingPlanBySlug(input.slug);
+//       }),
+//     
+//     getCompanyPlan: publicProcedure
+//       .input((val: unknown) => z.object({ companyId: z.number() }).parse(val))
+//       .query(async ({ input }) => {
+//         return await dbPricing.getCompanyPricingPlan(input.companyId);
+//       }),
+//     
+//     getPlanLimits: publicProcedure
+//       .input((val: unknown) => z.object({ planSlug: z.string() }).parse(val))
+//       .query(async ({ input }) => {
+//         return await dbPricing.getPlanLimits(input.planSlug);
+//       }),
+//   }),
 });
 
 export type AppRouter = typeof appRouter;

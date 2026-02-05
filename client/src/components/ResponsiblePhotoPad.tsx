@@ -2,7 +2,7 @@ import { useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { X, Camera, Upload } from "lucide-react";
-import { useToast } from "@/hooks/use-toast";
+import { toast } from "sonner";
 
 interface ResponsiblePhotoPadProps {
   value?: string;
@@ -22,7 +22,7 @@ export function ResponsiblePhotoPad({
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [isCamera, setIsCamera] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const { toast } = useToast();
+
 
   const handleFileSelect = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -30,21 +30,13 @@ export function ResponsiblePhotoPad({
 
     // Validar tipo de arquivo
     if (!file.type.startsWith("image/")) {
-      toast({
-        title: "Erro",
-        description: "Por favor, selecione uma imagem válida",
-        variant: "destructive",
-      });
+      toast.error("Por favor, selecione uma imagem válida");
       return;
     }
 
     // Validar tamanho (máximo 5MB)
     if (file.size > 5 * 1024 * 1024) {
-      toast({
-        title: "Erro",
-        description: "A imagem deve ter no máximo 5MB",
-        variant: "destructive",
-      });
+      toast.error("A imagem deve ter no máximo 5MB");
       return;
     }
 
@@ -53,10 +45,7 @@ export function ResponsiblePhotoPad({
       if (onPhotoUpload) {
         const photoUrl = await onPhotoUpload(file);
         onChange(photoUrl);
-        toast({
-          title: "Sucesso",
-          description: "Foto do responsável enviada com sucesso",
-        });
+        toast.success("Foto do responsável enviada com sucesso");
       } else {
         // Fallback: usar FileReader para converter em data URL
         const reader = new FileReader();
@@ -67,11 +56,7 @@ export function ResponsiblePhotoPad({
         reader.readAsDataURL(file);
       }
     } catch (error) {
-      toast({
-        title: "Erro",
-        description: "Falha ao fazer upload da foto",
-        variant: "destructive",
-      });
+      toast.error("Falha ao fazer upload da foto");
     } finally {
       setIsLoading(false);
     }
@@ -87,11 +72,7 @@ export function ResponsiblePhotoPad({
         setIsCamera(true);
       }
     } catch (error) {
-      toast({
-        title: "Erro",
-        description: "Não foi possível acessar a câmera",
-        variant: "destructive",
-      });
+      toast.error("Não foi possível acessar a câmera");
     }
   };
 
@@ -105,10 +86,7 @@ export function ResponsiblePhotoPad({
         const dataUrl = canvasRef.current.toDataURL("image/jpeg");
         onChange(dataUrl);
         stopCamera();
-        toast({
-          title: "Sucesso",
-          description: "Foto capturada com sucesso",
-        });
+        toast.success("Foto capturada com sucesso");
       }
     }
   };
