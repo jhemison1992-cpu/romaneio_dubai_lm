@@ -380,10 +380,18 @@ function addSignatures(doc: PDFKit.PDFDocument, data: AlumincPDFData, accentColo
 }
 
 function addFooter(doc: PDFKit.PDFDocument, data: AlumincPDFData) {
-  const pageCount = doc.bufferedPageRange().count;
-  for (let i = 0; i < pageCount; i++) {
-    doc.switchToPage(i);
-    doc.fontSize(8).fillColor("#999").text(`${i + 1} / ${pageCount}`, doc.page.width - 80, doc.page.height - 30, { align: "right" });
-    doc.text(`Criado em: ${new Date().toLocaleString("pt-BR")}`, 40, doc.page.height - 30);
+  try {
+    const pageCount = doc.bufferedPageRange().count;
+    for (let i = 0; i < pageCount; i++) {
+      try {
+        doc.switchToPage(i);
+        doc.fontSize(8).fillColor("#999").text(`${i + 1} / ${pageCount}`, doc.page.width - 80, doc.page.height - 30, { align: "right" });
+        doc.text(`Criado em: ${new Date().toLocaleString("pt-BR")}`, 40, doc.page.height - 30);
+      } catch (pageError) {
+        console.warn(`Erro ao adicionar rodapé na página ${i}:`, pageError);
+      }
+    }
+  } catch (error) {
+    console.error("Erro ao adicionar rodapé:", error);
   }
 }

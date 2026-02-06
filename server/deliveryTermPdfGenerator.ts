@@ -213,8 +213,10 @@ export async function generateDeliveryTermPDF(
           doc.moveDown(0.5);
 
           // Adicionar fotos (2 por linha)
-          const photoWidth = 250;
-          const photoHeight = 180;
+          // A4 width = 595px, margins = 50+50 = 100px, usable = 495px
+          // 2 fotos + spacing: (width * 2) + spacing + margins deve ser <= 495px
+          const photoWidth = 220;
+          const photoHeight = 160;
           const spacing = 15;
           let photoCount = 0;
           let xPosition = 50;
@@ -340,11 +342,16 @@ export async function generateDeliveryTermPDF(
       // Assinatura
       if (data.deliveryTerm.signature) {
         try {
+          // Verificar se precisa de nova página antes de adicionar assinatura
+          if (doc.y + 150 > doc.page.height - 50) {
+            doc.addPage();
+          }
+          
           const sigData = data.deliveryTerm.signature.split(",")[1];
           if (sigData) {
             const sigBuffer = Buffer.from(sigData, "base64");
-            const signatureWidth = 300;
-            const signatureHeight = 100;
+            const signatureWidth = 200;
+            const signatureHeight = 80;
             const xPos = (doc.page.width - signatureWidth) / 2;
 
             doc.image(sigBuffer, xPos, doc.y, {
