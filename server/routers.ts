@@ -329,22 +329,27 @@ export const appRouter = router({
         console.log("[generatePDF] Items with media:", JSON.stringify(itemsWithMedia, null, 2));
         
         let pdfBuffer;
-        if (input.format === "abnt") {
-          console.log("[generatePDF] Generating ABNT format PDF");
-          pdfBuffer = await generateABNTPDF({
-            title: inspection.title,
-            status: inspection.status,
-            createdAt: inspection.createdAt,
-            items: itemsWithMedia,
-          });
-        } else {
-          console.log("[generatePDF] Generating standard format PDF");
-          pdfBuffer = await generateInspectionPDF({
-            title: inspection.title,
-            status: inspection.status,
-            createdAt: inspection.createdAt,
-            items: itemsWithMedia,
-          });
+        try {
+          if (input.format === "abnt") {
+            console.log("[generatePDF] Generating ABNT format PDF");
+            pdfBuffer = await generateABNTPDF({
+              title: inspection.title,
+              status: inspection.status,
+              createdAt: inspection.createdAt,
+              items: itemsWithMedia,
+            });
+          } else {
+            console.log("[generatePDF] Generating standard format PDF");
+            pdfBuffer = await generateInspectionPDF({
+              title: inspection.title,
+              status: inspection.status,
+              createdAt: inspection.createdAt,
+              items: itemsWithMedia,
+            });
+          }
+        } catch (pdfError) {
+          console.error("[generatePDF] Error generating PDF:", pdfError);
+          throw new Error(`Erro ao gerar PDF: ${pdfError instanceof Error ? pdfError.message : String(pdfError)}`);
         }
         
         const fileKey = `reports/${input.inspectionId}/${nanoid()}-relatorio.pdf`;

@@ -1039,3 +1039,12 @@
 - [x] Comentar arquivo stripe-webhook.ts (tabelas não implementadas)
 - [x] Comentar arquivo db-subscriptions.ts (tabelas não implementadas)
 - [x] Verificar servidor funcionando sem erros TypeScript
+
+
+## Redesenho de Sistema de Assinatura com QR Code
+- [ ] Criar novo componente SignatureWithQRCode com modal profissional
+- [ ] Lado esquerdo: QR Code + informações do responsável
+- [ ] Lado direito: Área de desenho para assinatura digital
+- [ ] Integrar novo componente na InspectionDetail
+- [ ] Testar fluxo completo de assinatura
+- [ ] Atualizar geração de PDF para incluir QR Code e assinatura

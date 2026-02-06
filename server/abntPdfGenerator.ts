@@ -439,14 +439,18 @@ async function generateDesenvolvimento(
               maxY = y;
             }
 
-            doc.image(buffer, x, y, { width: photoWidth, height: photoHeight });
-            doc.fontSize(8).text(photo.identifier, x, y + photoHeight + 2, {
-              width: photoWidth,
+            // Garantir que width e height são inteiros
+            const intWidth = Math.floor(photoWidth);
+            const intHeight = Math.floor(photoHeight);
+            
+            doc.image(buffer, x, y, { width: intWidth, height: intHeight });
+            doc.fontSize(8).text(photo.identifier, x, y + intHeight + 2, {
+              width: intWidth,
               align: "center",
             });
 
-            maxY = Math.max(maxY, y);
-            x += photoWidth + gapBetweenPhotos;
+            maxY = Math.max(maxY, y + intHeight);
+            x += intWidth + gapBetweenPhotos;
           } catch (error) {
             console.error(`Erro ao carregar foto ${photo.fileName}:`, error);
           }

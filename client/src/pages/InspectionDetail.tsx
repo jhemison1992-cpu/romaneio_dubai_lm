@@ -14,6 +14,7 @@ import { ArrowLeft, Download, Save, FileText, Plus, Trash2 } from "lucide-react"
 import { getPlantaUrl } from "@/lib/plantasMapping";
 import { MediaUpload } from "@/components/MediaUpload";
 import { SignaturePad } from "@/components/SignaturePad";
+import { SignatureWithQRCode } from "@/components/SignatureWithQRCode";
 import { InstallationStepsChecklist } from "@/components/InstallationStepsChecklist";
 import { NewEnvironmentDialog } from "@/components/NewEnvironmentDialog";
 import { FillGuideDialog } from "@/components/FillGuideDialog";
@@ -113,6 +114,15 @@ export default function InspectionDetail() {
   
   // Estado para confirmação de exclusão
   const [envToDelete, setEnvToDelete] = useState<number | null>(null);
+  
+  // Estados para modal de assinatura com QR Code
+  const [signatureModal, setSignatureModal] = useState<{
+    isOpen: boolean;
+    type: "construction" | "supplier";
+    environmentId: number;
+    environmentName: string;
+    responsibleName: string;
+  } | null>(null);
   
   const utils = trpc.useUtils();
   
