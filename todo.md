@@ -1062,3 +1062,15 @@
 - [x] Deixar apenas uma assinatura única no termo de entrega
 - [x] Atualizar PDF para incluir apenas uma assinatura
 - [ ] Testar fluxo completo
+
+
+## Adicionar Editar/Excluir em Todas as Seções
+- [ ] Adicionar ícones de editar e excluir em Mão de obra
+- [ ] Adicionar ícones de editar e excluir em Equipamentos
+- [ ] Adicionar ícones de editar e excluir em Atividades
+- [ ] Adicionar ícones de editar e excluir em Ocorrências
+- [ ] Adicionar ícones de editar e excluir em Checklist
+- [ ] Adicionar ícones de editar e excluir em Materiais recebidos
+- [ ] Adicionar ícones de editar e excluir em Materiais utilizados
+- [ ] Adicionar ícones de editar e excluir em Comentários
+- [ ] Testar fluxo completo em desenvolvimento

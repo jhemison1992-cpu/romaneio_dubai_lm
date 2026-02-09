@@ -743,6 +743,15 @@ export const appRouter = router({
 //         return await dbPricing.getPlanLimits(input.planSlug);
 //       }),
 //   }),
+
+  // Labor Items (Mão de obra) - Comentado por enquanto
+  // laborItems: router({
+  //   list: publicProcedure
+  //     .input(z.object({ environmentId: z.number() }))
+  //     .query(async ({ input }) => {
+  //       return { items: [] };
+  //     }),
+  // }),
 });
 
 export type AppRouter = typeof appRouter;

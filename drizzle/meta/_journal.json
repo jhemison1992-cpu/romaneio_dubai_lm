@@ -8,6 +8,13 @@
       "when": 1770200951500,
       "tag": "0000_colossal_salo",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1770632741590,
+      "tag": "0001_complete_rogue",
+      "breakpoints": true
     }
   ]
 }

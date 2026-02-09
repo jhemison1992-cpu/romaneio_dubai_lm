@@ -254,3 +254,128 @@ export const pricingPlans = mysqlTable("pricing_plans", {
 
 export type PricingPlan = typeof pricingPlans.$inferSelect;
 export type InsertPricingPlan = typeof pricingPlans.$inferInsert;
+
+
+/**
+ * Mão de obra - Profissionais envolvidos na instalação
+ */
+export const laborItems = mysqlTable("labor_items", {
+  id: int("id").autoincrement().primaryKey(),
+  companyId: int("company_id").notNull().references(() => companies.id, { onDelete: "cascade" }),
+  inspectionEnvironmentId: int("inspection_environment_id").notNull().references(() => inspectionEnvironments.id, { onDelete: "cascade" }),
+  profession: varchar("profession", { length: 100 }).notNull(),
+  name: varchar("name", { length: 255 }).notNull(),
+  hours: varchar("hours", { length: 50 }).notNull(),
+  notes: text("notes"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type LaborItem = typeof laborItems.$inferSelect;
+export type InsertLaborItem = typeof laborItems.$inferInsert;
+
+/**
+ * Equipamentos utilizados na instalação
+ */
+export const equipmentItems = mysqlTable("equipment_items", {
+  id: int("id").autoincrement().primaryKey(),
+  companyId: int("company_id").notNull().references(() => companies.id, { onDelete: "cascade" }),
+  inspectionEnvironmentId: int("inspection_environment_id").notNull().references(() => inspectionEnvironments.id, { onDelete: "cascade" }),
+  name: varchar("name", { length: 255 }).notNull(),
+  quantity: int("quantity").notNull(),
+  unit: varchar("unit", { length: 50 }).notNull(), // Ex: unidade, metro, kg
+  notes: text("notes"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type EquipmentItem = typeof equipmentItems.$inferSelect;
+export type InsertEquipmentItem = typeof equipmentItems.$inferInsert;
+
+/**
+ * Atividades realizadas na instalação
+ */
+export const activityItems = mysqlTable("activity_items", {
+  id: int("id").autoincrement().primaryKey(),
+  companyId: int("company_id").notNull().references(() => companies.id, { onDelete: "cascade" }),
+  inspectionEnvironmentId: int("inspection_environment_id").notNull().references(() => inspectionEnvironments.id, { onDelete: "cascade" }),
+  description: varchar("description", { length: 255 }).notNull(),
+  status: mysqlEnum("status", ["pendente", "em_andamento", "concluida"]).default("pendente").notNull(),
+  notes: text("notes"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type ActivityItem = typeof activityItems.$inferSelect;
+export type InsertActivityItem = typeof activityItems.$inferInsert;
+
+/**
+ * Ocorrências/Problemas encontrados
+ */
+export const occurrenceItems = mysqlTable("occurrence_items", {
+  id: int("id").autoincrement().primaryKey(),
+  companyId: int("company_id").notNull().references(() => companies.id, { onDelete: "cascade" }),
+  inspectionEnvironmentId: int("inspection_environment_id").notNull().references(() => inspectionEnvironments.id, { onDelete: "cascade" }),
+  description: varchar("description", { length: 255 }).notNull(),
+  severity: mysqlEnum("severity", ["baixa", "media", "alta"]).default("media").notNull(),
+  status: mysqlEnum("status", ["aberta", "em_resolucao", "resolvida"]).default("aberta").notNull(),
+  notes: text("notes"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type OccurrenceItem = typeof occurrenceItems.$inferSelect;
+export type InsertOccurrenceItem = typeof occurrenceItems.$inferInsert;
+
+/**
+ * Materiais recebidos na obra
+ */
+export const receivedMaterialItems = mysqlTable("received_material_items", {
+  id: int("id").autoincrement().primaryKey(),
+  companyId: int("company_id").notNull().references(() => companies.id, { onDelete: "cascade" }),
+  inspectionEnvironmentId: int("inspection_environment_id").notNull().references(() => inspectionEnvironments.id, { onDelete: "cascade" }),
+  name: varchar("name", { length: 255 }).notNull(),
+  quantity: int("quantity").notNull(),
+  unit: varchar("unit", { length: 50 }).notNull(),
+  receivedDate: date("received_date").notNull(),
+  notes: text("notes"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type ReceivedMaterialItem = typeof receivedMaterialItems.$inferSelect;
+export type InsertReceivedMaterialItem = typeof receivedMaterialItems.$inferInsert;
+
+/**
+ * Materiais utilizados na instalação
+ */
+export const usedMaterialItems = mysqlTable("used_material_items", {
+  id: int("id").autoincrement().primaryKey(),
+  companyId: int("company_id").notNull().references(() => companies.id, { onDelete: "cascade" }),
+  inspectionEnvironmentId: int("inspection_environment_id").notNull().references(() => inspectionEnvironments.id, { onDelete: "cascade" }),
+  name: varchar("name", { length: 255 }).notNull(),
+  quantity: int("quantity").notNull(),
+  unit: varchar("unit", { length: 50 }).notNull(),
+  notes: text("notes"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type UsedMaterialItem = typeof usedMaterialItems.$inferSelect;
+export type InsertUsedMaterialItem = typeof usedMaterialItems.$inferInsert;
+
+/**
+ * Comentários gerais sobre a instalação
+ */
+export const commentItems = mysqlTable("comment_items", {
+  id: int("id").autoincrement().primaryKey(),
+  companyId: int("company_id").notNull().references(() => companies.id, { onDelete: "cascade" }),
+  inspectionEnvironmentId: int("inspection_environment_id").notNull().references(() => inspectionEnvironments.id, { onDelete: "cascade" }),
+  author: varchar("author", { length: 255 }).notNull(),
+  content: text("content").notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type CommentItem = typeof commentItems.$inferSelect;
+export type InsertCommentItem = typeof commentItems.$inferInsert;
