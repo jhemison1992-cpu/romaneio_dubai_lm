@@ -802,3 +802,32 @@ export async function deleteCommentItem(id: number) {
   const { commentItems } = await import("../drizzle/schema");
   await db.delete(commentItems).where(eq(commentItems.id, id));
 }
+
+
+// Helper functions for delivery report PDF
+export async function getInspectionEnvironmentById(id: number) {
+  const db = await getDb();
+  if (!db) return null;
+  const { inspectionEnvironments } = await import("../drizzle/schema");
+  const result = await db.select().from(inspectionEnvironments).where(eq(inspectionEnvironments.id, id));
+  return result[0] || null;
+}
+
+export async function getProjectById(id: number) {
+  const db = await getDb();
+  if (!db) return null;
+  const { projects } = await import("../drizzle/schema");
+  const result = await db.select().from(projects).where(eq(projects.id, id));
+  return result[0] || null;
+}
+
+export async function getInspectionItemByEnvironmentId(environmentId: number) {
+  const db = await getDb();
+  if (!db) return null;
+  const { inspectionItems } = await import("../drizzle/schema");
+  const result = await db.select().from(inspectionItems).where(eq(inspectionItems.environmentId, environmentId));
+  return result[0] || null;
+}
+
+// Media files are linked to inspectionItems, not directly to environments
+// This function is not needed for the PDF generation

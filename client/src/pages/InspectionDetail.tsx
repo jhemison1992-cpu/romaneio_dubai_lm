@@ -20,6 +20,7 @@ import { NewEnvironmentDialog } from "@/components/NewEnvironmentDialog";
 import { FillGuideDialog } from "@/components/FillGuideDialog";
 import { EnvironmentSection, SectionItem } from "@/components/EnvironmentSection";
 import { EnvironmentSections } from "@/components/EnvironmentSections";
+import { DeliveryReportButton } from "@/components/DeliveryReportButton";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { Link, useParams } from "wouter";
@@ -489,6 +490,10 @@ export default function InspectionDetail() {
                       </CardDescription>
                     </div>
                     <div className="flex gap-2">
+                      <DeliveryReportButton 
+                        inspectionEnvironmentId={env.id} 
+                        environmentName={env.name}
+                      />
                       {(env.plantaFileUrl || getPlantaUrl(env.caixilhoCode)) && (
                         <Button
                           variant="outline"

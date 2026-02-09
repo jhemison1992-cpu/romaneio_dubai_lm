@@ -1096,3 +1096,16 @@
 - [x] Atualizar cores dos botões de editar/excluir para usar cores semânticas
 - [x] Padronizar cores de texto para usar variáveis CSS do tema (text-foreground, text-muted-foreground)
 - [x] Testar visual em todos os ambientes - Servidor rodando com sucesso
+
+
+## Termo de Entrega Completo
+- [x] Criar endpoint backend para gerar PDF do termo de entrega
+- [x] Incluir informações do ambiente (nome, código, tipo, quantidade)
+- [x] Incluir declaração de entrega padronizada
+- [x] Incluir histórico de todas as 7 seções (mão de obra, equipamentos, atividades, ocorrências, materiais)
+- [x] Incluir dados de responsáveis (obra e fornecedor)
+- [x] Incluir cabeçalho com logo e dados da obra
+- [x] Criar botão de download do termo na página InspectionDetail
+- [x] Integrar componente DeliveryReportButton na página
+- [ ] Testar geração e download do termo com dados reais
+- [ ] Adicionar fotos do ambiente ao PDF (quando estrutura de fotos for implementada)

@@ -1047,6 +1047,16 @@ export const appRouter = router({
         return { success: true };
       }),
   }),
+
+  deliveryReport: router({
+    generatePDF: publicProcedure
+      .input((val: unknown) => z.object({ inspectionEnvironmentId: z.number() }).parse(val))
+      .mutation(async ({ input }) => {
+        const { generateDeliveryReportPDF } = await import("./pdf-generators");
+        const pdfBuffer = await generateDeliveryReportPDF(input.inspectionEnvironmentId);
+        return { success: true, buffer: pdfBuffer };
+      }),
+  }),
 });
 
 export type AppRouter = typeof appRouter;
