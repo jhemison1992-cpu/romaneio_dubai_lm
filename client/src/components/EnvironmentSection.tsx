@@ -83,11 +83,10 @@ export const EnvironmentSection: React.FC<SectionConfig> = ({
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
-        <h3 className="text-lg font-semibold text-orange-600">{title}</h3>
+        <h3 className="text-lg font-semibold text-primary">{title}</h3>
         <Button
           onClick={() => handleOpenDialog()}
           size="sm"
-          className="bg-blue-500 hover:bg-blue-600"
         >
           <Plus className="w-4 h-4 mr-2" />
           Adicionar
@@ -95,16 +94,16 @@ export const EnvironmentSection: React.FC<SectionConfig> = ({
       </div>
 
       {items.length === 0 ? (
-        <p className="text-gray-500 text-sm">Nenhum item adicionado</p>
+        <p className="text-muted-foreground text-sm">Nenhum item adicionado</p>
       ) : (
         <div className="space-y-2">
           {items.map((item) => (
             <Card key={item.id} className="p-4 flex items-center justify-between">
               <div className="flex-1">
-                <p className="font-medium">
+                <p className="font-medium text-foreground">
                   {fields.map((f) => item[f.name]).filter(Boolean).join(" - ")}
                 </p>
-                {item.notes && <p className="text-sm text-gray-600">{item.notes}</p>}
+                {item.notes && <p className="text-sm text-muted-foreground">{item.notes}</p>}
               </div>
               <div className="flex gap-2">
                 <Button
