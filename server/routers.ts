@@ -744,14 +744,309 @@ export const appRouter = router({
 //       }),
 //   }),
 
-  // Labor Items (Mão de obra) - Comentado por enquanto
-  // laborItems: router({
-  //   list: publicProcedure
-  //     .input(z.object({ environmentId: z.number() }))
-  //     .query(async ({ input }) => {
-  //       return { items: [] };
-  //     }),
-  // }),
+  // Labor Items (Mão de obra)
+  laborItems: router({
+    list: publicProcedure
+      .input((val: unknown) => z.object({ inspectionEnvironmentId: z.number() }).parse(val))
+      .query(async ({ input }) => {
+        const { getLaborItems } = await import("./db");
+        return await getLaborItems(input.inspectionEnvironmentId);
+      }),
+    create: publicProcedure
+      .input((val: unknown) => z.object({
+        inspectionEnvironmentId: z.number(),
+        profession: z.string(),
+        name: z.string(),
+        hours: z.string(),
+        notes: z.string().optional(),
+      }).parse(val))
+      .mutation(async ({ input }) => {
+        const { createLaborItem } = await import("./db");
+        const id = await createLaborItem(input);
+        return { id };
+      }),
+    update: publicProcedure
+      .input((val: unknown) => z.object({
+        id: z.number(),
+        profession: z.string().optional(),
+        name: z.string().optional(),
+        hours: z.string().optional(),
+        notes: z.string().optional(),
+      }).parse(val))
+      .mutation(async ({ input }) => {
+        const { updateLaborItem } = await import("./db");
+        const { id, ...data } = input;
+        await updateLaborItem(id, data);
+        return { success: true };
+      }),
+    delete: publicProcedure
+      .input((val: unknown) => z.object({ id: z.number() }).parse(val))
+      .mutation(async ({ input }) => {
+        const { deleteLaborItem } = await import("./db");
+        await deleteLaborItem(input.id);
+        return { success: true };
+      }),
+  }),
+
+  // Equipment Items (Equipamentos)
+  equipmentItems: router({
+    list: publicProcedure
+      .input((val: unknown) => z.object({ inspectionEnvironmentId: z.number() }).parse(val))
+      .query(async ({ input }) => {
+        const { getEquipmentItems } = await import("./db");
+        return await getEquipmentItems(input.inspectionEnvironmentId);
+      }),
+    create: publicProcedure
+      .input((val: unknown) => z.object({
+        inspectionEnvironmentId: z.number(),
+        name: z.string(),
+        quantity: z.number(),
+        unit: z.string(),
+        notes: z.string().optional(),
+      }).parse(val))
+      .mutation(async ({ input }) => {
+        const { createEquipmentItem } = await import("./db");
+        const id = await createEquipmentItem(input);
+        return { id };
+      }),
+    update: publicProcedure
+      .input((val: unknown) => z.object({
+        id: z.number(),
+        name: z.string().optional(),
+        quantity: z.number().optional(),
+        unit: z.string().optional(),
+        notes: z.string().optional(),
+      }).parse(val))
+      .mutation(async ({ input }) => {
+        const { updateEquipmentItem } = await import("./db");
+        const { id, ...data } = input;
+        await updateEquipmentItem(id, data);
+        return { success: true };
+      }),
+    delete: publicProcedure
+      .input((val: unknown) => z.object({ id: z.number() }).parse(val))
+      .mutation(async ({ input }) => {
+        const { deleteEquipmentItem } = await import("./db");
+        await deleteEquipmentItem(input.id);
+        return { success: true };
+      }),
+  }),
+
+  // Activity Items (Atividades)
+  activityItems: router({
+    list: publicProcedure
+      .input((val: unknown) => z.object({ inspectionEnvironmentId: z.number() }).parse(val))
+      .query(async ({ input }) => {
+        const { getActivityItems } = await import("./db");
+        return await getActivityItems(input.inspectionEnvironmentId);
+      }),
+    create: publicProcedure
+      .input((val: unknown) => z.object({
+        inspectionEnvironmentId: z.number(),
+        description: z.string(),
+        status: z.enum(["pendente", "em_andamento", "concluida"]).optional(),
+        notes: z.string().optional(),
+      }).parse(val))
+      .mutation(async ({ input }) => {
+        const { createActivityItem } = await import("./db");
+        const id = await createActivityItem(input);
+        return { id };
+      }),
+    update: publicProcedure
+      .input((val: unknown) => z.object({
+        id: z.number(),
+        description: z.string().optional(),
+        status: z.enum(["pendente", "em_andamento", "concluida"]).optional(),
+        notes: z.string().optional(),
+      }).parse(val))
+      .mutation(async ({ input }) => {
+        const { updateActivityItem } = await import("./db");
+        const { id, ...data } = input;
+        await updateActivityItem(id, data);
+        return { success: true };
+      }),
+    delete: publicProcedure
+      .input((val: unknown) => z.object({ id: z.number() }).parse(val))
+      .mutation(async ({ input }) => {
+        const { deleteActivityItem } = await import("./db");
+        await deleteActivityItem(input.id);
+        return { success: true };
+      }),
+  }),
+
+  // Occurrence Items (Ocorrências)
+  occurrenceItems: router({
+    list: publicProcedure
+      .input((val: unknown) => z.object({ inspectionEnvironmentId: z.number() }).parse(val))
+      .query(async ({ input }) => {
+        const { getOccurrenceItems } = await import("./db");
+        return await getOccurrenceItems(input.inspectionEnvironmentId);
+      }),
+    create: publicProcedure
+      .input((val: unknown) => z.object({
+        inspectionEnvironmentId: z.number(),
+        description: z.string(),
+        severity: z.enum(["baixa", "media", "alta"]).optional(),
+        status: z.enum(["aberta", "em_resolucao", "resolvida"]).optional(),
+        notes: z.string().optional(),
+      }).parse(val))
+      .mutation(async ({ input }) => {
+        const { createOccurrenceItem } = await import("./db");
+        const id = await createOccurrenceItem(input);
+        return { id };
+      }),
+    update: publicProcedure
+      .input((val: unknown) => z.object({
+        id: z.number(),
+        description: z.string().optional(),
+        severity: z.enum(["baixa", "media", "alta"]).optional(),
+        status: z.enum(["aberta", "em_resolucao", "resolvida"]).optional(),
+        notes: z.string().optional(),
+      }).parse(val))
+      .mutation(async ({ input }) => {
+        const { updateOccurrenceItem } = await import("./db");
+        const { id, ...data } = input;
+        await updateOccurrenceItem(id, data);
+        return { success: true };
+      }),
+    delete: publicProcedure
+      .input((val: unknown) => z.object({ id: z.number() }).parse(val))
+      .mutation(async ({ input }) => {
+        const { deleteOccurrenceItem } = await import("./db");
+        await deleteOccurrenceItem(input.id);
+        return { success: true };
+      }),
+  }),
+
+  // Received Material Items (Materiais recebidos)
+  receivedMaterialItems: router({
+    list: publicProcedure
+      .input((val: unknown) => z.object({ inspectionEnvironmentId: z.number() }).parse(val))
+      .query(async ({ input }) => {
+        const { getReceivedMaterialItems } = await import("./db");
+        return await getReceivedMaterialItems(input.inspectionEnvironmentId);
+      }),
+    create: publicProcedure
+      .input((val: unknown) => z.object({
+        inspectionEnvironmentId: z.number(),
+        name: z.string(),
+        quantity: z.number(),
+        unit: z.string(),
+        receivedDate: z.string(),
+        notes: z.string().optional(),
+      }).parse(val))
+      .mutation(async ({ input }) => {
+        const { createReceivedMaterialItem } = await import("./db");
+        const id = await createReceivedMaterialItem(input);
+        return { id };
+      }),
+    update: publicProcedure
+      .input((val: unknown) => z.object({
+        id: z.number(),
+        name: z.string().optional(),
+        quantity: z.number().optional(),
+        unit: z.string().optional(),
+        receivedDate: z.string().optional(),
+        notes: z.string().optional(),
+      }).parse(val))
+      .mutation(async ({ input }) => {
+        const { updateReceivedMaterialItem } = await import("./db");
+        const { id, ...data } = input;
+        await updateReceivedMaterialItem(id, data);
+        return { success: true };
+      }),
+    delete: publicProcedure
+      .input((val: unknown) => z.object({ id: z.number() }).parse(val))
+      .mutation(async ({ input }) => {
+        const { deleteReceivedMaterialItem } = await import("./db");
+        await deleteReceivedMaterialItem(input.id);
+        return { success: true };
+      }),
+  }),
+
+  // Used Material Items (Materiais utilizados)
+  usedMaterialItems: router({
+    list: publicProcedure
+      .input((val: unknown) => z.object({ inspectionEnvironmentId: z.number() }).parse(val))
+      .query(async ({ input }) => {
+        const { getUsedMaterialItems } = await import("./db");
+        return await getUsedMaterialItems(input.inspectionEnvironmentId);
+      }),
+    create: publicProcedure
+      .input((val: unknown) => z.object({
+        inspectionEnvironmentId: z.number(),
+        name: z.string(),
+        quantity: z.number(),
+        unit: z.string(),
+        notes: z.string().optional(),
+      }).parse(val))
+      .mutation(async ({ input }) => {
+        const { createUsedMaterialItem } = await import("./db");
+        const id = await createUsedMaterialItem(input);
+        return { id };
+      }),
+    update: publicProcedure
+      .input((val: unknown) => z.object({
+        id: z.number(),
+        name: z.string().optional(),
+        quantity: z.number().optional(),
+        unit: z.string().optional(),
+        notes: z.string().optional(),
+      }).parse(val))
+      .mutation(async ({ input }) => {
+        const { updateUsedMaterialItem } = await import("./db");
+        const { id, ...data } = input;
+        await updateUsedMaterialItem(id, data);
+        return { success: true };
+      }),
+    delete: publicProcedure
+      .input((val: unknown) => z.object({ id: z.number() }).parse(val))
+      .mutation(async ({ input }) => {
+        const { deleteUsedMaterialItem } = await import("./db");
+        await deleteUsedMaterialItem(input.id);
+        return { success: true };
+      }),
+  }),
+
+  // Comment Items (Comentários)
+  commentItems: router({
+    list: publicProcedure
+      .input((val: unknown) => z.object({ inspectionEnvironmentId: z.number() }).parse(val))
+      .query(async ({ input }) => {
+        const { getCommentItems } = await import("./db");
+        return await getCommentItems(input.inspectionEnvironmentId);
+      }),
+    create: publicProcedure
+      .input((val: unknown) => z.object({
+        inspectionEnvironmentId: z.number(),
+        author: z.string(),
+        content: z.string(),
+      }).parse(val))
+      .mutation(async ({ input }) => {
+        const { createCommentItem } = await import("./db");
+        const id = await createCommentItem(input);
+        return { id };
+      }),
+    update: publicProcedure
+      .input((val: unknown) => z.object({
+        id: z.number(),
+        author: z.string().optional(),
+        content: z.string().optional(),
+      }).parse(val))
+      .mutation(async ({ input }) => {
+        const { updateCommentItem } = await import("./db");
+        const { id, ...data } = input;
+        await updateCommentItem(id, data);
+        return { success: true };
+      }),
+    delete: publicProcedure
+      .input((val: unknown) => z.object({ id: z.number() }).parse(val))
+      .mutation(async ({ input }) => {
+        const { deleteCommentItem } = await import("./db");
+        await deleteCommentItem(input.id);
+        return { success: true };
+      }),
+  }),
 });
 
 export type AppRouter = typeof appRouter;

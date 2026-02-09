@@ -18,6 +18,8 @@ import { SignatureWithQRCode } from "@/components/SignatureWithQRCode";
 import { InstallationStepsChecklist } from "@/components/InstallationStepsChecklist";
 import { NewEnvironmentDialog } from "@/components/NewEnvironmentDialog";
 import { FillGuideDialog } from "@/components/FillGuideDialog";
+import { EnvironmentSection, SectionItem } from "@/components/EnvironmentSection";
+import { EnvironmentSections } from "@/components/EnvironmentSections";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { Link, useParams } from "wouter";
@@ -90,6 +92,29 @@ export default function InspectionDetail() {
     { enabled: inspectionId > 0 }
   );
   
+  // Queries para carregar itens das seções
+  const laborItemsQueries = (inspectionEnvs || []).map(env => 
+    trpc.laborItems.list.useQuery({ inspectionEnvironmentId: env.id }, { enabled: !!env.id })
+  );
+  const equipmentItemsQueries = (inspectionEnvs || []).map(env => 
+    trpc.equipmentItems.list.useQuery({ inspectionEnvironmentId: env.id }, { enabled: !!env.id })
+  );
+  const activityItemsQueries = (inspectionEnvs || []).map(env => 
+    trpc.activityItems.list.useQuery({ inspectionEnvironmentId: env.id }, { enabled: !!env.id })
+  );
+  const occurrenceItemsQueries = (inspectionEnvs || []).map(env => 
+    trpc.occurrenceItems.list.useQuery({ inspectionEnvironmentId: env.id }, { enabled: !!env.id })
+  );
+  const receivedMaterialItemsQueries = (inspectionEnvs || []).map(env => 
+    trpc.receivedMaterialItems.list.useQuery({ inspectionEnvironmentId: env.id }, { enabled: !!env.id })
+  );
+  const usedMaterialItemsQueries = (inspectionEnvs || []).map(env => 
+    trpc.usedMaterialItems.list.useQuery({ inspectionEnvironmentId: env.id }, { enabled: !!env.id })
+  );
+  const commentItemsQueries = (inspectionEnvs || []).map(env => 
+    trpc.commentItems.list.useQuery({ inspectionEnvironmentId: env.id }, { enabled: !!env.id })
+  );
+  
   const [formData, setFormData] = useState<Record<number, InspectionItemData>>({});
   const [activeTab, setActiveTab] = useState<string>("0");
   const [statusValue, setStatusValue] = useState<string>(inspection?.status || "draft");
@@ -114,6 +139,15 @@ export default function InspectionDetail() {
   
   // Estado para confirmação de exclusão
   const [envToDelete, setEnvToDelete] = useState<number | null>(null);
+  
+  // Estados para seções de ambientes
+  const [laborItems, setLaborItems] = useState<Record<number, SectionItem[]>>({});
+  const [equipmentItems, setEquipmentItems] = useState<Record<number, SectionItem[]>>({});
+  const [activityItems, setActivityItems] = useState<Record<number, SectionItem[]>>({});
+  const [occurrenceItems, setOccurrenceItems] = useState<Record<number, SectionItem[]>>({});
+  const [receivedMaterialItems, setReceivedMaterialItems] = useState<Record<number, SectionItem[]>>({});
+  const [usedMaterialItems, setUsedMaterialItems] = useState<Record<number, SectionItem[]>>({});
+  const [commentItems, setCommentItems] = useState<Record<number, SectionItem[]>>({});
   
   // Estados para modal de assinatura com QR Code
   const [signatureModal, setSignatureModal] = useState<{
@@ -553,6 +587,18 @@ export default function InspectionDetail() {
                       className="w-full min-h-[100px] px-3 py-2 border rounded-md"
                     />
                   </div>
+
+                  <EnvironmentSections
+                    environmentId={env.id}
+                    allEnvironments={allEnvironments}
+                    laborItemsQueries={laborItemsQueries}
+                    equipmentItemsQueries={equipmentItemsQueries}
+                    activityItemsQueries={activityItemsQueries}
+                    occurrenceItemsQueries={occurrenceItemsQueries}
+                    receivedMaterialItemsQueries={receivedMaterialItemsQueries}
+                    usedMaterialItemsQueries={usedMaterialItemsQueries}
+                    commentItemsQueries={commentItemsQueries}
+                  />
 
           {/* Assinatura será coletada apenas quando o ambiente for finalizado */}
                   

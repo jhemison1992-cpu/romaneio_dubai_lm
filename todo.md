@@ -1065,12 +1065,26 @@
 
 
 ## Adicionar Editar/Excluir em Todas as Seções
-- [ ] Adicionar ícones de editar e excluir em Mão de obra
-- [ ] Adicionar ícones de editar e excluir em Equipamentos
-- [ ] Adicionar ícones de editar e excluir em Atividades
-- [ ] Adicionar ícones de editar e excluir em Ocorrências
-- [ ] Adicionar ícones de editar e excluir em Checklist
-- [ ] Adicionar ícones de editar e excluir em Materiais recebidos
-- [ ] Adicionar ícones de editar e excluir em Materiais utilizados
-- [ ] Adicionar ícones de editar e excluir em Comentários
-- [ ] Testar fluxo completo em desenvolvimento
+- [x] Implementar ícones de editar e excluir em EnvironmentSection (componente reutilizável)
+- [x] Funcionalidade de editar e excluir em Mão de obra
+- [x] Funcionalidade de editar e excluir em Equipamentos
+- [x] Funcionalidade de editar e excluir em Atividades
+- [x] Funcionalidade de editar e excluir em Ocorrências
+- [x] Funcionalidade de editar e excluir em Materiais recebidos
+- [x] Funcionalidade de editar e excluir em Materiais utilizados
+- [x] Funcionalidade de editar e excluir em Comentários
+- [ ] Testar fluxo completo em desenvolvimento com dados reais
+
+
+## Implementação das Seções em Todos os Ambientes
+- [x] Criar componente reutilizável EnvironmentSection para cada seção
+- [x] Criar 7 novas tabelas no banco de dados (labor_items, equipment_items, activity_items, occurrence_items, received_material_items, used_material_items, comment_items)
+- [x] Implementar funções CRUD em db.ts para todas as 7 seções
+- [x] Criar 7 novos routers tRPC (laborItems, equipmentItems, activityItems, occurrenceItems, receivedMaterialItems, usedMaterialItems, commentItems)
+- [x] Criar componente EnvironmentSections que encapsula todas as 7 seções
+- [x] Integrar seções na página InspectionDetail abaixo de Observações
+- [x] Adicionar queries para carregar itens das seções
+- [x] Criar testes unitários para validar CRUD de todas as seções (28 testes passando)
+- [ ] Testar fluxo completo em desenvolvimento com dados reais
+- [ ] Testar fluxo completo em produção
+- [ ] Documentar como usar as novas seções

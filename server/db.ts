@@ -471,3 +471,334 @@ export async function deleteInspectionEnvironment(id: number) {
   const { inspectionEnvironments } = await import("../drizzle/schema");
   await db.delete(inspectionEnvironments).where(eq(inspectionEnvironments.id, id));
 }
+
+
+// Labor Items (Mão de obra)
+export async function getLaborItems(inspectionEnvironmentId: number) {
+  const db = await getDb();
+  if (!db) return [];
+  const { laborItems } = await import("../drizzle/schema");
+  return await db.select().from(laborItems).where(eq(laborItems.inspectionEnvironmentId, inspectionEnvironmentId));
+}
+
+export async function createLaborItem(data: {
+  inspectionEnvironmentId: number;
+  companyId?: number;
+  profession: string;
+  name: string;
+  hours: string;
+  notes?: string;
+}) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  const { laborItems } = await import("../drizzle/schema");
+  
+  const result = await db.insert(laborItems).values({
+    ...data,
+    companyId: data.companyId ?? 1,
+  });
+  return result[0].insertId;
+}
+
+export async function updateLaborItem(id: number, data: {
+  profession?: string;
+  name?: string;
+  hours?: string;
+  notes?: string;
+}) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  const { laborItems } = await import("../drizzle/schema");
+  await db.update(laborItems).set(data).where(eq(laborItems.id, id));
+}
+
+export async function deleteLaborItem(id: number) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  const { laborItems } = await import("../drizzle/schema");
+  await db.delete(laborItems).where(eq(laborItems.id, id));
+}
+
+// Equipment Items (Equipamentos)
+export async function getEquipmentItems(inspectionEnvironmentId: number) {
+  const db = await getDb();
+  if (!db) return [];
+  const { equipmentItems } = await import("../drizzle/schema");
+  return await db.select().from(equipmentItems).where(eq(equipmentItems.inspectionEnvironmentId, inspectionEnvironmentId));
+}
+
+export async function createEquipmentItem(data: {
+  inspectionEnvironmentId: number;
+  companyId?: number;
+  name: string;
+  quantity: number;
+  unit: string;
+  notes?: string;
+}) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  const { equipmentItems } = await import("../drizzle/schema");
+  
+  const result = await db.insert(equipmentItems).values({
+    ...data,
+    companyId: data.companyId ?? 1,
+  });
+  return result[0].insertId;
+}
+
+export async function updateEquipmentItem(id: number, data: {
+  name?: string;
+  quantity?: number;
+  unit?: string;
+  notes?: string;
+}) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  const { equipmentItems } = await import("../drizzle/schema");
+  await db.update(equipmentItems).set(data).where(eq(equipmentItems.id, id));
+}
+
+export async function deleteEquipmentItem(id: number) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  const { equipmentItems } = await import("../drizzle/schema");
+  await db.delete(equipmentItems).where(eq(equipmentItems.id, id));
+}
+
+// Activity Items (Atividades)
+export async function getActivityItems(inspectionEnvironmentId: number) {
+  const db = await getDb();
+  if (!db) return [];
+  const { activityItems } = await import("../drizzle/schema");
+  return await db.select().from(activityItems).where(eq(activityItems.inspectionEnvironmentId, inspectionEnvironmentId));
+}
+
+export async function createActivityItem(data: {
+  inspectionEnvironmentId: number;
+  companyId?: number;
+  description: string;
+  status?: "pendente" | "em_andamento" | "concluida";
+  notes?: string;
+}) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  const { activityItems } = await import("../drizzle/schema");
+  
+  const result = await db.insert(activityItems).values({
+    ...data,
+    companyId: data.companyId ?? 1,
+    status: data.status ?? "pendente",
+  });
+  return result[0].insertId;
+}
+
+export async function updateActivityItem(id: number, data: {
+  description?: string;
+  status?: "pendente" | "em_andamento" | "concluida";
+  notes?: string;
+}) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  const { activityItems } = await import("../drizzle/schema");
+  await db.update(activityItems).set(data).where(eq(activityItems.id, id));
+}
+
+export async function deleteActivityItem(id: number) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  const { activityItems } = await import("../drizzle/schema");
+  await db.delete(activityItems).where(eq(activityItems.id, id));
+}
+
+// Occurrence Items (Ocorrências)
+export async function getOccurrenceItems(inspectionEnvironmentId: number) {
+  const db = await getDb();
+  if (!db) return [];
+  const { occurrenceItems } = await import("../drizzle/schema");
+  return await db.select().from(occurrenceItems).where(eq(occurrenceItems.inspectionEnvironmentId, inspectionEnvironmentId));
+}
+
+export async function createOccurrenceItem(data: {
+  inspectionEnvironmentId: number;
+  companyId?: number;
+  description: string;
+  severity?: "baixa" | "media" | "alta";
+  status?: "aberta" | "em_resolucao" | "resolvida";
+  notes?: string;
+}) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  const { occurrenceItems } = await import("../drizzle/schema");
+  
+  const result = await db.insert(occurrenceItems).values({
+    ...data,
+    companyId: data.companyId ?? 1,
+    severity: data.severity ?? "media",
+    status: data.status ?? "aberta",
+  });
+  return result[0].insertId;
+}
+
+export async function updateOccurrenceItem(id: number, data: {
+  description?: string;
+  severity?: "baixa" | "media" | "alta";
+  status?: "aberta" | "em_resolucao" | "resolvida";
+  notes?: string;
+}) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  const { occurrenceItems } = await import("../drizzle/schema");
+  await db.update(occurrenceItems).set(data).where(eq(occurrenceItems.id, id));
+}
+
+export async function deleteOccurrenceItem(id: number) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  const { occurrenceItems } = await import("../drizzle/schema");
+  await db.delete(occurrenceItems).where(eq(occurrenceItems.id, id));
+}
+
+// Received Material Items (Materiais recebidos)
+export async function getReceivedMaterialItems(inspectionEnvironmentId: number) {
+  const db = await getDb();
+  if (!db) return [];
+  const { receivedMaterialItems } = await import("../drizzle/schema");
+  return await db.select().from(receivedMaterialItems).where(eq(receivedMaterialItems.inspectionEnvironmentId, inspectionEnvironmentId));
+}
+
+export async function createReceivedMaterialItem(data: {
+  inspectionEnvironmentId: number;
+  companyId?: number;
+  name: string;
+  quantity: number;
+  unit: string;
+  receivedDate: string | Date;
+  notes?: string;
+}) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  const { receivedMaterialItems } = await import("../drizzle/schema");
+  
+  const receivedDate = typeof data.receivedDate === 'string' ? new Date(data.receivedDate) : data.receivedDate;
+  
+  const result = await db.insert(receivedMaterialItems).values({
+    ...data,
+    companyId: data.companyId ?? 1,
+    receivedDate,
+  });
+  return result[0].insertId;
+}
+
+export async function updateReceivedMaterialItem(id: number, data: {
+  name?: string;
+  quantity?: number;
+  unit?: string;
+  receivedDate?: string | Date;
+  notes?: string;
+}) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  const { receivedMaterialItems } = await import("../drizzle/schema");
+  
+  const updateData: any = { ...data };
+  if (data.receivedDate) {
+    updateData.receivedDate = typeof data.receivedDate === 'string' ? new Date(data.receivedDate) : data.receivedDate;
+  }
+  
+  await db.update(receivedMaterialItems).set(updateData).where(eq(receivedMaterialItems.id, id));
+}
+
+export async function deleteReceivedMaterialItem(id: number) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  const { receivedMaterialItems } = await import("../drizzle/schema");
+  await db.delete(receivedMaterialItems).where(eq(receivedMaterialItems.id, id));
+}
+
+// Used Material Items (Materiais utilizados)
+export async function getUsedMaterialItems(inspectionEnvironmentId: number) {
+  const db = await getDb();
+  if (!db) return [];
+  const { usedMaterialItems } = await import("../drizzle/schema");
+  return await db.select().from(usedMaterialItems).where(eq(usedMaterialItems.inspectionEnvironmentId, inspectionEnvironmentId));
+}
+
+export async function createUsedMaterialItem(data: {
+  inspectionEnvironmentId: number;
+  companyId?: number;
+  name: string;
+  quantity: number;
+  unit: string;
+  notes?: string;
+}) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  const { usedMaterialItems } = await import("../drizzle/schema");
+  
+  const result = await db.insert(usedMaterialItems).values({
+    ...data,
+    companyId: data.companyId ?? 1,
+  });
+  return result[0].insertId;
+}
+
+export async function updateUsedMaterialItem(id: number, data: {
+  name?: string;
+  quantity?: number;
+  unit?: string;
+  notes?: string;
+}) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  const { usedMaterialItems } = await import("../drizzle/schema");
+  await db.update(usedMaterialItems).set(data).where(eq(usedMaterialItems.id, id));
+}
+
+export async function deleteUsedMaterialItem(id: number) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  const { usedMaterialItems } = await import("../drizzle/schema");
+  await db.delete(usedMaterialItems).where(eq(usedMaterialItems.id, id));
+}
+
+// Comment Items (Comentários)
+export async function getCommentItems(inspectionEnvironmentId: number) {
+  const db = await getDb();
+  if (!db) return [];
+  const { commentItems } = await import("../drizzle/schema");
+  return await db.select().from(commentItems).where(eq(commentItems.inspectionEnvironmentId, inspectionEnvironmentId));
+}
+
+export async function createCommentItem(data: {
+  inspectionEnvironmentId: number;
+  companyId?: number;
+  author: string;
+  content: string;
+}) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  const { commentItems } = await import("../drizzle/schema");
+  
+  const result = await db.insert(commentItems).values({
+    ...data,
+    companyId: data.companyId ?? 1,
+  });
+  return result[0].insertId;
+}
+
+export async function updateCommentItem(id: number, data: {
+  author?: string;
+  content?: string;
+}) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  const { commentItems } = await import("../drizzle/schema");
+  await db.update(commentItems).set(data).where(eq(commentItems.id, id));
+}
+
+export async function deleteCommentItem(id: number) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  const { commentItems } = await import("../drizzle/schema");
+  await db.delete(commentItems).where(eq(commentItems.id, id));
+}
