@@ -554,18 +554,7 @@ export default function InspectionDetail() {
                     />
                   </div>
 
-          {/* Assinaturas Digitais */}
-          <div className="grid md:grid-cols-2 gap-6 mt-6">
-            <SignaturePad
-              label="Assinatura do Responsável da Obra"
-              value={formData[env.id]?.signatureConstruction}
-              onChange={(sig) => handleChange(env.id, "signatureConstruction", sig)}
-            />
-            <SignaturePad
-              label="Assinatura do Responsável da Aluminc"
-              value={formData[env.id]?.signatureSupplier}
-              onChange={(sig) => handleChange(env.id, "signatureSupplier", sig)}
-            />                  </div>
+          {/* Assinatura será coletada apenas quando o ambiente for finalizado */}
                   
                   {data.id && (
                     <div className="border-t pt-6">

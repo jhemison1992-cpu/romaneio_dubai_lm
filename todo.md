@@ -1048,3 +1048,17 @@
 - [ ] Integrar novo componente na InspectionDetail
 - [ ] Testar fluxo completo de assinatura
 - [ ] Atualizar geração de PDF para incluir QR Code e assinatura
+
+
+## Pré-preenchimento de Termo de Entrega
+- [ ] Pré-preencher nome do responsável no modal
+- [ ] Pré-preencher assinatura do responsável no modal
+- [ ] Carregar informações do banco de dados
+- [ ] Testar pré-preenchimento em desenvolvimento
+
+
+## Remoção de Assinaturas Duplas
+- [x] Remover assinaturas de Responsável da Obra e Aluminc do formulário
+- [x] Deixar apenas uma assinatura única no termo de entrega
+- [x] Atualizar PDF para incluir apenas uma assinatura
+- [ ] Testar fluxo completo
