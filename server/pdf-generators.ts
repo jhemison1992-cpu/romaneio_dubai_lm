@@ -1,8 +1,9 @@
 import { PDFDocument, rgb } from "pdf-lib";
 import * as db from "./db";
+import fetch from "node-fetch";
 
 /**
- * Gera PDF do termo de entrega com todas as informações do ambiente
+ * Gera PDF do termo de entrega com novo layout profissional e fotos
  */
 export async function generateDeliveryReportPDF(
   inspectionEnvironmentId: number
@@ -33,21 +34,11 @@ export async function generateDeliveryReportPDF(
     inspectionEnvironmentId
   );
 
-  // Buscar dados das 7 seções
-  const laborItems = await db.getLaborItems(inspectionEnvironmentId);
-  const equipmentItems = await db.getEquipmentItems(inspectionEnvironmentId);
-  const activityItems = await db.getActivityItems(inspectionEnvironmentId);
-  const occurrenceItems = await db.getOccurrenceItems(inspectionEnvironmentId);
-  const receivedMaterialItems = await db.getReceivedMaterialItems(
-    inspectionEnvironmentId
-  );
-  const usedMaterialItems = await db.getUsedMaterialItems(
-    inspectionEnvironmentId
-  );
-  const commentItems = await db.getCommentItems(inspectionEnvironmentId);
-
-  // Fotos do ambiente estariam aqui, mas mediaFiles está ligado a inspectionItems
-  // Implementação de fotos pode ser adicionada depois se necessário
+  // Buscar fotos do item de inspeção
+  let mediaFiles: any[] = [];
+  if (inspectionItem) {
+    mediaFiles = await db.getMediaFilesByItem(inspectionItem.id);
+  }
 
   // Criar documento PDF
   const pdfDoc = await PDFDocument.create();
@@ -61,7 +52,7 @@ export async function generateDeliveryReportPDF(
   // Função auxiliar para adicionar texto
   function addText(
     text: string,
-    fontSize: number = 12,
+    fontSize: number = 11,
     bold: boolean = false,
     color = rgb(0, 0, 0)
   ) {
@@ -79,170 +70,129 @@ export async function generateDeliveryReportPDF(
       wordBreaks: [" ", "-"],
     });
 
-    yPosition -= fontSize + 8;
+    yPosition -= fontSize + 6;
+  }
+
+  // Função para adicionar linha horizontal
+  function addLine() {
+    if (yPosition < margin + 50) {
+      page = pdfDoc.addPage([595, 842]);
+      yPosition = height - 40;
+    }
+    page.drawLine({
+      start: { x: margin, y: yPosition },
+      end: { x: width - margin, y: yPosition },
+      thickness: 1,
+      color: rgb(0, 0, 0),
+    });
+    yPosition -= 10;
   }
 
   // Cabeçalho
-  addText("TERMO DE ENTREGA", 18, true, rgb(31, 41, 55));
-  addText("Romaneio ALUMINC", 14, true, rgb(31, 41, 55));
+  addText("TERMO DE ENTREGA DE CAIXILHOS DE ALUMÍNIO – ALUMINC", 14, true, rgb(31, 41, 55));
+  yPosition -= 5;
+
+  // Empresa Executora
+  addText("Empresa Executora:", 11, true);
+  addText("ALUMINC Esquadrias Metálicas Ltda.", 11);
+  addText("CNPJ: ______________________________", 11);
+  addText("Endereço: ___________________________", 11);
+  addText("Responsável Técnico: __________________", 11);
   yPosition -= 10;
 
-  // Informações da obra
-  addText("INFORMAÇÕES DA OBRA", 12, true, rgb(31, 41, 55));
-  addText(`Obra: ${project.name}`, 11);
-  addText(`Endereço: ${project.address || "N/A"}`, 11);
-  addText(`Contratante: ${project.contractor || "N/A"}`, 11);
-  addText(`Responsável Técnico: ${project.technicalManager || "N/A"}`, 11);
+  addLine();
+
+  // Dados do Cliente / Obra
+  addText("DADOS DO CLIENTE / OBRA", 11, true, rgb(31, 41, 55));
+  addText("Contratante: ___________________________________________", 11);
+  addText("CNPJ/CPF: _____________________________________________", 11);
+  addText("Empreendimento / Obra: _________________________________", 11);
+  addText(`Endereço da Obra: ${project.address || "____________________________"}`, 11);
+  addText(`Ambiente: ${inspectionEnv.name}`, 11);
+  addText("Contrato nº: _______________________", 11);
   yPosition -= 10;
 
-  // Informações do ambiente
-  addText("INFORMAÇÕES DO AMBIENTE", 12, true, rgb(31, 41, 55));
-  addText(`Nome: ${inspectionEnv.name}`, 11);
-  addText(`Código: ${inspectionEnv.caixilhoCode || "N/A"}`, 11);
-  addText(`Tipo: ${inspectionEnv.caixilhoType || "N/A"}`, 11);
-  addText(`Quantidade: ${inspectionEnv.quantity || 1}`, 11);
-  if (inspectionEnv.startDate) {
-    addText(
-      `Data de Início: ${new Date(inspectionEnv.startDate).toLocaleDateString("pt-BR")}`,
-      11
-    );
-  }
-  if (inspectionEnv.endDate) {
-    addText(
-      `Data de Finalização: ${new Date(inspectionEnv.endDate).toLocaleDateString("pt-BR")}`,
-      11
-    );
-  }
-  yPosition -= 10;
+  addLine();
 
-  // Responsáveis
-  addText("RESPONSÁVEIS", 12, true, rgb(31, 41, 55));
-  if (inspectionItem?.responsibleConstruction) {
-    addText(
-      `Responsável da Obra: ${inspectionItem.responsibleConstruction}`,
-      11
-    );
-  }
-  if (inspectionItem?.responsibleSupplier) {
-    addText(`Responsável da Aluminc: ${inspectionItem.responsibleSupplier}`, 11);
-  }
+  // Declaração de Entrega
+  addText("DECLARAÇÃO DE ENTREGA", 11, true, rgb(31, 41, 55));
+  const declaracao = `Declaro que recebi a instalação do(s) caixilho(s) de alumínio no ambiente, em perfeitas condições de funcionamento, com todos os acabamentos concluídos, conforme especificado em projeto, memoriais e contrato.
+
+A instalação foi realizada pela empresa ALUMINC Esquadrias Metálicas Ltda., atendendo aos padrões técnicos, de qualidade e segurança aplicáveis.
+
+No ato da entrega, o(s) caixilho(s) foi(foram) vistoriado(s), encontrando-se em conformidade, não havendo ressalvas quanto à execução, salvo observações abaixo (se houver).`;
+  
+  addText(declaracao, 10);
   yPosition -= 10;
 
   // Observações
   if (inspectionItem?.observations) {
-    addText("OBSERVAÇÕES", 12, true, rgb(31, 41, 55));
-    addText(inspectionItem.observations, 11);
+    addText("OBSERVAÇÕES:", 11, true);
+    addText(inspectionItem.observations, 10);
     yPosition -= 10;
   }
 
-  // Declaração de Entrega
-  addText("DECLARAÇÃO DE ENTREGA", 12, true, rgb(31, 41, 55));
-  const declaracao = `Declaro que o ambiente acima descrito foi inspecionado e encontra-se em conformidade com os padrões de qualidade da Aluminc. Todos os trabalhos foram executados de acordo com as especificações técnicas e as normas aplicáveis. As informações contidas neste termo de entrega refletem fielmente o estado do ambiente na data de sua emissão.`;
-  addText(declaracao, 11);
-  yPosition -= 10;
+  addLine();
 
-  // Mão de Obra
-  if (laborItems.length > 0) {
-    addText("MÃO DE OBRA", 12, true, rgb(31, 41, 55));
-    laborItems.forEach((item) => {
-      addText(
-        `• ${item.profession} - ${item.name} (${item.hours} horas)`,
-        10
-      );
-      if (item.notes) {
-        addText(`  Observações: ${item.notes}`, 9);
-      }
-    });
-    yPosition -= 5;
-  }
-
-  // Equipamentos
-  if (equipmentItems.length > 0) {
-    addText("EQUIPAMENTOS", 12, true, rgb(31, 41, 55));
-    equipmentItems.forEach((item) => {
-      addText(`• ${item.name} (${item.quantity} ${item.unit})`, 10);
-      if (item.notes) {
-        addText(`  Observações: ${item.notes}`, 9);
-      }
-    });
-    yPosition -= 5;
-  }
-
-  // Atividades
-  if (activityItems.length > 0) {
-    addText("ATIVIDADES", 12, true, rgb(31, 41, 55));
-    activityItems.forEach((item) => {
-      addText(`• ${item.description} (${item.status || "N/A"})`, 10);
-      if (item.notes) {
-        addText(`  Observações: ${item.notes}`, 9);
-      }
-    });
-    yPosition -= 5;
-  }
-
-  // Ocorrências
-  if (occurrenceItems.length > 0) {
-    addText("OCORRÊNCIAS", 12, true, rgb(31, 41, 55));
-    occurrenceItems.forEach((item) => {
-      addText(
-        `• ${item.description} (Severidade: ${item.severity || "N/A"}, Status: ${item.status || "N/A"})`,
-        10
-      );
-      if (item.notes) {
-        addText(`  Observações: ${item.notes}`, 9);
-      }
-    });
-    yPosition -= 5;
-  }
-
-  // Materiais Recebidos
-  if (receivedMaterialItems.length > 0) {
-    addText("MATERIAIS RECEBIDOS", 12, true, rgb(31, 41, 55));
-    receivedMaterialItems.forEach((item) => {
-      addText(
-        `• ${item.name} (${item.quantity} ${item.unit}) - ${new Date(item.receivedDate).toLocaleDateString("pt-BR")}`,
-        10
-      );
-      if (item.notes) {
-        addText(`  Observações: ${item.notes}`, 9);
-      }
-    });
-    yPosition -= 5;
-  }
-
-  // Materiais Utilizados
-  if (usedMaterialItems.length > 0) {
-    addText("MATERIAIS UTILIZADOS", 12, true, rgb(31, 41, 55));
-    usedMaterialItems.forEach((item) => {
-      addText(`• ${item.name} (${item.quantity} ${item.unit})`, 10);
-      if (item.notes) {
-        addText(`  Observações: ${item.notes}`, 9);
-      }
-    });
-    yPosition -= 5;
-  }
-
-  // Comentários
-  if (commentItems.length > 0) {
-    addText("COMENTÁRIOS", 12, true, rgb(31, 41, 55));
-    commentItems.forEach((item) => {
-      addText(`• ${item.author}: ${item.content}`, 10);
-    });
-    yPosition -= 5;
-  }
-
-  // Seção de Assinatura
+  // Responsável pelo Recebimento
+  addText("RESPONSÁVEL PELO RECEBIMENTO", 11, true, rgb(31, 41, 55));
+  addText("Nome do Responsável: ________________________________________", 11);
+  addText("Função: _________________________________________________", 11);
+  addText("Documento (CPF/RG): _____________________________________", 11);
   yPosition -= 20;
-  addText("ASSINATURA DO RESPONSÁVEL", 12, true, rgb(31, 41, 55));
-  yPosition -= 40; // Espaço para assinatura
-  addText("_________________________________", 11);
-  if (inspectionItem?.deliveryTermResponsible) {
-    addText(inspectionItem.deliveryTermResponsible, 11);
-  } else {
-    addText("Nome do Responsável", 11);
+  addText("Assinatura: ______________________________________________", 11);
+  yPosition -= 5;
+  addText("Data: ____ / ____ / ______", 11);
+  yPosition -= 15;
+
+  addLine();
+
+  // Responsável pela Entrega – ALUMINC
+  addText("RESPONSÁVEL PELA ENTREGA – ALUMINC", 11, true, rgb(31, 41, 55));
+  addText("Nome: _________________________________________________", 11);
+  addText("Função: ________________________________________________", 11);
+  yPosition -= 20;
+  addText("Assinatura: _____________________________________________", 11);
+  yPosition -= 5;
+  addText("Data: ____ / ____ / ______", 11);
+
+  // Seção de Fotos
+  if (mediaFiles.length > 0) {
+    yPosition -= 20;
+    addLine();
+    addText("FOTOS DO AMBIENTE", 11, true, rgb(31, 41, 55));
+    yPosition -= 10;
+
+    // Tentar carregar e adicionar fotos
+    for (const media of mediaFiles) {
+      if (media.mediaType === "photo") {
+        try {
+          // Tentar buscar a imagem
+          const response = await fetch(media.fileUrl);
+          if (response.ok) {
+            const buffer = await response.buffer();
+            
+            // Adicionar informações da foto
+            addText(`Foto: ${media.fileName}`, 10);
+            if (media.comment) {
+              addText(`Observação: ${media.comment}`, 9);
+            }
+            yPosition -= 5;
+          }
+        } catch (error) {
+          // Se não conseguir carregar a foto, apenas adicionar referência
+          addText(`Foto: ${media.fileName} (URL: ${media.fileUrl})`, 9);
+          if (media.comment) {
+            addText(`Observação: ${media.comment}`, 8);
+          }
+          yPosition -= 5;
+        }
+      }
+    }
   }
-  
-  yPosition -= 10;
+
+  // Data de emissão
+  yPosition -= 20;
   const dataEmissao = new Date().toLocaleDateString("pt-BR");
   addText(`Data de Emissão: ${dataEmissao}`, 11, true);
 
