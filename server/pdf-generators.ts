@@ -231,8 +231,18 @@ export async function generateDeliveryReportPDF(
     yPosition -= 5;
   }
 
-  // Data de emissão
+  // Seção de Assinatura
   yPosition -= 20;
+  addText("ASSINATURA DO RESPONSÁVEL", 12, true, rgb(31, 41, 55));
+  yPosition -= 40; // Espaço para assinatura
+  addText("_________________________________", 11);
+  if (inspectionItem?.deliveryTermResponsible) {
+    addText(inspectionItem.deliveryTermResponsible, 11);
+  } else {
+    addText("Nome do Responsável", 11);
+  }
+  
+  yPosition -= 10;
   const dataEmissao = new Date().toLocaleDateString("pt-BR");
   addText(`Data de Emissão: ${dataEmissao}`, 11, true);
 

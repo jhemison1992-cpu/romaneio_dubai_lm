@@ -490,10 +490,6 @@ export default function InspectionDetail() {
                       </CardDescription>
                     </div>
                     <div className="flex gap-2">
-                      <DeliveryReportButton 
-                        inspectionEnvironmentId={env.id} 
-                        environmentName={env.name}
-                      />
                       {(env.plantaFileUrl || getPlantaUrl(env.caixilhoCode)) && (
                         <Button
                           variant="outline"
