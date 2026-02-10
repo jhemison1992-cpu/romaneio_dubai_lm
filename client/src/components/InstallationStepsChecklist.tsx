@@ -174,11 +174,9 @@ export function InstallationStepsChecklist({ inspectionItemId, environmentId, en
   const allCompleted = stepPercentages.every((p: number) => p === 100);
 
   // Chamar callback quando progresso muda
-  useEffect(() => {
-    if (onProgressChange) {
-      onProgressChange(overallProgress);
-    }
-  }, [overallProgress, onProgressChange]);
+  if (onProgressChange) {
+    onProgressChange(overallProgress);
+  }
 
   return (
     <>
