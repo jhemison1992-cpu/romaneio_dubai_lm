@@ -14,10 +14,9 @@ interface InstallationStepsChecklistProps {
   environmentId: number;
   environmentName: string;
   totalQuantity: number; // Quantidade total de caixilhos do ambiente
-  onProgressChange?: (progress: number) => void; // Callback para atualizar progresso
 }
 
-export function InstallationStepsChecklist({ inspectionItemId, environmentId, environmentName, totalQuantity, onProgressChange }: InstallationStepsChecklistProps) {
+export function InstallationStepsChecklist({ inspectionItemId, environmentId, environmentName, totalQuantity }: InstallationStepsChecklistProps) {
   const [initialized, setInitialized] = useState(false);
   const [openDeliveryTerm, setOpenDeliveryTerm] = useState(false);
   const [responsibleName, setResponsibleName] = useState("");
@@ -172,11 +171,6 @@ export function InstallationStepsChecklist({ inspectionItemId, environmentId, en
     : 0;
 
   const allCompleted = stepPercentages.every((p: number) => p === 100);
-
-  // Chamar callback quando progresso muda
-  if (onProgressChange) {
-    onProgressChange(overallProgress);
-  }
 
   return (
     <>

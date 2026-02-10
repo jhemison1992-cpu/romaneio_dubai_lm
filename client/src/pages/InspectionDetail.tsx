@@ -119,7 +119,6 @@ export default function InspectionDetail() {
   const [formData, setFormData] = useState<Record<number, InspectionItemData>>({});
   const [activeTab, setActiveTab] = useState<string>("0");
   const [statusValue, setStatusValue] = useState<string>(inspection?.status || "draft");
-  const [installationProgress, setInstallationProgress] = useState<Record<number, number>>({});
   
   // Sincronizar statusValue quando inspection muda
   useEffect(() => {
@@ -494,7 +493,6 @@ export default function InspectionDetail() {
                       <DeliveryReportButton 
                         inspectionEnvironmentId={env.id} 
                         environmentName={env.name}
-                        installationStatus={installationProgress[data?.id] || 0}
                       />
                       {(env.plantaFileUrl || getPlantaUrl(env.caixilhoCode)) && (
                         <Button
@@ -617,7 +615,6 @@ export default function InspectionDetail() {
                         environmentId={data.environmentId}
                         environmentName={env.name}
                         totalQuantity={env.quantity || 1}
-                        onProgressChange={(progress) => setInstallationProgress({...installationProgress, [data.id]: progress})}
                       />
                     </div>
                   )}
