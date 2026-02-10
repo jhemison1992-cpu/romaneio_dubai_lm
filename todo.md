@@ -1109,3 +1109,15 @@
 - [x] Integrar componente DeliveryReportButton na página
 - [ ] Testar geração e download do termo com dados reais
 - [ ] Adicionar fotos do ambiente ao PDF (quando estrutura de fotos for implementada)
+
+
+## Correções do Termo de Entrega
+- [x] Diagnosticar e corrigir erros no código do termo de entrega (import PDFDocument adicionado)
+- [x] Liberar termo de entrega apenas quando evolução da instalação = 100%
+- [x] Incluir todas as informações completas no PDF (7 seções + dados da obra + responsáveis)
+- [x] Adicionar callback onProgressChange ao InstallationStepsChecklist
+- [x] Integrar progresso de instalação com botão de termo de entrega
+- [x] Botão desabilitado quando progresso < 100%
+- [x] Servidor rodando sem erros
+- [ ] Testar geração do PDF com dados reais
+- [ ] Validar que todas as 7 seções aparecem no PDF

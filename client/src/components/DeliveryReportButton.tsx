@@ -6,12 +6,16 @@ import { toast } from "sonner";
 interface DeliveryReportButtonProps {
   inspectionEnvironmentId: number;
   environmentName: string;
+  installationStatus?: number; // Percentual de conclusão (0-100)
 }
 
 export const DeliveryReportButton: React.FC<DeliveryReportButtonProps> = ({
   inspectionEnvironmentId,
   environmentName,
+  installationStatus = 0,
 }) => {
+  const isComplete = installationStatus === 100;
+
   const generatePDFMutation = trpc.deliveryReport.generatePDF.useMutation({
     onSuccess: (data) => {
       // Criar blob do PDF
@@ -35,29 +39,41 @@ export const DeliveryReportButton: React.FC<DeliveryReportButtonProps> = ({
   });
 
   const handleDownload = async () => {
+    if (!isComplete) {
+      toast.error(`Evolução da instalação deve estar 100% para gerar termo (Atual: ${installationStatus}%)`);
+      return;
+    }
     await generatePDFMutation.mutate({
       inspectionEnvironmentId,
     });
   };
 
   return (
-    <Button
-      onClick={handleDownload}
-      disabled={generatePDFMutation.isPending}
-      variant="default"
-      size="sm"
-    >
-      {generatePDFMutation.isPending ? (
-        <>
-          <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-          Gerando...
-        </>
-      ) : (
-        <>
-          <Download className="w-4 h-4 mr-2" />
-          Termo de Entrega
-        </>
+    <div className="flex flex-col gap-1">
+      <Button
+        onClick={handleDownload}
+        disabled={generatePDFMutation.isPending || !isComplete}
+        variant="default"
+        size="sm"
+        title={!isComplete ? `Evolução da instalação deve estar 100% para gerar termo (Atual: ${installationStatus}%)` : "Gerar termo de entrega"}
+      >
+        {generatePDFMutation.isPending ? (
+          <>
+            <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+            Gerando...
+          </>
+        ) : (
+          <>
+            <Download className="w-4 h-4 mr-2" />
+            Termo de Entrega
+          </>
+        )}
+      </Button>
+      {!isComplete && (
+        <span className="text-xs text-muted-foreground">
+          Evolução: {installationStatus}%
+        </span>
       )}
-    </Button>
+    </div>
   );
 };

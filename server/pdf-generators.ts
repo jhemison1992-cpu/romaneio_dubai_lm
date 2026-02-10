@@ -1,4 +1,4 @@
-import { PDFDocument, PDFPage, rgb } from "pdf-lib";
+import { PDFDocument, rgb } from "pdf-lib";
 import * as db from "./db";
 
 /**
