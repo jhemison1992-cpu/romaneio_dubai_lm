@@ -1,6 +1,5 @@
 import { PDFDocument, rgb } from "pdf-lib";
 import * as db from "./db";
-import fetch from "node-fetch";
 
 /**
  * Gera PDF do termo de entrega com novo layout profissional e fotos
@@ -163,30 +162,14 @@ No ato da entrega, o(s) caixilho(s) foi(foram) vistoriado(s), encontrando-se em 
     addText("FOTOS DO AMBIENTE", 11, true, rgb(31, 41, 55));
     yPosition -= 10;
 
-    // Tentar carregar e adicionar fotos
+    // Adicionar referências das fotos
     for (const media of mediaFiles) {
       if (media.mediaType === "photo") {
-        try {
-          // Tentar buscar a imagem
-          const response = await fetch(media.fileUrl);
-          if (response.ok) {
-            const buffer = await response.buffer();
-            
-            // Adicionar informações da foto
-            addText(`Foto: ${media.fileName}`, 10);
-            if (media.comment) {
-              addText(`Observação: ${media.comment}`, 9);
-            }
-            yPosition -= 5;
-          }
-        } catch (error) {
-          // Se não conseguir carregar a foto, apenas adicionar referência
-          addText(`Foto: ${media.fileName} (URL: ${media.fileUrl})`, 9);
-          if (media.comment) {
-            addText(`Observação: ${media.comment}`, 8);
-          }
-          yPosition -= 5;
+        addText(`Foto: ${media.fileName}`, 10);
+        if (media.comment) {
+          addText(`Observação: ${media.comment}`, 9);
         }
+        yPosition -= 5;
       }
     }
   }

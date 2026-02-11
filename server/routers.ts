@@ -1048,12 +1048,26 @@ export const appRouter = router({
       }),
   }),
 
-  deliveryReport: router({
-    generatePDF: publicProcedure
+  environmentReports: router({
+    technicalReport: publicProcedure
       .input((val: unknown) => z.object({ inspectionEnvironmentId: z.number() }).parse(val))
       .mutation(async ({ input }) => {
-        const { generateDeliveryReportPDF } = await import("./pdf-generators");
-        const pdfBuffer = await generateDeliveryReportPDF(input.inspectionEnvironmentId);
+        const { generateTechnicalReportPDF } = await import("./report-generators");
+        const pdfBuffer = await generateTechnicalReportPDF(input.inspectionEnvironmentId);
+        return { success: true, buffer: pdfBuffer };
+      }),
+    photoGallery: publicProcedure
+      .input((val: unknown) => z.object({ inspectionEnvironmentId: z.number() }).parse(val))
+      .mutation(async ({ input }) => {
+        const { generatePhotoGalleryPDF } = await import("./report-generators");
+        const pdfBuffer = await generatePhotoGalleryPDF(input.inspectionEnvironmentId);
+        return { success: true, buffer: pdfBuffer };
+      }),
+    deliveryTerm: publicProcedure
+      .input((val: unknown) => z.object({ inspectionEnvironmentId: z.number() }).parse(val))
+      .mutation(async ({ input }) => {
+        const { generateDeliveryTermPDF } = await import("./report-generators");
+        const pdfBuffer = await generateDeliveryTermPDF(input.inspectionEnvironmentId);
         return { success: true, buffer: pdfBuffer };
       }),
   }),
