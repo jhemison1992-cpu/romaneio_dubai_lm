@@ -1131,3 +1131,15 @@
 - [ ] Adicionar cronograma Gantt para visualização de etapas
 - [ ] Integrar gráficos de progresso e performance
 - [ ] Testar layout completo em desenvolvimento
+
+
+## Redesign Completo do Site - Face Lift ObraControl
+- [ ] Criar novo layout base com header profissional e sidebar
+- [ ] Implementar navegação horizontal no header (Dashboard, Obras, Etapas, Custos, Recursos, Execução, Gestão)
+- [ ] Redesenhar página de Obras com cards profissionais
+- [ ] Redesenhar página de Vistorias com layout moderno
+- [ ] Redesenhar página de Usuários com tabela profissional
+- [ ] Aplicar tema de cores do ObraControl (azul, verde, laranja, vermelho)
+- [ ] Implementar tipografia e espaçamento profissionais
+- [ ] Testar layout em desktop, tablet e mobile
+- [ ] Validar todas as funcionalidades após redesign

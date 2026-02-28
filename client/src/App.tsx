@@ -20,57 +20,66 @@ import Checkout from "./pages/Checkout";
 import Dashboard from "./pages/Dashboard";
 import SubscriptionManagement from "./pages/SubscriptionManagement";
 import Landing from "./pages/Landing";
+import AppLayout from "./components/AppLayout";
 
 function Router() {
   return (
     <Switch>
       <Route path="/" component={Landing} />
       <Route path="/app" component={() => (
-        <DashboardLayout>
+        <AppLayout currentPage="obras">
           <Projects />
-        </DashboardLayout>
+        </AppLayout>
       )} />
       <Route path="/projects" component={() => (
-        <DashboardLayout>
+        <AppLayout currentPage="obras">
           <Projects />
-        </DashboardLayout>
+        </AppLayout>
       )} />
       <Route path="/project/:id/environments" component={() => (
-        <DashboardLayout>
+        <AppLayout currentPage="obras">
           <ProjectEnvironments />
-        </DashboardLayout>
+        </AppLayout>
       )} />
       <Route path="/inspections" component={() => (
-        <DashboardLayout>
+        <AppLayout currentPage="vistorias">
           <Inspections />
-        </DashboardLayout>
+        </AppLayout>
       )} />
       <Route path="/inspection/:id" component={() => (
-        <DashboardLayout>
+        <AppLayout currentPage="vistorias">
           <InspectionDetail />
-        </DashboardLayout>
+        </AppLayout>
       )} />
-      <Route path="/users" component={Users} />
+      <Route path="/users" component={() => (
+        <AppLayout currentPage="usuarios">
+          <Users />
+        </AppLayout>
+      )} />
       <Route path="/pricing" component={Pricing} />
       <Route path="/billing/success" component={BillingSuccess} />
       <Route path="/billing" component={() => (
-        <DashboardLayout>
+        <AppLayout>
           <Billing />
-        </DashboardLayout>
+        </AppLayout>
       )} />
       <Route path="/signup" component={CompanySignup} />
       <Route path="/select-company" component={CompanyLogin} />
-      <Route path="/company/users" component={CompanyUsers} />
+      <Route path="/company/users" component={() => (
+        <AppLayout currentPage="usuarios">
+          <CompanyUsers />
+        </AppLayout>
+      )} />
       <Route path="/checkout" component={Checkout} />
       <Route path="/dashboard" component={() => (
-        <DashboardLayout>
+        <AppLayout currentPage="dashboard">
           <Dashboard />
-        </DashboardLayout>
+        </AppLayout>
       )} />
       <Route path="/subscription" component={() => (
-        <DashboardLayout>
+        <AppLayout>
           <SubscriptionManagement />
-        </DashboardLayout>
+        </AppLayout>
       )} />
       <Route path="/404" component={NotFound} />
       <Route component={NotFound} />
