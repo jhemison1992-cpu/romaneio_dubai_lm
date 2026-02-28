@@ -1121,3 +1121,13 @@
 - [x] Servidor rodando sem erros
 - [ ] Testar geração do PDF com dados reais
 - [ ] Validar que todas as 7 seções aparecem no PDF
+
+
+## Redesign do Dashboard para Padrão ObraControl (Obras Fácil)
+- [ ] Criar novo layout de dashboard com navegação profissional (Dashboard, Obras, Etapas, Custos, Recursos, Execução, Gestão)
+- [ ] Implementar cards de KPIs (Total de Obras, Em Andamento, Concluídas, Atrasadas)
+- [ ] Adicionar indicadores de desempenho (IDC, IDP, IPC com cores e interpretação)
+- [ ] Implementar resumo financeiro (Orçado, Realizado, Saldo)
+- [ ] Adicionar cronograma Gantt para visualização de etapas
+- [ ] Integrar gráficos de progresso e performance
+- [ ] Testar layout completo em desenvolvimento
