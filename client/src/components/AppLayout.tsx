@@ -28,7 +28,7 @@ export default function AppLayout({ children, currentPage }: AppLayoutProps) {
         {/* Logo */}
         <div className="p-6 border-b border-gray-200">
           <Link href="/dashboard">
-            <a className="flex items-center gap-2 cursor-pointer">
+            <div className="flex items-center gap-2 cursor-pointer">
               <div className="w-10 h-10 bg-orange-500 rounded-lg flex items-center justify-center">
                 <Building2 className="w-6 h-6 text-white" />
               </div>
@@ -36,7 +36,7 @@ export default function AppLayout({ children, currentPage }: AppLayoutProps) {
                 <p className="font-bold text-gray-900">OBRAS</p>
                 <p className="text-xs text-gray-500">FÁCIL</p>
               </div>
-            </a>
+            </div>
           </Link>
         </div>
 
@@ -47,7 +47,7 @@ export default function AppLayout({ children, currentPage }: AppLayoutProps) {
             const isActive = currentPage === item.id;
             return (
               <Link key={item.id} href={`/${item.id}`}>
-                <a
+                <div
                   className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${
                     isActive
                       ? 'bg-orange-50 text-orange-600 font-medium'
@@ -56,7 +56,7 @@ export default function AppLayout({ children, currentPage }: AppLayoutProps) {
                 >
                   <Icon className="w-5 h-5" />
                   <span>{item.label}</span>
-                </a>
+                </div>
               </Link>
             );
           })}
