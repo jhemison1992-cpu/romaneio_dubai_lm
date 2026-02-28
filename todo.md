@@ -1143,3 +1143,11 @@
 - [ ] Implementar tipografia e espaçamento profissionais
 - [ ] Testar layout em desktop, tablet e mobile
 - [ ] Validar todas as funcionalidades após redesign
+
+
+## Redesign da Página de Obras (ObraControl)
+- [ ] Criar novo layout de detalhe de obra com header, progresso e KPIs
+- [ ] Implementar abas de navegação (Visão Geral, Progresso, Ambientes, Custos)
+- [ ] Adicionar seções de informações, setores e observações
+- [ ] Implementar tabela de progresso de etapas
+- [ ] Testar layout completo
