@@ -1184,3 +1184,7 @@
 - [x] Criar componente InspectionEnvironmentSections.tsx para encapsular hooks
 - [x] Corrigir erro "Cannot read properties of undefined (reading 'length')"
 - [x] Todos os 42 testes passando após correção
+- [x] Corrigir erro "Maximum update depth exceeded" usando useMemo
+- [x] Memoizar allEnvironments para evitar loop infinito
+- [x] Remover environmentIdToIndex não utilizado
+- [x] Todos os 42 testes passando após correção final

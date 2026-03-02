@@ -21,7 +21,7 @@ import { FillGuideDialog } from "@/components/FillGuideDialog";
 import { EnvironmentSection, SectionItem } from "@/components/EnvironmentSection";
 import { InspectionEnvironmentSections } from "@/components/InspectionEnvironmentSections";
 import { DeliveryReportButton } from "@/components/DeliveryReportButton";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { toast } from "sonner";
 import { Link, useParams } from "wouter";
 
@@ -200,49 +200,43 @@ export default function InspectionDetail() {
     },
   });
   
-  // Mesclar ambientes da obra + ambientes da vistoria
-  const allEnvironments = [
+  // Mesclar ambientes da obra + ambientes da vistoria - MEMOIZADO
+  const allEnvironments = useMemo(() => [
     ...(environments || []),
     ...(inspectionEnvs || []),
-  ];
-  
-  // Mapeamento de ambientes para renderizar componentes com hooks
-  const environmentIdToIndex = allEnvironments.reduce((acc, env, idx) => {
-    acc[env.id] = idx;
-    return acc;
-  }, {} as Record<number, number>);
+  ], [environments, inspectionEnvs]);
   
   useEffect(() => {
-    if (allEnvironments && allEnvironments.length > 0 && items) {
-      const initialData: Record<number, InspectionItemData> = {};
-      allEnvironments.forEach((env) => {
-        const existingItem = items.find((item) => item.environmentId === env.id);
-        let releaseDate: Date | undefined = undefined;
-        if (existingItem?.releaseDate) {
-          // Se for Date, usar diretamente
-          if (existingItem.releaseDate instanceof Date) {
-            releaseDate = existingItem.releaseDate;
-          } else {
-            // Se for string ISO, converter para Date usando parseInputDate
-            const releaseDateValue = existingItem.releaseDate as string;
-            // Extrair apenas a data (YYYY-MM-DD) da string ISO
-            const datePart = releaseDateValue.split('T')[0];
-            releaseDate = parseInputDate(datePart);
-          }
+    if (!allEnvironments || allEnvironments.length === 0 || !items) return;
+    
+    const initialData: Record<number, InspectionItemData> = {};
+    allEnvironments.forEach((env) => {
+      const existingItem = items.find((item) => item.environmentId === env.id);
+      let releaseDate: Date | undefined = undefined;
+      if (existingItem?.releaseDate) {
+        // Se for Date, usar diretamente
+        if (existingItem.releaseDate instanceof Date) {
+          releaseDate = existingItem.releaseDate;
+        } else {
+          // Se for string ISO, converter para Date usando parseInputDate
+          const releaseDateValue = existingItem.releaseDate as string;
+          // Extrair apenas a data (YYYY-MM-DD) da string ISO
+          const datePart = releaseDateValue.split('T')[0];
+          releaseDate = parseInputDate(datePart);
         }
-        initialData[env.id] = {
-          id: existingItem?.id,
-          environmentId: env.id,
-          releaseDate: releaseDate,
-          responsibleConstruction: existingItem?.responsibleConstruction || "",
-          responsibleSupplier: existingItem?.responsibleSupplier || "",
-          observations: existingItem?.observations || "",
-          signatureConstruction: (existingItem as any)?.signatureConstruction || "",
-          signatureSupplier: (existingItem as any)?.signatureSupplier || "",
-        };
-      });
-      setFormData(initialData);
-    }
+      }
+      initialData[env.id] = {
+        id: existingItem?.id,
+        environmentId: env.id,
+        releaseDate: releaseDate,
+        responsibleConstruction: existingItem?.responsibleConstruction || "",
+        responsibleSupplier: existingItem?.responsibleSupplier || "",
+        observations: existingItem?.observations || "",
+        signatureConstruction: (existingItem as any)?.signatureConstruction || "",
+        signatureSupplier: (existingItem as any)?.signatureSupplier || "",
+      };
+    });
+    setFormData(initialData);
   }, [allEnvironments, items]);
   
   const handleSave = (environmentId: number) => {
