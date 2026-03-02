@@ -1176,3 +1176,11 @@
 - [ ] Testar lista de ambientes com checkboxes
 - [ ] Testar status de ambientes
 - [ ] Testar CRUD completo de ambientes
+
+
+## Correção de Erros - InspectionDetail
+- [x] Corrigir erro "Change in order of Hooks" em InspectionDetail.tsx
+- [x] Remover chamadas de useQuery dentro de .map() (linhas 97-117)
+- [x] Criar componente InspectionEnvironmentSections.tsx para encapsular hooks
+- [x] Corrigir erro "Cannot read properties of undefined (reading 'length')"
+- [x] Todos os 42 testes passando após correção

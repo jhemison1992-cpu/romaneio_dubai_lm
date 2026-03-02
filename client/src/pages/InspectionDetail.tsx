@@ -19,7 +19,7 @@ import { InstallationStepsChecklist } from "@/components/InstallationStepsCheckl
 import { NewEnvironmentDialog } from "@/components/NewEnvironmentDialog";
 import { FillGuideDialog } from "@/components/FillGuideDialog";
 import { EnvironmentSection, SectionItem } from "@/components/EnvironmentSection";
-import { EnvironmentSections } from "@/components/EnvironmentSections";
+import { InspectionEnvironmentSections } from "@/components/InspectionEnvironmentSections";
 import { DeliveryReportButton } from "@/components/DeliveryReportButton";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
@@ -93,28 +93,7 @@ export default function InspectionDetail() {
     { enabled: inspectionId > 0 }
   );
   
-  // Queries para carregar itens das seções
-  const laborItemsQueries = (inspectionEnvs || []).map(env => 
-    trpc.laborItems.list.useQuery({ inspectionEnvironmentId: env.id }, { enabled: !!env.id })
-  );
-  const equipmentItemsQueries = (inspectionEnvs || []).map(env => 
-    trpc.equipmentItems.list.useQuery({ inspectionEnvironmentId: env.id }, { enabled: !!env.id })
-  );
-  const activityItemsQueries = (inspectionEnvs || []).map(env => 
-    trpc.activityItems.list.useQuery({ inspectionEnvironmentId: env.id }, { enabled: !!env.id })
-  );
-  const occurrenceItemsQueries = (inspectionEnvs || []).map(env => 
-    trpc.occurrenceItems.list.useQuery({ inspectionEnvironmentId: env.id }, { enabled: !!env.id })
-  );
-  const receivedMaterialItemsQueries = (inspectionEnvs || []).map(env => 
-    trpc.receivedMaterialItems.list.useQuery({ inspectionEnvironmentId: env.id }, { enabled: !!env.id })
-  );
-  const usedMaterialItemsQueries = (inspectionEnvs || []).map(env => 
-    trpc.usedMaterialItems.list.useQuery({ inspectionEnvironmentId: env.id }, { enabled: !!env.id })
-  );
-  const commentItemsQueries = (inspectionEnvs || []).map(env => 
-    trpc.commentItems.list.useQuery({ inspectionEnvironmentId: env.id }, { enabled: !!env.id })
-  );
+  // Queries removidas de dentro do .map() - agora cada ambiente tem seu próprio componente com hooks
   
   const [formData, setFormData] = useState<Record<number, InspectionItemData>>({});
   const [activeTab, setActiveTab] = useState<string>("0");
@@ -227,8 +206,14 @@ export default function InspectionDetail() {
     ...(inspectionEnvs || []),
   ];
   
+  // Mapeamento de ambientes para renderizar componentes com hooks
+  const environmentIdToIndex = allEnvironments.reduce((acc, env, idx) => {
+    acc[env.id] = idx;
+    return acc;
+  }, {} as Record<number, number>);
+  
   useEffect(() => {
-    if (allEnvironments.length > 0 && items) {
+    if (allEnvironments && allEnvironments.length > 0 && items) {
       const initialData: Record<number, InspectionItemData> = {};
       allEnvironments.forEach((env) => {
         const existingItem = items.find((item) => item.environmentId === env.id);
@@ -258,7 +243,7 @@ export default function InspectionDetail() {
       });
       setFormData(initialData);
     }
-  }, [allEnvironments.length, items]);
+  }, [allEnvironments, items]);
   
   const handleSave = (environmentId: number) => {
     console.log('handleSave chamado com environmentId:', environmentId);
@@ -585,23 +570,13 @@ export default function InspectionDetail() {
                       value={formData[env.id]?.observations || ""}
                       onChange={(e) => handleChange(env.id, "observations", e.target.value)}
                       placeholder="Adicione observações sobre este ambiente..."
-                      className="w-full min-h-[100px] px-3 py-2 border rounded-md"
+                      className="w-full min-h-24 p-2 border rounded"
                     />
                   </div>
-
-                  <EnvironmentSections
-                    environmentId={env.id}
-                    allEnvironments={allEnvironments}
-                    laborItemsQueries={laborItemsQueries}
-                    equipmentItemsQueries={equipmentItemsQueries}
-                    activityItemsQueries={activityItemsQueries}
-                    occurrenceItemsQueries={occurrenceItemsQueries}
-                    receivedMaterialItemsQueries={receivedMaterialItemsQueries}
-                    usedMaterialItemsQueries={usedMaterialItemsQueries}
-                    commentItemsQueries={commentItemsQueries}
+                  
+                  <InspectionEnvironmentSections
+                    inspectionEnvironmentId={env.id}
                   />
-
-          {/* Assinatura será coletada apenas quando o ambiente for finalizado */}
                   
                   {data.id && (
                     <div className="border-t pt-6">
