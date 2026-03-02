@@ -15,7 +15,7 @@ export default function AppLayout({ children, currentPage }: AppLayoutProps) {
   };
 
   const navItems = [
-    { id: 'dashboard', label: 'Dashboard', icon: Building2 },
+    { id: 'dashboard', label: 'Painel', icon: Building2 },
     { id: 'obras', label: 'Obras', icon: Building2 },
     { id: 'vistorias', label: 'Vistorias', icon: FileText },
     { id: 'usuarios', label: 'Usuários', icon: Users },
@@ -91,7 +91,7 @@ export default function AppLayout({ children, currentPage }: AppLayoutProps) {
         <div className="bg-white border-b border-gray-200 px-8 py-4">
           <div className="flex items-center justify-between">
             <h1 className="text-2xl font-bold text-gray-900">
-              {currentPage === 'dashboard' && 'Dashboard'}
+              {currentPage === 'dashboard' && 'Painel'}
               {currentPage === 'obras' && 'Obras'}
               {currentPage === 'vistorias' && 'Vistorias'}
               {currentPage === 'usuarios' && 'Usuários'}

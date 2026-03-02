@@ -1151,3 +1151,28 @@
 - [ ] Adicionar seções de informações, setores e observações
 - [ ] Implementar tabela de progresso de etapas
 - [ ] Testar layout completo
+
+
+## Site 100% Funcional - ObraControl
+- [ ] Renomear Dashboard para Painel na navegação
+- [ ] Implementar página de Obras com lista de 12 ambientes
+- [ ] Integrar dados reais do banco de dados
+- [ ] Implementar CRUD completo (criar, editar, deletar)
+- [ ] Testar todas as funcionalidades
+- [ ] Garantir aparência idêntica ao ObraControl
+
+## Implementação de Página de Obras com Lista de Ambientes
+- [x] Renomear "Dashboard" para "Painel" na sidebar
+- [x] Adicionar rotas /obras, /vistorias, /usuarios no App.tsx
+- [x] Criar página ObraDetail.tsx com layout profissional do ObraControl
+- [x] Implementar aba "Ambientes" com lista de checkboxes
+- [x] Adicionar status de conclusão para cada ambiente (Concluído/Em Andamento/Não Iniciado)
+- [x] Implementar CRUD de ambientes na página ObraDetail
+- [x] Integrar dados reais do banco de dados
+- [x] Corrigir testes de ambientes para passar projectId obrigatório
+- [x] Todos os 42 testes passando
+- [ ] Testar navegação entre páginas
+- [ ] Testar criação de obra e ambientes
+- [ ] Testar lista de ambientes com checkboxes
+- [ ] Testar status de ambientes
+- [ ] Testar CRUD completo de ambientes

@@ -249,7 +249,7 @@ export default function Projects() {
                   <div className="flex gap-2">
                     <Button
                       className="flex-1"
-                      onClick={() => setLocation(`/project/${project.id}/environments`)}
+                      onClick={() => setLocation(`/obra/${project.id}`)}
                     >
                       <Settings className="mr-2 h-4 w-4" />
                       Gerenciar

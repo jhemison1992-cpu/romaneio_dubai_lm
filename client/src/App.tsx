@@ -7,6 +7,7 @@ import { ThemeProvider } from "./contexts/ThemeContext";
 import DashboardLayout from "./components/DashboardLayout";
 import Projects from "./pages/Projects";
 import ProjectEnvironments from "./pages/ProjectEnvironments";
+import ObraDetail from "./pages/ObraDetail";
 import Inspections from "./pages/Inspections";
 import InspectionDetail from "./pages/InspectionDetail";
 import Users from "./pages/Users";
@@ -39,6 +40,11 @@ function Router() {
       <Route path="/project/:id/environments" component={() => (
         <AppLayout currentPage="obras">
           <ProjectEnvironments />
+        </AppLayout>
+      )} />
+      <Route path="/obra/:id" component={() => (
+        <AppLayout currentPage="obras">
+          <ObraDetail />
         </AppLayout>
       )} />
       <Route path="/inspections" component={() => (
@@ -74,6 +80,21 @@ function Router() {
       <Route path="/dashboard" component={() => (
         <AppLayout currentPage="dashboard">
           <Dashboard />
+        </AppLayout>
+      )} />
+      <Route path="/obras" component={() => (
+        <AppLayout currentPage="obras">
+          <Projects />
+        </AppLayout>
+      )} />
+      <Route path="/vistorias" component={() => (
+        <AppLayout currentPage="vistorias">
+          <Inspections />
+        </AppLayout>
+      )} />
+      <Route path="/usuarios" component={() => (
+        <AppLayout currentPage="usuarios">
+          <Users />
         </AppLayout>
       )} />
       <Route path="/subscription" component={() => (
