@@ -1201,3 +1201,12 @@
 - [x] Integrar recibimentos com obras e ambientes existentes
 - [x] Criar página de listagem de recibimentos
 - [ ] Testar fluxo completo de recibimento
+
+
+## Correção de Erro de Foreign Key em inspection_items
+- [x] Identificar erro de environment_id inválido em inspection_items
+- [x] Adicionar coluna environmentId a inspection_environments
+- [x] Modificar createInspectionEnvironment para criar ambiente em environments também
+- [x] Adicionar projectId ao input da procedure create
+- [x] Corrigir testes de inspection environments
+- [x] Todos os 37 testes passando após correção

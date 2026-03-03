@@ -191,6 +191,7 @@ export const inspectionEnvironments = mysqlTable("inspection_environments", {
   id: int("id").autoincrement().primaryKey(),
   companyId: int("company_id").notNull().references(() => companies.id, { onDelete: "cascade" }),
   inspectionId: int("inspection_id").notNull().references(() => inspections.id, { onDelete: "cascade" }),
+  environmentId: int("environment_id").references(() => environments.id, { onDelete: "set null" }),
   name: varchar("name", { length: 255 }).notNull(),
   caixilhoCode: varchar("caixilho_code", { length: 50 }).notNull(),
   caixilhoType: text("caixilho_type").notNull(),

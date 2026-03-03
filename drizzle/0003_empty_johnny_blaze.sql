@@ -1,0 +1,2 @@
+ALTER TABLE `inspection_environments` ADD `environment_id` int;--> statement-breakpoint
+ALTER TABLE `inspection_environments` ADD CONSTRAINT `inspection_environments_environment_id_environments_id_fk` FOREIGN KEY (`environment_id`) REFERENCES `environments`(`id`) ON DELETE set null ON UPDATE no action;

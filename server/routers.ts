@@ -526,6 +526,7 @@ export const appRouter = router({
     create: publicProcedure
       .input((val: unknown) => z.object({
         inspectionId: z.number(),
+        projectId: z.number().optional(),
         name: z.string(),
         caixilhoCode: z.string(),
         caixilhoType: z.string(),

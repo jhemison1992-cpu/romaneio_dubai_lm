@@ -424,6 +424,7 @@ export async function getInspectionEnvironments(inspectionId: number) {
 export async function createInspectionEnvironment(data: {
   inspectionId: number;
   companyId?: number;
+  projectId?: number;
   name: string;
   caixilhoCode: string;
   caixilhoType: string;
@@ -437,12 +438,25 @@ export async function createInspectionEnvironment(data: {
 }) {
   const db = await getDb();
   if (!db) throw new Error("Database not available");
-  const { inspectionEnvironments } = await import("../drizzle/schema");
+  const { inspectionEnvironments, environments } = await import("../drizzle/schema");
   
-  // Converter strings de data para Date
+  const envResult = await db.insert(environments).values({
+    projectId: data.projectId ?? 1,
+    name: data.name,
+    caixilhoCode: data.caixilhoCode,
+    caixilhoType: data.caixilhoType,
+    quantity: data.quantity,
+    plantaFileKey: data.plantaFileKey,
+    plantaFileUrl: data.plantaFileUrl,
+    projectFileKey: data.projectFileKey,
+    projectFileUrl: data.projectFileUrl,
+  });
+  
+  const environmentId = envResult[0].insertId;
   const values: any = {
     ...data,
     companyId: data.companyId ?? 1,
+    environmentId,
     startDate: data.startDate ? new Date(data.startDate) : undefined,
     endDate: data.endDate ? new Date(data.endDate) : undefined,
   };
