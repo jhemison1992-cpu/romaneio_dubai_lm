@@ -36,6 +36,13 @@
       "when": 1772560988563,
       "tag": "0004_great_gargoyle",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "5",
+      "when": 1772561573412,
+      "tag": "0005_square_edwin_jarvis",
+      "breakpoints": true
     }
   ]
 }

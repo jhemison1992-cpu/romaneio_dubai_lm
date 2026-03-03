@@ -1230,3 +1230,13 @@
 - [ ] Implementar geração de PDF do relatório
 - [ ] Criar página de listagem de relatórios por obra
 - [ ] Testar fluxo completo de geração de relatório
+
+
+## Sistema de Importação de PDF de Proposta
+- [ ] Criar tabelas de pavimentos e estrutura hierárquica no banco de dados
+- [ ] Implementar extrator de PDF com LLM para extrair dados estruturados
+- [ ] Criar procedures tRPC para importação automática de caixilhos e ambientes
+- [ ] Implementar página de upload de PDF com preview
+- [ ] Integrar visualização de planta (PDF de referência)
+- [ ] Testar extração de dados do PDF de proposta
+- [ ] Validar criação automática de pavimentos, ambientes e caixilhos

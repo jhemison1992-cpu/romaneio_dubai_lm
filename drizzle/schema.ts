@@ -510,3 +510,114 @@ export const projectReportItems = mysqlTable("project_report_items", {
 
 export type ProjectReportItem = typeof projectReportItems.$inferSelect;
 export type InsertProjectReportItem = typeof projectReportItems.$inferInsert;
+
+
+/**
+ * Pavimentos de um projeto
+ */
+export const floors = mysqlTable("floors", {
+  id: int("id").autoincrement().primaryKey(),
+  projectId: int("project_id").notNull().references(() => projects.id, { onDelete: "cascade" }),
+  
+  // Dados do pavimento
+  floorNumber: int("floor_number").notNull(), // 1, 2, 3, etc.
+  name: varchar("name", { length: 255 }).notNull(), // "1º Pavimento", "Térreo", etc.
+  description: text("description"),
+  
+  // Planta do pavimento
+  plantaFileKey: varchar("planta_file_key", { length: 500 }),
+  plantaFileUrl: varchar("planta_file_url", { length: 1000 }),
+  
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type Floor = typeof floors.$inferSelect;
+export type InsertFloor = typeof floors.$inferInsert;
+
+/**
+ * Ambientes dentro de um pavimento
+ */
+export const rooms = mysqlTable("rooms", {
+  id: int("id").autoincrement().primaryKey(),
+  projectId: int("project_id").notNull().references(() => projects.id, { onDelete: "cascade" }),
+  floorId: int("floor_id").notNull().references(() => floors.id, { onDelete: "cascade" }),
+  
+  // Dados do ambiente
+  name: varchar("name", { length: 255 }).notNull(), // "SUITES", "DORMITÓRIOS 2", etc.
+  description: text("description"),
+  
+  // Referência no PDF
+  pdfReference: varchar("pdf_reference", { length: 500 }), // Localização no PDF original
+  
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type Room = typeof rooms.$inferSelect;
+export type InsertRoom = typeof rooms.$inferInsert;
+
+/**
+ * Caixilhos dentro de um ambiente
+ */
+export const caixilhos = mysqlTable("caixilhos", {
+  id: int("id").autoincrement().primaryKey(),
+  projectId: int("project_id").notNull().references(() => projects.id, { onDelete: "cascade" }),
+  roomId: int("room_id").notNull().references(() => rooms.id, { onDelete: "cascade" }),
+  
+  // Dados do caixilho
+  code: varchar("code", { length: 100 }).notNull(), // "AL 001", "AL 002", etc.
+  type: varchar("type", { length: 100 }).notNull(), // "CA1", "CA2", etc.
+  description: text("description"), // Descrição completa do caixilho
+  quantity: int("quantity").default(1).notNull(),
+  
+  // Dimensões
+  width: int("width"), // Largura em mm
+  height: int("height"), // Altura em mm
+  
+  // Especificações técnicas (JSON)
+  specifications: text("specifications"), // JSON com todas as especificações
+  
+  // Peso
+  weight: varchar("weight", { length: 50 }), // Peso em kg
+  
+  // Referência no PDF
+  pdfReference: varchar("pdf_reference", { length: 500 }), // Localização no PDF original
+  
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type Caixilho = typeof caixilhos.$inferSelect;
+export type InsertCaixilho = typeof caixilhos.$inferInsert;
+
+/**
+ * Importações de PDF de proposta
+ */
+export const pdfImports = mysqlTable("pdf_imports", {
+  id: int("id").autoincrement().primaryKey(),
+  projectId: int("project_id").notNull().references(() => projects.id, { onDelete: "cascade" }),
+  
+  // Arquivo PDF
+  pdfFileKey: varchar("pdf_file_key", { length: 500 }).notNull(),
+  pdfFileUrl: varchar("pdf_file_url", { length: 1000 }).notNull(),
+  pdfFileName: varchar("pdf_file_name", { length: 255 }).notNull(),
+  
+  // Dados extraídos
+  extractedData: text("extracted_data"), // JSON com dados extraídos
+  
+  // Status da importação
+  status: mysqlEnum("import_status", ["pending", "processing", "completed", "failed"]).default("pending").notNull(),
+  errorMessage: text("error_message"),
+  
+  // Contagem de itens criados
+  floorsCreated: int("floors_created").default(0).notNull(),
+  roomsCreated: int("rooms_created").default(0).notNull(),
+  caixilhosCreated: int("caixilhos_created").default(0).notNull(),
+  
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type PdfImport = typeof pdfImports.$inferSelect;
+export type InsertPdfImport = typeof pdfImports.$inferInsert;
