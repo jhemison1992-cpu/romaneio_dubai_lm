@@ -1071,6 +1071,127 @@ export const appRouter = router({
         return { success: true, buffer: pdfBuffer };
       }),
   }),
+
+  deliveryReceipts: router({
+    list: publicProcedure
+      .input(z.object({ projectId: z.number() }))
+      .query(async ({ input }) => {
+        const { getDeliveryReceiptsByProject } = await import("./db");
+        return await getDeliveryReceiptsByProject(input.projectId);
+      }),
+    
+    get: publicProcedure
+      .input(z.object({ id: z.number() }))
+      .query(async ({ input }) => {
+        const { getDeliveryReceiptById, getDeliveryReceiptItems } = await import("./db");
+        const receipt = await getDeliveryReceiptById(input.id);
+        if (!receipt) return null;
+        const items = await getDeliveryReceiptItems(input.id);
+        return { ...receipt, items };
+      }),
+    
+    create: protectedProcedure
+      .input(z.object({
+        projectId: z.number(),
+        receiptNumber: z.string(),
+        constructionResponsible: z.string().optional(),
+        supplierResponsible: z.string().optional(),
+        receiptDate: z.date(),
+        deliveryDate: z.date().optional(),
+        observations: z.string().optional(),
+      }))
+      .mutation(async ({ input, ctx }) => {
+        const { createDeliveryReceipt } = await import("./db");
+        const result = await createDeliveryReceipt({
+          companyId: ctx.user.id,
+          projectId: input.projectId,
+          receiptNumber: input.receiptNumber,
+          constructionResponsible: input.constructionResponsible,
+          supplierResponsible: input.supplierResponsible,
+          receiptDate: input.receiptDate,
+          deliveryDate: input.deliveryDate,
+          observations: input.observations,
+        });
+        return result;
+      }),
+    
+    update: protectedProcedure
+      .input(z.object({
+        id: z.number(),
+        constructionResponsible: z.string().optional(),
+        constructionResponsibleSignature: z.string().optional(),
+        supplierResponsible: z.string().optional(),
+        supplierResponsibleSignature: z.string().optional(),
+        status: z.enum(["draft", "pending", "approved", "rejected"]).optional(),
+        observations: z.string().optional(),
+      }))
+      .mutation(async ({ input }) => {
+        const { updateDeliveryReceipt } = await import("./db");
+        const { id, ...data } = input;
+        await updateDeliveryReceipt(id, data);
+        return { success: true };
+      }),
+    
+    delete: protectedProcedure
+      .input(z.object({ id: z.number() }))
+      .mutation(async ({ input }) => {
+        const { deleteDeliveryReceipt } = await import("./db");
+        await deleteDeliveryReceipt(input.id);
+        return { success: true };
+      }),
+    
+    addItem: protectedProcedure
+      .input(z.object({
+        deliveryReceiptId: z.number(),
+        environmentId: z.number(),
+        code: z.string(),
+        description: z.string(),
+        quantity: z.number(),
+        unitValue: z.string().optional(),
+        totalValue: z.string().optional(),
+        conformity: z.enum(["ok", "not_ok", "pending"]).optional(),
+        observations: z.string().optional(),
+      }))
+      .mutation(async ({ input }) => {
+        const { createDeliveryReceiptItem } = await import("./db");
+        const result = await createDeliveryReceiptItem({
+          deliveryReceiptId: input.deliveryReceiptId,
+          environmentId: input.environmentId,
+          code: input.code,
+          description: input.description,
+          quantity: input.quantity,
+          unitValue: input.unitValue,
+          totalValue: input.totalValue,
+          conformity: input.conformity,
+          observations: input.observations,
+        });
+        return result;
+      }),
+    
+    updateItem: protectedProcedure
+      .input(z.object({
+        id: z.number(),
+        receivedQuantity: z.number().optional(),
+        status: z.enum(["pending", "received", "partial", "rejected"]).optional(),
+        conformity: z.enum(["ok", "not_ok", "pending"]).optional(),
+        observations: z.string().optional(),
+        defects: z.string().optional(),
+      }))
+      .mutation(async ({ input }) => {
+        const { updateDeliveryReceiptItem } = await import("./db");
+        const { id, ...data } = input;
+        await updateDeliveryReceiptItem(id, data);
+        return { success: true };
+      }),
+    
+    deleteItem: protectedProcedure
+      .input(z.object({ id: z.number() }))
+      .mutation(async ({ input }) => {
+        const { deleteDeliveryReceiptItem } = await import("./db");
+        await deleteDeliveryReceiptItem(input.id);
+        return { success: true };
+      }),
+  }),
 });
 
 export type AppRouter = typeof appRouter;

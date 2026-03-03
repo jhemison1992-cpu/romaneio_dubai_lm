@@ -379,3 +379,67 @@ export const commentItems = mysqlTable("comment_items", {
 
 export type CommentItem = typeof commentItems.$inferSelect;
 export type InsertCommentItem = typeof commentItems.$inferInsert;
+
+
+/**
+ * Termos de Recebimento/Entrega
+ * Documento que registra o recebimento de ambientes/caixilhos instalados
+ */
+export const deliveryReceipts = mysqlTable("delivery_receipts", {
+  id: int("id").autoincrement().primaryKey(),
+  companyId: int("company_id").notNull().references(() => companies.id, { onDelete: "cascade" }),
+  projectId: int("project_id").notNull().references(() => projects.id, { onDelete: "cascade" }),
+  receiptNumber: varchar("receipt_number", { length: 50 }).notNull(),
+  
+  // Responsáveis
+  constructionResponsible: varchar("construction_responsible", { length: 255 }),
+  constructionResponsibleSignature: text("construction_responsible_signature"),
+  supplierResponsible: varchar("supplier_responsible", { length: 255 }),
+  supplierResponsibleSignature: text("supplier_responsible_signature"),
+  
+  // Datas
+  receiptDate: timestamp("receipt_date").notNull(),
+  deliveryDate: timestamp("delivery_date"),
+  
+  // Status
+  status: mysqlEnum("status", ["draft", "pending", "approved", "rejected"]).default("draft").notNull(),
+  observations: text("observations"),
+  
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type DeliveryReceipt = typeof deliveryReceipts.$inferSelect;
+export type InsertDeliveryReceipt = typeof deliveryReceipts.$inferInsert;
+
+/**
+ * Itens do Termo de Recebimento
+ * Cada ambiente/caixilho recebido
+ */
+export const deliveryReceiptItems = mysqlTable("delivery_receipt_items", {
+  id: int("id").autoincrement().primaryKey(),
+  deliveryReceiptId: int("delivery_receipt_id").notNull().references(() => deliveryReceipts.id, { onDelete: "cascade" }),
+  environmentId: int("environment_id").notNull().references(() => environments.id, { onDelete: "cascade" }),
+  
+  // Dados do ambiente
+  code: varchar("code", { length: 100 }).notNull(),
+  description: text("description").notNull(),
+  quantity: int("quantity").default(1).notNull(),
+  unitValue: varchar("unit_value", { length: 20 }),
+  totalValue: varchar("total_value", { length: 20 }),
+  
+  // Status do recebimento
+  receivedQuantity: int("received_quantity").default(0).notNull(),
+  status: mysqlEnum("item_status", ["pending", "received", "partial", "rejected"]).default("pending").notNull(),
+  conformity: mysqlEnum("conformity", ["ok", "not_ok", "pending"]).default("pending").notNull(),
+  
+  // Observações
+  observations: text("observations"),
+  defects: text("defects"),
+  
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type DeliveryReceiptItem = typeof deliveryReceiptItems.$inferSelect;
+export type InsertDeliveryReceiptItem = typeof deliveryReceiptItems.$inferInsert;

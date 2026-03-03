@@ -831,3 +831,146 @@ export async function getInspectionItemByEnvironmentId(environmentId: number) {
 
 // Media files are linked to inspectionItems, not directly to environments
 // This function is not needed for the PDF generation
+
+
+// ============ DELIVERY RECEIPTS ============
+
+export async function createDeliveryReceipt(data: {
+  companyId: number;
+  projectId: number;
+  receiptNumber: string;
+  constructionResponsible?: string;
+  supplierResponsible?: string;
+  receiptDate: Date;
+  deliveryDate?: Date;
+  observations?: string;
+}) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  const { deliveryReceipts } = await import("../drizzle/schema");
+  
+  const result = await db.insert(deliveryReceipts).values({
+    companyId: data.companyId,
+    projectId: data.projectId,
+    receiptNumber: data.receiptNumber,
+    constructionResponsible: data.constructionResponsible,
+    supplierResponsible: data.supplierResponsible,
+    receiptDate: data.receiptDate,
+    deliveryDate: data.deliveryDate,
+    observations: data.observations,
+    status: "draft",
+  });
+  
+  return result;
+}
+
+export async function getDeliveryReceiptById(id: number) {
+  const db = await getDb();
+  if (!db) return null;
+  
+  const { deliveryReceipts } = await import("../drizzle/schema");
+  const result = await db.select().from(deliveryReceipts).where(eq(deliveryReceipts.id, id));
+  return result[0] || null;
+}
+
+export async function getDeliveryReceiptsByProject(projectId: number) {
+  const db = await getDb();
+  if (!db) return [];
+  
+  const { deliveryReceipts } = await import("../drizzle/schema");
+  return await db.select().from(deliveryReceipts).where(eq(deliveryReceipts.projectId, projectId));
+}
+
+export async function updateDeliveryReceipt(id: number, data: Partial<{
+  constructionResponsible: string;
+  constructionResponsibleSignature: string;
+  supplierResponsible: string;
+  supplierResponsibleSignature: string;
+  status: "draft" | "pending" | "approved" | "rejected";
+  observations: string;
+}>) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  const { deliveryReceipts } = await import("../drizzle/schema");
+  
+  await db.update(deliveryReceipts).set(data).where(eq(deliveryReceipts.id, id));
+}
+
+export async function deleteDeliveryReceipt(id: number) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  const { deliveryReceipts } = await import("../drizzle/schema");
+  await db.delete(deliveryReceipts).where(eq(deliveryReceipts.id, id));
+}
+
+// ============ DELIVERY RECEIPT ITEMS ============
+
+export async function createDeliveryReceiptItem(data: {
+  deliveryReceiptId: number;
+  environmentId: number;
+  code: string;
+  description: string;
+  quantity: number;
+  unitValue?: string;
+  totalValue?: string;
+  receivedQuantity?: number;
+  conformity?: "ok" | "not_ok" | "pending";
+  observations?: string;
+  defects?: string;
+}) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  const { deliveryReceiptItems } = await import("../drizzle/schema");
+  
+  const result = await db.insert(deliveryReceiptItems).values({
+    deliveryReceiptId: data.deliveryReceiptId,
+    environmentId: data.environmentId,
+    code: data.code,
+    description: data.description,
+    quantity: data.quantity,
+    unitValue: data.unitValue,
+    totalValue: data.totalValue,
+    receivedQuantity: data.receivedQuantity || 0,
+    status: "pending",
+    conformity: data.conformity || "pending",
+    observations: data.observations,
+    defects: data.defects,
+  });
+  
+  return result;
+}
+
+export async function getDeliveryReceiptItems(receiptId: number) {
+  const db = await getDb();
+  if (!db) return [];
+  
+  const { deliveryReceiptItems } = await import("../drizzle/schema");
+  return await db.select().from(deliveryReceiptItems).where(eq(deliveryReceiptItems.deliveryReceiptId, receiptId));
+}
+
+export async function updateDeliveryReceiptItem(id: number, data: Partial<{
+  receivedQuantity: number;
+  status: "pending" | "received" | "partial" | "rejected";
+  conformity: "ok" | "not_ok" | "pending";
+  observations: string;
+  defects: string;
+}>) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  const { deliveryReceiptItems } = await import("../drizzle/schema");
+  
+  await db.update(deliveryReceiptItems).set(data).where(eq(deliveryReceiptItems.id, id));
+}
+
+export async function deleteDeliveryReceiptItem(id: number) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  const { deliveryReceiptItems } = await import("../drizzle/schema");
+  await db.delete(deliveryReceiptItems).where(eq(deliveryReceiptItems.id, id));
+}

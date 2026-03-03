@@ -15,6 +15,13 @@
       "when": 1770632741590,
       "tag": "0001_complete_rogue",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1772476825098,
+      "tag": "0002_round_daimon_hellstrom",
+      "breakpoints": true
     }
   ]
 }

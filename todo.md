@@ -1188,3 +1188,16 @@
 - [x] Memoizar allEnvironments para evitar loop infinito
 - [x] Remover environmentIdToIndex não utilizado
 - [x] Todos os 42 testes passando após correção final
+
+
+## Modelo de Recibimento/Termo de Entrega
+- [x] Criar tabela de recibimentos no banco de dados (drizzle schema)
+- [x] Criar tabela de itens de recibimento (ambientes/caixilhos)
+- [x] Implementar procedures tRPC para CRUD de recibimentos
+- [x] Criar página de recibimento com formulário
+- [x] Implementar tabela de ambientes com checkboxes
+- [x] Adicionar campos de assinatura (responsável obra, responsável ALUMINC)
+- [ ] Implementar geração de PDF do termo de entrega
+- [x] Integrar recibimentos com obras e ambientes existentes
+- [x] Criar página de listagem de recibimentos
+- [ ] Testar fluxo completo de recibimento

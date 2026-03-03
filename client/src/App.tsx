@@ -22,6 +22,7 @@ import Dashboard from "./pages/Dashboard";
 import SubscriptionManagement from "./pages/SubscriptionManagement";
 import Landing from "./pages/Landing";
 import AppLayout from "./components/AppLayout";
+import DeliveryReceipt from "./pages/DeliveryReceipt";
 
 function Router() {
   return (
@@ -55,6 +56,11 @@ function Router() {
       <Route path="/inspection/:id" component={() => (
         <AppLayout currentPage="vistorias">
           <InspectionDetail />
+        </AppLayout>
+      )} />
+      <Route path="/delivery-receipt/:projectId" component={() => (
+        <AppLayout currentPage="obras">
+          <DeliveryReceipt />
         </AppLayout>
       )} />
       <Route path="/users" component={() => (
