@@ -24,6 +24,7 @@ import Landing from "./pages/Landing";
 import AppLayout from "./components/AppLayout";
 import DeliveryReceipt from "./pages/DeliveryReceipt";
 import ProjectReport from "./pages/ProjectReport";
+import PdfImport from "./pages/PdfImport";
 
 function Router() {
   return (
@@ -67,6 +68,11 @@ function Router() {
       <Route path="/report/:id" component={() => (
         <AppLayout currentPage="obras">
           <ProjectReport />
+        </AppLayout>
+      )} />
+      <Route path="/pdf-import/:projectId" component={() => (
+        <AppLayout currentPage="obras">
+          <PdfImport />
         </AppLayout>
       )} />
       <Route path="/users" component={() => (

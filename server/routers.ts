@@ -1307,6 +1307,45 @@ export const appRouter = router({
         return { success: true };
       }),
   }),
+
+  pdf: router({
+    import: protectedProcedure
+      .input((val: unknown) => z.object({ projectId: z.number(), pdfUrl: z.string(), pdfFileName: z.string(), pdfFileKey: z.string() }).parse(val))
+      .mutation(async ({ input, ctx }) => {
+        const { importPdfData } = await import("./pdf-import");
+        const companyId = ctx.user?.id || 1;
+        const result = await importPdfData(input.projectId, companyId, input.pdfUrl, input.pdfFileName, input.pdfFileKey);
+        return result;
+      }),
+
+    getFloors: protectedProcedure
+      .input((val: unknown) => z.object({ projectId: z.number() }).parse(val))
+      .query(async ({ input }) => {
+        const { getProjectFloors } = await import("./pdf-import");
+        return await getProjectFloors(input.projectId);
+      }),
+
+    getRooms: protectedProcedure
+      .input((val: unknown) => z.object({ floorId: z.number() }).parse(val))
+      .query(async ({ input }) => {
+        const { getFloorRooms } = await import("./pdf-import");
+        return await getFloorRooms(input.floorId);
+      }),
+
+    getCaixilhos: protectedProcedure
+      .input((val: unknown) => z.object({ roomId: z.number() }).parse(val))
+      .query(async ({ input }) => {
+        const { getRoomCaixilhos } = await import("./pdf-import");
+        return await getRoomCaixilhos(input.roomId);
+      }),
+
+    getImports: protectedProcedure
+      .input((val: unknown) => z.object({ projectId: z.number() }).parse(val))
+      .query(async ({ input }) => {
+        const { getProjectImports } = await import("./pdf-import");
+        return await getProjectImports(input.projectId);
+      }),
+  }),
 });
 
 export type AppRouter = typeof appRouter;
