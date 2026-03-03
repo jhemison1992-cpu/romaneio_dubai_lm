@@ -3,7 +3,7 @@ import SignatureCanvas from "react-signature-canvas";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { X, Pen } from "lucide-react";
-import QRCode from "qrcode.react";
+import { QRCodeSVG } from "qrcode.react";
 
 interface SignatureWithQRCodeProps {
   isOpen: boolean;
@@ -83,12 +83,11 @@ export function SignatureWithQRCode({
             <div className="border-t pt-4 mt-4">
               <p className="text-xs text-gray-500 mb-3">Código de Verificação</p>
               <div ref={qrRef} className="flex justify-center">
-                <QRCode
+                <QRCodeSVG
                   value={qrData}
                   size={150}
                   level="H"
                   includeMargin={true}
-                  renderAs="canvas"
                 />
               </div>
             </div>

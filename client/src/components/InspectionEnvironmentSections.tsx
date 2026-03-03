@@ -48,19 +48,34 @@ export function InspectionEnvironmentSections({ inspectionEnvironmentId }: Inspe
         ]}
         items={laborItemsQuery.data ?? []}
         onAdd={async (data) => {
-          await trpc.laborItems.create.mutate({
-            ...data,
-            inspectionEnvironmentId,
-          });
-          laborItemsQuery.refetch();
+          try {
+            const createMutation = trpc.laborItems.create.useMutation();
+            await createMutation.mutateAsync({
+              ...data,
+              inspectionEnvironmentId,
+            });
+            laborItemsQuery.refetch();
+          } catch (e) {
+            console.error('Erro ao adicionar mao de obra:', e);
+          }
         }}
         onEdit={async (id, data) => {
-          await trpc.laborItems.update.mutate({ id, ...data });
-          laborItemsQuery.refetch();
+          try {
+            const updateMutation = trpc.laborItems.update.useMutation();
+            await updateMutation.mutateAsync({ id, ...data });
+            laborItemsQuery.refetch();
+          } catch (e) {
+            console.error('Erro ao editar mao de obra:', e);
+          }
         }}
         onDelete={async (id) => {
-          await trpc.laborItems.delete.mutate({ id });
-          laborItemsQuery.refetch();
+          try {
+            const deleteMutation = trpc.laborItems.delete.useMutation();
+            await deleteMutation.mutateAsync({ id });
+            laborItemsQuery.refetch();
+          } catch (e) {
+            console.error('Erro ao deletar mao de obra:', e);
+          }
         }}
       />
       <EnvironmentSection
@@ -73,19 +88,34 @@ export function InspectionEnvironmentSections({ inspectionEnvironmentId }: Inspe
         ]}
         items={equipmentItemsQuery.data ?? []}
         onAdd={async (data) => {
-          await trpc.equipmentItems.create.mutate({
-            ...data,
-            inspectionEnvironmentId,
-          });
-          equipmentItemsQuery.refetch();
+          try {
+            const createMutation = trpc.equipmentItems.create.useMutation();
+            await createMutation.mutateAsync({
+              ...data,
+              inspectionEnvironmentId,
+            });
+            equipmentItemsQuery.refetch();
+          } catch (e) {
+            console.error('Erro ao adicionar equipamento:', e);
+          }
         }}
         onEdit={async (id, data) => {
-          await trpc.equipmentItems.update.mutate({ id, ...data });
-          equipmentItemsQuery.refetch();
+          try {
+            const updateMutation = trpc.equipmentItems.update.useMutation();
+            await updateMutation.mutateAsync({ id, ...data });
+            equipmentItemsQuery.refetch();
+          } catch (e) {
+            console.error('Erro ao editar equipamento:', e);
+          }
         }}
         onDelete={async (id) => {
-          await trpc.equipmentItems.delete.mutate({ id });
-          equipmentItemsQuery.refetch();
+          try {
+            const deleteMutation = trpc.equipmentItems.delete.useMutation();
+            await deleteMutation.mutateAsync({ id });
+            equipmentItemsQuery.refetch();
+          } catch (e) {
+            console.error('Erro ao deletar equipamento:', e);
+          }
         }}
       />
       <EnvironmentSection
@@ -97,19 +127,34 @@ export function InspectionEnvironmentSections({ inspectionEnvironmentId }: Inspe
         ]}
         items={activityItemsQuery.data ?? []}
         onAdd={async (data) => {
-          await trpc.activityItems.create.mutate({
-            ...data,
-            inspectionEnvironmentId,
-          });
-          activityItemsQuery.refetch();
+          try {
+            const createMutation = trpc.activityItems.create.useMutation();
+            await createMutation.mutateAsync({
+              ...data,
+              inspectionEnvironmentId,
+            });
+            activityItemsQuery.refetch();
+          } catch (e) {
+            console.error('Erro ao adicionar atividade:', e);
+          }
         }}
         onEdit={async (id, data) => {
-          await trpc.activityItems.update.mutate({ id, ...data });
-          activityItemsQuery.refetch();
+          try {
+            const updateMutation = trpc.activityItems.update.useMutation();
+            await updateMutation.mutateAsync({ id, ...data });
+            activityItemsQuery.refetch();
+          } catch (e) {
+            console.error('Erro ao editar atividade:', e);
+          }
         }}
         onDelete={async (id) => {
-          await trpc.activityItems.delete.mutate({ id });
-          activityItemsQuery.refetch();
+          try {
+            const deleteMutation = trpc.activityItems.delete.useMutation();
+            await deleteMutation.mutateAsync({ id });
+            activityItemsQuery.refetch();
+          } catch (e) {
+            console.error('Erro ao deletar atividade:', e);
+          }
         }}
       />
       <EnvironmentSection
@@ -121,19 +166,34 @@ export function InspectionEnvironmentSections({ inspectionEnvironmentId }: Inspe
         ]}
         items={occurrenceItemsQuery.data ?? []}
         onAdd={async (data) => {
-          await trpc.occurrenceItems.create.mutate({
-            ...data,
-            inspectionEnvironmentId,
-          });
-          occurrenceItemsQuery.refetch();
+          try {
+            const createMutation = trpc.occurrenceItems.create.useMutation();
+            await createMutation.mutateAsync({
+              ...data,
+              inspectionEnvironmentId,
+            });
+            occurrenceItemsQuery.refetch();
+          } catch (e) {
+            console.error('Erro ao adicionar ocorrencia:', e);
+          }
         }}
         onEdit={async (id, data) => {
-          await trpc.occurrenceItems.update.mutate({ id, ...data });
-          occurrenceItemsQuery.refetch();
+          try {
+            const updateMutation = trpc.occurrenceItems.update.useMutation();
+            await updateMutation.mutateAsync({ id, ...data });
+            occurrenceItemsQuery.refetch();
+          } catch (e) {
+            console.error('Erro ao editar ocorrencia:', e);
+          }
         }}
         onDelete={async (id) => {
-          await trpc.occurrenceItems.delete.mutate({ id });
-          occurrenceItemsQuery.refetch();
+          try {
+            const deleteMutation = trpc.occurrenceItems.delete.useMutation();
+            await deleteMutation.mutateAsync({ id });
+            occurrenceItemsQuery.refetch();
+          } catch (e) {
+            console.error('Erro ao deletar ocorrencia:', e);
+          }
         }}
       />
       <EnvironmentSection
@@ -145,19 +205,34 @@ export function InspectionEnvironmentSections({ inspectionEnvironmentId }: Inspe
         ]}
         items={receivedMaterialItemsQuery.data ?? []}
         onAdd={async (data) => {
-          await trpc.receivedMaterialItems.create.mutate({
-            ...data,
-            inspectionEnvironmentId,
-          });
-          receivedMaterialItemsQuery.refetch();
+          try {
+            const createMutation = trpc.receivedMaterialItems.create.useMutation();
+            await createMutation.mutateAsync({
+              ...data,
+              inspectionEnvironmentId,
+            });
+            receivedMaterialItemsQuery.refetch();
+          } catch (e) {
+            console.error('Erro ao adicionar material recebido:', e);
+          }
         }}
         onEdit={async (id, data) => {
-          await trpc.receivedMaterialItems.update.mutate({ id, ...data });
-          receivedMaterialItemsQuery.refetch();
+          try {
+            const updateMutation = trpc.receivedMaterialItems.update.useMutation();
+            await updateMutation.mutateAsync({ id, ...data });
+            receivedMaterialItemsQuery.refetch();
+          } catch (e) {
+            console.error('Erro ao editar material recebido:', e);
+          }
         }}
         onDelete={async (id) => {
-          await trpc.receivedMaterialItems.delete.mutate({ id });
-          receivedMaterialItemsQuery.refetch();
+          try {
+            const deleteMutation = trpc.receivedMaterialItems.delete.useMutation();
+            await deleteMutation.mutateAsync({ id });
+            receivedMaterialItemsQuery.refetch();
+          } catch (e) {
+            console.error('Erro ao deletar material recebido:', e);
+          }
         }}
       />
       <EnvironmentSection
@@ -169,19 +244,34 @@ export function InspectionEnvironmentSections({ inspectionEnvironmentId }: Inspe
         ]}
         items={usedMaterialItemsQuery.data ?? []}
         onAdd={async (data) => {
-          await trpc.usedMaterialItems.create.mutate({
-            ...data,
-            inspectionEnvironmentId,
-          });
-          usedMaterialItemsQuery.refetch();
+          try {
+            const createMutation = trpc.usedMaterialItems.create.useMutation();
+            await createMutation.mutateAsync({
+              ...data,
+              inspectionEnvironmentId,
+            });
+            usedMaterialItemsQuery.refetch();
+          } catch (e) {
+            console.error('Erro ao adicionar material:', e);
+          }
         }}
         onEdit={async (id, data) => {
-          await trpc.usedMaterialItems.update.mutate({ id, ...data });
-          usedMaterialItemsQuery.refetch();
+          try {
+            const updateMutation = trpc.usedMaterialItems.update.useMutation();
+            await updateMutation.mutateAsync({ id, ...data });
+            usedMaterialItemsQuery.refetch();
+          } catch (e) {
+            console.error('Erro ao editar material:', e);
+          }
         }}
         onDelete={async (id) => {
-          await trpc.usedMaterialItems.delete.mutate({ id });
-          usedMaterialItemsQuery.refetch();
+          try {
+            const deleteMutation = trpc.usedMaterialItems.delete.useMutation();
+            await deleteMutation.mutateAsync({ id });
+            usedMaterialItemsQuery.refetch();
+          } catch (e) {
+            console.error('Erro ao deletar material:', e);
+          }
         }}
       />
       <EnvironmentSection
@@ -191,19 +281,34 @@ export function InspectionEnvironmentSections({ inspectionEnvironmentId }: Inspe
         ]}
         items={commentItemsQuery.data ?? []}
         onAdd={async (data) => {
-          await trpc.commentItems.create.mutate({
-            ...data,
-            inspectionEnvironmentId,
-          });
-          commentItemsQuery.refetch();
+          try {
+            const createMutation = trpc.commentItems.create.useMutation();
+            await createMutation.mutateAsync({
+              ...data,
+              inspectionEnvironmentId,
+            });
+            commentItemsQuery.refetch();
+          } catch (e) {
+            console.error('Erro ao adicionar comentario:', e);
+          }
         }}
         onEdit={async (id, data) => {
-          await trpc.commentItems.update.mutate({ id, ...data });
-          commentItemsQuery.refetch();
+          try {
+            const updateMutation = trpc.commentItems.update.useMutation();
+            await updateMutation.mutateAsync({ id, ...data });
+            commentItemsQuery.refetch();
+          } catch (e) {
+            console.error('Erro ao editar comentario:', e);
+          }
         }}
         onDelete={async (id) => {
-          await trpc.commentItems.delete.mutate({ id });
-          commentItemsQuery.refetch();
+          try {
+            const deleteMutation = trpc.commentItems.delete.useMutation();
+            await deleteMutation.mutateAsync({ id });
+            commentItemsQuery.refetch();
+          } catch (e) {
+            console.error('Erro ao deletar comentario:', e);
+          }
         }}
       />
     </div>

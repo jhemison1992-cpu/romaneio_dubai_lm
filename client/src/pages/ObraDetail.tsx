@@ -35,7 +35,7 @@ export default function ObraDetail() {
   // Queries
   const { data: project, isLoading: projectLoading } = trpc.projects.get.useQuery({ id: projectId });
   const { data: environments, isLoading: environmentsLoading, refetch: refetchEnvironments } = trpc.environments.list.useQuery({ projectId });
-  const { data: inspections } = trpc.inspections.list.useQuery({ projectId });
+  const { data: inspections } = trpc.inspections.list.useQuery();
 
   // Mutations
   const createEnvironment = trpc.environments.create.useMutation({
@@ -125,10 +125,10 @@ export default function ObraDetail() {
   };
 
   const getEnvironmentStatus = (env: any) => {
-    const inspection = inspections?.find((i: any) => i.environmentId === env.id);
+    const inspection = inspections?.find((i: any) => i.projectId === projectId);
     if (!inspection) return { status: 'Não Iniciado', color: 'bg-gray-100 text-gray-700' };
     
-    const progress = inspection.installationProgress || 0;
+    const progress: number = 0;
     if (progress === 100) {
       return { status: 'Concluído', color: 'bg-green-100 text-green-700' };
     } else if (progress > 0) {

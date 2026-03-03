@@ -11,7 +11,6 @@ import ObraDetail from "./pages/ObraDetail";
 import Inspections from "./pages/Inspections";
 import InspectionDetail from "./pages/InspectionDetail";
 import Users from "./pages/Users";
-import Pricing from "./pages/Pricing";
 import BillingSuccess from "./pages/BillingSuccess";
 import Billing from "./pages/Billing";
 import CompanySignup from "./pages/CompanySignup";
@@ -19,7 +18,6 @@ import CompanyLogin from "./pages/CompanyLogin";
 import CompanyUsers from "./pages/CompanyUsers";
 import Checkout from "./pages/Checkout";
 import Dashboard from "./pages/Dashboard";
-import SubscriptionManagement from "./pages/SubscriptionManagement";
 import Landing from "./pages/Landing";
 import AppLayout from "./components/AppLayout";
 import DeliveryReceipt from "./pages/DeliveryReceipt";
@@ -80,7 +78,7 @@ function Router() {
           <Users />
         </AppLayout>
       )} />
-      <Route path="/pricing" component={Pricing} />
+
       <Route path="/billing/success" component={BillingSuccess} />
       <Route path="/billing" component={() => (
         <AppLayout>
@@ -115,11 +113,7 @@ function Router() {
           <Users />
         </AppLayout>
       )} />
-      <Route path="/subscription" component={() => (
-        <AppLayout>
-          <SubscriptionManagement />
-        </AppLayout>
-      )} />
+
       <Route path="/404" component={NotFound} />
       <Route component={NotFound} />
     </Switch>

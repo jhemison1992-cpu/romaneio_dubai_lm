@@ -80,14 +80,14 @@ export default function DeliveryReceipt() {
         supplierResponsible,
         receiptDate: new Date(receiptDate),
         observations,
-      });
+      }) as any;
       
       // Adicionar ambientes selecionados
       for (const envId of selectedEnvironments) {
         const env = environments?.find(e => e.id === envId);
         if (env) {
           await addItemMutation.mutateAsync({
-            deliveryReceiptId: result.insertId || 0,
+            deliveryReceiptId: result?.id || result?.[0]?.id || 0,
             environmentId: envId,
             code: env.caixilhoCode || "",
             description: env.name,

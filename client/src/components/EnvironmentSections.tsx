@@ -39,18 +39,18 @@ export const EnvironmentSections: React.FC<EnvironmentSectionsProps> = ({
         ]}
         items={laborItemsQueries[envIndex]?.data || []}
         onAdd={async (data) => {
-          await trpc.laborItems.create.mutate({
+          const createMutation = trpc.laborItems.create.useMutation(); await createMutation.mutateAsync({
             ...data,
             inspectionEnvironmentId: environmentId,
           });
           laborItemsQueries[envIndex]?.refetch();
         }}
         onEdit={async (id, data) => {
-          await trpc.laborItems.update.mutate({ id, ...data });
+          const updateMutation = trpc.laborItems.update.useMutation(); await updateMutation.mutateAsync({ id, ...data });
           laborItemsQueries[envIndex]?.refetch();
         }}
         onDelete={async (id) => {
-          await trpc.laborItems.delete.mutate({ id });
+          const deleteMutation = trpc.laborItems.delete.useMutation(); await deleteMutation.mutateAsync({ id });
           laborItemsQueries[envIndex]?.refetch();
         }}
       />
@@ -65,18 +65,18 @@ export const EnvironmentSections: React.FC<EnvironmentSectionsProps> = ({
         ]}
         items={equipmentItemsQueries[envIndex]?.data || []}
         onAdd={async (data) => {
-          await trpc.equipmentItems.create.mutate({
+          const createMutation = trpc.equipmentItems.create.useMutation(); await createMutation.mutateAsync({
             ...data,
             inspectionEnvironmentId: environmentId,
           });
           equipmentItemsQueries[envIndex]?.refetch();
         }}
         onEdit={async (id, data) => {
-          await trpc.equipmentItems.update.mutate({ id, ...data });
+          const updateMutation = trpc.equipmentItems.update.useMutation(); await updateMutation.mutateAsync({ id, ...data });
           equipmentItemsQueries[envIndex]?.refetch();
         }}
         onDelete={async (id) => {
-          await trpc.equipmentItems.delete.mutate({ id });
+          const deleteMutation = trpc.equipmentItems.delete.useMutation(); await deleteMutation.mutateAsync({ id });
           equipmentItemsQueries[envIndex]?.refetch();
         }}
       />
@@ -90,18 +90,18 @@ export const EnvironmentSections: React.FC<EnvironmentSectionsProps> = ({
         ]}
         items={activityItemsQueries[envIndex]?.data || []}
         onAdd={async (data) => {
-          await trpc.activityItems.create.mutate({
+          const createMutation = trpc.activityItems.create.useMutation(); await createMutation.mutateAsync({
             ...data,
             inspectionEnvironmentId: environmentId,
           });
           activityItemsQueries[envIndex]?.refetch();
         }}
         onEdit={async (id, data) => {
-          await trpc.activityItems.update.mutate({ id, ...data });
+          const updateMutation = trpc.activityItems.update.useMutation(); await updateMutation.mutateAsync({ id, ...data });
           activityItemsQueries[envIndex]?.refetch();
         }}
         onDelete={async (id) => {
-          await trpc.activityItems.delete.mutate({ id });
+          const deleteMutation = trpc.activityItems.delete.useMutation(); await deleteMutation.mutateAsync({ id });
           activityItemsQueries[envIndex]?.refetch();
         }}
       />
@@ -116,18 +116,18 @@ export const EnvironmentSections: React.FC<EnvironmentSectionsProps> = ({
         ]}
         items={occurrenceItemsQueries[envIndex]?.data || []}
         onAdd={async (data) => {
-          await trpc.occurrenceItems.create.mutate({
+          const createMutation = trpc.occurrenceItems.create.useMutation(); await createMutation.mutateAsync({
             ...data,
             inspectionEnvironmentId: environmentId,
           });
           occurrenceItemsQueries[envIndex]?.refetch();
         }}
         onEdit={async (id, data) => {
-          await trpc.occurrenceItems.update.mutate({ id, ...data });
+          const updateMutation = trpc.occurrenceItems.update.useMutation(); await updateMutation.mutateAsync({ id, ...data });
           occurrenceItemsQueries[envIndex]?.refetch();
         }}
         onDelete={async (id) => {
-          await trpc.occurrenceItems.delete.mutate({ id });
+          const deleteMutation = trpc.occurrenceItems.delete.useMutation(); await deleteMutation.mutateAsync({ id });
           occurrenceItemsQueries[envIndex]?.refetch();
         }}
       />
@@ -143,18 +143,18 @@ export const EnvironmentSections: React.FC<EnvironmentSectionsProps> = ({
         ]}
         items={receivedMaterialItemsQueries[envIndex]?.data || []}
         onAdd={async (data) => {
-          await trpc.receivedMaterialItems.create.mutate({
+          const createMutation = trpc.receivedMaterialItems.create.useMutation(); await createMutation.mutateAsync({
             ...data,
             inspectionEnvironmentId: environmentId,
           });
           receivedMaterialItemsQueries[envIndex]?.refetch();
         }}
         onEdit={async (id, data) => {
-          await trpc.receivedMaterialItems.update.mutate({ id, ...data });
+          const updateMutation = trpc.receivedMaterialItems.update.useMutation(); await updateMutation.mutateAsync({ id, ...data });
           receivedMaterialItemsQueries[envIndex]?.refetch();
         }}
         onDelete={async (id) => {
-          await trpc.receivedMaterialItems.delete.mutate({ id });
+          const deleteMutation = trpc.receivedMaterialItems.delete.useMutation(); await deleteMutation.mutateAsync({ id });
           receivedMaterialItemsQueries[envIndex]?.refetch();
         }}
       />
@@ -169,18 +169,18 @@ export const EnvironmentSections: React.FC<EnvironmentSectionsProps> = ({
         ]}
         items={usedMaterialItemsQueries[envIndex]?.data || []}
         onAdd={async (data) => {
-          await trpc.usedMaterialItems.create.mutate({
+          const createMutation = trpc.usedMaterialItems.create.useMutation(); await createMutation.mutateAsync({
             ...data,
             inspectionEnvironmentId: environmentId,
           });
           usedMaterialItemsQueries[envIndex]?.refetch();
         }}
         onEdit={async (id, data) => {
-          await trpc.usedMaterialItems.update.mutate({ id, ...data });
+          const updateMutation = trpc.usedMaterialItems.update.useMutation(); await updateMutation.mutateAsync({ id, ...data });
           usedMaterialItemsQueries[envIndex]?.refetch();
         }}
         onDelete={async (id) => {
-          await trpc.usedMaterialItems.delete.mutate({ id });
+          const deleteMutation = trpc.usedMaterialItems.delete.useMutation(); await deleteMutation.mutateAsync({ id });
           usedMaterialItemsQueries[envIndex]?.refetch();
         }}
       />
@@ -193,18 +193,18 @@ export const EnvironmentSections: React.FC<EnvironmentSectionsProps> = ({
         ]}
         items={commentItemsQueries[envIndex]?.data || []}
         onAdd={async (data) => {
-          await trpc.commentItems.create.mutate({
+          const createMutation = trpc.commentItems.create.useMutation(); await createMutation.mutateAsync({
             ...data,
             inspectionEnvironmentId: environmentId,
           });
           commentItemsQueries[envIndex]?.refetch();
         }}
         onEdit={async (id, data) => {
-          await trpc.commentItems.update.mutate({ id, ...data });
+          const updateMutation = trpc.commentItems.update.useMutation(); await updateMutation.mutateAsync({ id, ...data });
           commentItemsQueries[envIndex]?.refetch();
         }}
         onDelete={async (id) => {
-          await trpc.commentItems.delete.mutate({ id });
+          const deleteMutation = trpc.commentItems.delete.useMutation(); await deleteMutation.mutateAsync({ id });
           commentItemsQueries[envIndex]?.refetch();
         }}
       />
