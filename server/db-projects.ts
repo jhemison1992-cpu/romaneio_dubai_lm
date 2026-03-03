@@ -142,3 +142,190 @@ export async function deleteEnvironment(id: number) {
   
   await db.delete(environments).where(eq(environments.id, id));
 }
+
+
+// ===== PROJECT REPORTS =====
+
+export async function createProjectReport(data: {
+  projectId: number;
+  companyId: number;
+  title: string;
+  inspectionDate: string;
+  responsibleName: string;
+  responsibleRole?: string;
+  observations?: string;
+  generalConformity?: "ok" | "not_ok" | "partial";
+}) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  const { projectReports } = await import("../drizzle/schema");
+  
+  const result = await db.insert(projectReports).values({
+    projectId: data.projectId,
+    companyId: data.companyId,
+    title: data.title,
+    inspectionDate: new Date(data.inspectionDate),
+    responsibleName: data.responsibleName,
+    responsibleRole: data.responsibleRole,
+    observations: data.observations,
+    generalConformity: data.generalConformity || "partial",
+  });
+  
+  return result[0].insertId;
+}
+
+export async function getProjectReports(projectId: number) {
+  const db = await getDb();
+  if (!db) return [];
+  const { projectReports } = await import("../drizzle/schema");
+  const { eq } = await import("drizzle-orm");
+  
+  return await db
+    .select()
+    .from(projectReports)
+    .where(eq(projectReports.projectId, projectId))
+    .orderBy(projectReports.inspectionDate);
+}
+
+export async function getProjectReportById(id: number) {
+  const db = await getDb();
+  if (!db) return null;
+  const { projectReports } = await import("../drizzle/schema");
+  const { eq } = await import("drizzle-orm");
+  
+  const result = await db
+    .select()
+    .from(projectReports)
+    .where(eq(projectReports.id, id));
+  
+  return result[0] || null;
+}
+
+export async function updateProjectReport(id: number, data: {
+  title?: string;
+  inspectionDate?: string;
+  responsibleName?: string;
+  responsibleRole?: string;
+  observations?: string;
+  generalConformity?: "ok" | "not_ok" | "partial";
+  responsibleSignature?: string;
+  aluminicSignature?: string;
+  status?: "draft" | "completed" | "approved";
+}) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  const { projectReports } = await import("../drizzle/schema");
+  const { eq } = await import("drizzle-orm");
+  
+  const updateData: any = {};
+  if (data.title) updateData.title = data.title;
+  if (data.inspectionDate) updateData.inspectionDate = new Date(data.inspectionDate);
+  if (data.responsibleName) updateData.responsibleName = data.responsibleName;
+  if (data.responsibleRole) updateData.responsibleRole = data.responsibleRole;
+  if (data.observations) updateData.observations = data.observations;
+  if (data.generalConformity) updateData.generalConformity = data.generalConformity;
+  if (data.responsibleSignature) updateData.responsibleSignature = data.responsibleSignature;
+  if (data.aluminicSignature) updateData.aluminicSignature = data.aluminicSignature;
+  if (data.status) updateData.status = data.status;
+  
+  await db.update(projectReports).set(updateData).where(eq(projectReports.id, id));
+}
+
+export async function deleteProjectReport(id: number) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  const { projectReports } = await import("../drizzle/schema");
+  const { eq } = await import("drizzle-orm");
+  
+  await db.delete(projectReports).where(eq(projectReports.id, id));
+}
+
+// ===== PROJECT REPORT ITEMS =====
+
+export async function addReportItem(data: {
+  reportId: number;
+  environmentId: number;
+  name: string;
+  caixilhoCode: string;
+  caixilhoType: string;
+  quantity: number;
+  evolutionStatus?: string;
+  conformity?: "ok" | "not_ok" | "pending";
+  observations?: string;
+  defects?: string;
+  photoUrls?: string[];
+  photoKeys?: string[];
+}) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  const { projectReportItems } = await import("../drizzle/schema");
+  
+  const result = await db.insert(projectReportItems).values({
+    reportId: data.reportId,
+    environmentId: data.environmentId,
+    name: data.name,
+    caixilhoCode: data.caixilhoCode,
+    caixilhoType: data.caixilhoType,
+    quantity: data.quantity,
+    evolutionStatus: data.evolutionStatus,
+    conformity: data.conformity || "pending",
+    observations: data.observations,
+    defects: data.defects,
+    photoUrls: data.photoUrls ? JSON.stringify(data.photoUrls) : null,
+    photoKeys: data.photoKeys ? JSON.stringify(data.photoKeys) : null,
+  });
+  
+  return result[0].insertId;
+}
+
+export async function getReportItems(reportId: number) {
+  const db = await getDb();
+  if (!db) return [];
+  const { projectReportItems } = await import("../drizzle/schema");
+  const { eq } = await import("drizzle-orm");
+  
+  const items = await db
+    .select()
+    .from(projectReportItems)
+    .where(eq(projectReportItems.reportId, reportId));
+  
+  // Parse JSON fields
+  return items.map(item => ({
+    ...item,
+    photoUrls: item.photoUrls ? JSON.parse(item.photoUrls) : [],
+    photoKeys: item.photoKeys ? JSON.parse(item.photoKeys) : [],
+  }));
+}
+
+export async function updateReportItem(id: number, data: {
+  evolutionStatus?: string;
+  conformity?: "ok" | "not_ok" | "pending";
+  observations?: string;
+  defects?: string;
+  photoUrls?: string[];
+  photoKeys?: string[];
+}) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  const { projectReportItems } = await import("../drizzle/schema");
+  const { eq } = await import("drizzle-orm");
+  
+  const updateData: any = {};
+  if (data.evolutionStatus) updateData.evolutionStatus = data.evolutionStatus;
+  if (data.conformity) updateData.conformity = data.conformity;
+  if (data.observations) updateData.observations = data.observations;
+  if (data.defects) updateData.defects = data.defects;
+  if (data.photoUrls) updateData.photoUrls = JSON.stringify(data.photoUrls);
+  if (data.photoKeys) updateData.photoKeys = JSON.stringify(data.photoKeys);
+  
+  await db.update(projectReportItems).set(updateData).where(eq(projectReportItems.id, id));
+}
+
+export async function deleteReportItem(id: number) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  const { projectReportItems } = await import("../drizzle/schema");
+  const { eq } = await import("drizzle-orm");
+  
+  await db.delete(projectReportItems).where(eq(projectReportItems.id, id));
+}

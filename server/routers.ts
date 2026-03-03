@@ -1193,6 +1193,120 @@ export const appRouter = router({
         return { success: true };
       }),
   }),
+  
+  projectReports: router({
+    list: publicProcedure
+      .input((val: unknown) => z.object({ projectId: z.number() }).parse(val))
+      .query(async ({ input }) => {
+        const { getProjectReports } = await import("./db-projects");
+        return await getProjectReports(input.projectId);
+      }),
+    
+    get: publicProcedure
+      .input((val: unknown) => z.object({ id: z.number() }).parse(val))
+      .query(async ({ input }) => {
+        const { getProjectReportById } = await import("./db-projects");
+        return await getProjectReportById(input.id);
+      }),
+    
+    create: publicProcedure
+      .input((val: unknown) => z.object({
+        projectId: z.number(),
+        companyId: z.number(),
+        title: z.string(),
+        inspectionDate: z.string(),
+        responsibleName: z.string(),
+        responsibleRole: z.string().optional(),
+        observations: z.string().optional(),
+        generalConformity: z.enum(["ok", "not_ok", "partial"]).optional(),
+      }).parse(val))
+      .mutation(async ({ input }) => {
+        const { createProjectReport } = await import("./db-projects");
+        const id = await createProjectReport(input);
+        return { id };
+      }),
+    
+    update: publicProcedure
+      .input((val: unknown) => z.object({
+        id: z.number(),
+        title: z.string().optional(),
+        inspectionDate: z.string().optional(),
+        responsibleName: z.string().optional(),
+        responsibleRole: z.string().optional(),
+        observations: z.string().optional(),
+        generalConformity: z.enum(["ok", "not_ok", "partial"]).optional(),
+        responsibleSignature: z.string().optional(),
+        aluminicSignature: z.string().optional(),
+        status: z.enum(["draft", "completed", "approved"]).optional(),
+      }).parse(val))
+      .mutation(async ({ input }) => {
+        const { id, ...data } = input;
+        const { updateProjectReport } = await import("./db-projects");
+        await updateProjectReport(id, data);
+        return { success: true };
+      }),
+    
+    delete: publicProcedure
+      .input((val: unknown) => z.object({ id: z.number() }).parse(val))
+      .mutation(async ({ input }) => {
+        const { deleteProjectReport } = await import("./db-projects");
+        await deleteProjectReport(input.id);
+        return { success: true };
+      }),
+    
+    addItem: publicProcedure
+      .input((val: unknown) => z.object({
+        reportId: z.number(),
+        environmentId: z.number(),
+        name: z.string(),
+        caixilhoCode: z.string(),
+        caixilhoType: z.string(),
+        quantity: z.number(),
+        evolutionStatus: z.string().optional(),
+        conformity: z.enum(["ok", "not_ok", "pending"]).optional(),
+        observations: z.string().optional(),
+        defects: z.string().optional(),
+        photoUrls: z.array(z.string()).optional(),
+        photoKeys: z.array(z.string()).optional(),
+      }).parse(val))
+      .mutation(async ({ input }) => {
+        const { addReportItem } = await import("./db-projects");
+        const id = await addReportItem(input);
+        return { id };
+      }),
+    
+    getItems: publicProcedure
+      .input((val: unknown) => z.object({ reportId: z.number() }).parse(val))
+      .query(async ({ input }) => {
+        const { getReportItems } = await import("./db-projects");
+        return await getReportItems(input.reportId);
+      }),
+    
+    updateItem: publicProcedure
+      .input((val: unknown) => z.object({
+        id: z.number(),
+        evolutionStatus: z.string().optional(),
+        conformity: z.enum(["ok", "not_ok", "pending"]).optional(),
+        observations: z.string().optional(),
+        defects: z.string().optional(),
+        photoUrls: z.array(z.string()).optional(),
+        photoKeys: z.array(z.string()).optional(),
+      }).parse(val))
+      .mutation(async ({ input }) => {
+        const { id, ...data } = input;
+        const { updateReportItem } = await import("./db-projects");
+        await updateReportItem(id, data);
+        return { success: true };
+      }),
+    
+    deleteItem: publicProcedure
+      .input((val: unknown) => z.object({ id: z.number() }).parse(val))
+      .mutation(async ({ input }) => {
+        const { deleteReportItem } = await import("./db-projects");
+        await deleteReportItem(input.id);
+        return { success: true };
+      }),
+  }),
 });
 
 export type AppRouter = typeof appRouter;

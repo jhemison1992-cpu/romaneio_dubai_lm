@@ -444,3 +444,69 @@ export const deliveryReceiptItems = mysqlTable("delivery_receipt_items", {
 
 export type DeliveryReceiptItem = typeof deliveryReceiptItems.$inferSelect;
 export type InsertDeliveryReceiptItem = typeof deliveryReceiptItems.$inferInsert;
+
+
+/**
+ * Relatórios de inspeção por obra
+ */
+export const projectReports = mysqlTable("project_reports", {
+  id: int("id").autoincrement().primaryKey(),
+  projectId: int("project_id").notNull().references(() => projects.id, { onDelete: "cascade" }),
+  companyId: int("company_id").notNull().references(() => companies.id, { onDelete: "cascade" }),
+  
+  // Dados do relatório
+  title: varchar("title", { length: 255 }).notNull(),
+  inspectionDate: date("inspection_date").notNull(),
+  responsibleName: varchar("responsible_name", { length: 255 }).notNull(),
+  responsibleRole: varchar("responsible_role", { length: 255 }),
+  
+  // Observações e conformidade
+  observations: text("observations"),
+  generalConformity: mysqlEnum("general_conformity", ["ok", "not_ok", "partial"]).default("partial").notNull(),
+  
+  // Assinaturas
+  responsibleSignature: text("responsible_signature"), // base64
+  aluminicSignature: text("aluminic_signature"), // base64
+  responsiblePhotoUrl: varchar("responsible_photo_url", { length: 1000 }),
+  aluminicPhotoUrl: varchar("aluminic_photo_url", { length: 1000 }),
+  
+  // Status
+  status: mysqlEnum("report_status", ["draft", "completed", "approved"]).default("draft").notNull(),
+  
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type ProjectReport = typeof projectReports.$inferSelect;
+export type InsertProjectReport = typeof projectReports.$inferInsert;
+
+/**
+ * Itens de relatório (ambientes/caixilhos no relatório)
+ */
+export const projectReportItems = mysqlTable("project_report_items", {
+  id: int("id").autoincrement().primaryKey(),
+  reportId: int("report_id").notNull().references(() => projectReports.id, { onDelete: "cascade" }),
+  environmentId: int("environment_id").notNull().references(() => environments.id, { onDelete: "cascade" }),
+  
+  // Dados do ambiente
+  name: varchar("name", { length: 255 }).notNull(),
+  caixilhoCode: varchar("caixilho_code", { length: 100 }).notNull(),
+  caixilhoType: varchar("caixilho_type", { length: 100 }).notNull(),
+  quantity: int("quantity").default(1).notNull(),
+  
+  // Inspeção
+  evolutionStatus: varchar("evolution_status", { length: 255 }), // Evolução da instalação
+  conformity: mysqlEnum("item_conformity", ["ok", "not_ok", "pending"]).default("pending").notNull(),
+  observations: text("observations"),
+  defects: text("defects"),
+  
+  // Fotos do ambiente
+  photoUrls: text("photo_urls"), // JSON array de URLs
+  photoKeys: text("photo_keys"), // JSON array de chaves S3
+  
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type ProjectReportItem = typeof projectReportItems.$inferSelect;
+export type InsertProjectReportItem = typeof projectReportItems.$inferInsert;

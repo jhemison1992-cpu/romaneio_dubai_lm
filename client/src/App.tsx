@@ -23,6 +23,7 @@ import SubscriptionManagement from "./pages/SubscriptionManagement";
 import Landing from "./pages/Landing";
 import AppLayout from "./components/AppLayout";
 import DeliveryReceipt from "./pages/DeliveryReceipt";
+import ProjectReport from "./pages/ProjectReport";
 
 function Router() {
   return (
@@ -61,6 +62,11 @@ function Router() {
       <Route path="/delivery-receipt/:projectId" component={() => (
         <AppLayout currentPage="obras">
           <DeliveryReceipt />
+        </AppLayout>
+      )} />
+      <Route path="/report/:id" component={() => (
+        <AppLayout currentPage="obras">
+          <ProjectReport />
         </AppLayout>
       )} />
       <Route path="/users" component={() => (

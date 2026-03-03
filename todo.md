@@ -1217,3 +1217,16 @@
 - [x] Adicionar suporte a campos opcionais (startDate, endDate, arquivos)
 - [x] Converter strings de data para objetos Date
 - [x] Todos os 37 testes passando após correção
+
+
+## Sistema de Relatórios por Obra
+- [x] Criar tabela de relatórios no banco de dados (drizzle schema)
+- [x] Adicionar campos: obra_id, data_inspeção, responsável, observações, conformidade
+- [x] Implementar procedures tRPC para CRUD de relatórios
+- [x] Criar página de relatório com formulário simplificado
+- [x] Integrar dados de obras, ambientes e fotos
+- [x] Implementar galeria de fotos no relatório
+- [x] Adicionar campos de assinatura (responsável obra, responsável ALUMINC)
+- [ ] Implementar geração de PDF do relatório
+- [ ] Criar página de listagem de relatórios por obra
+- [ ] Testar fluxo completo de geração de relatório
