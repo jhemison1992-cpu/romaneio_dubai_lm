@@ -1210,3 +1210,10 @@
 - [x] Adicionar projectId ao input da procedure create
 - [x] Corrigir testes de inspection environments
 - [x] Todos os 37 testes passando após correção
+
+
+## Correção de Erro de Criação de Ambientes
+- [x] Corrigir função createEnvironment para mapear dados corretamente
+- [x] Adicionar suporte a campos opcionais (startDate, endDate, arquivos)
+- [x] Converter strings de data para objetos Date
+- [x] Todos os 37 testes passando após correção

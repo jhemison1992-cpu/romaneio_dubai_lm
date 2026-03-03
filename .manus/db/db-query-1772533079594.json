@@ -1,0 +1,11 @@
+{
+  "query": "SELECT id, name FROM projects WHERE id = 90001 OR id IN (SELECT DISTINCT project_id FROM environments LIMIT 5);",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway03.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 2RJ6pkiYcWrkG7s.7677514b54b3 --database AdJ4NUusdiWEA7xpHs45nc --execute SELECT id, name FROM projects WHERE id = 90001 OR id IN (SELECT DISTINCT project_id FROM environments LIMIT 5);",
+  "rows": [],
+  "messages": [
+    "90001\t\tDUBAI LM EMPREENDIMENTOS IMOBILIÁRIOS SPE LTDA"
+  ],
+  "stdout": "id\tname\n90001\t\tDUBAI LM EMPREENDIMENTOS IMOBILIÁRIOS SPE LTDA\n",
+  "stderr": "",
+  "execution_time_ms": 59
+}

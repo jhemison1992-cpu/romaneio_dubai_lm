@@ -92,12 +92,33 @@ export async function createEnvironment(data: {
   caixilhoCode: string;
   caixilhoType: string;
   quantity: number;
+  startDate?: string;
+  endDate?: string;
+  plantaFileKey?: string;
+  plantaFileUrl?: string;
+  projectFileKey?: string;
+  projectFileUrl?: string;
 }) {
   const db = await getDb();
   if (!db) throw new Error("Database not available");
   const { environments } = await import("../drizzle/schema");
   
-  const result = await db.insert(environments).values(data);
+  // Map the data to match the schema field names
+  const insertData = {
+    projectId: data.projectId,
+    name: data.name,
+    caixilhoCode: data.caixilhoCode,
+    caixilhoType: data.caixilhoType,
+    quantity: data.quantity,
+    startDate: data.startDate ? new Date(data.startDate) : undefined,
+    endDate: data.endDate ? new Date(data.endDate) : undefined,
+    plantaFileKey: data.plantaFileKey,
+    plantaFileUrl: data.plantaFileUrl,
+    projectFileKey: data.projectFileKey,
+    projectFileUrl: data.projectFileUrl,
+  };
+  
+  const result = await db.insert(environments).values(insertData);
   return result[0].insertId;
 }
 

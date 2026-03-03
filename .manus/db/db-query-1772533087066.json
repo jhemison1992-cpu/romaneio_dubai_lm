@@ -1,0 +1,30 @@
+{
+  "query": "SHOW CREATE TABLE environments;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway03.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 2RJ6pkiYcWrkG7s.7677514b54b3 --database AdJ4NUusdiWEA7xpHs45nc --execute SHOW CREATE TABLE environments;",
+  "rows": [
+    {
+      "Table": "environments",
+      "Create Table": "CREATE TABLE `environments` ("
+    }
+  ],
+  "messages": [
+    "  `id` int NOT NULL AUTO_INCREMENT,",
+    "  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,",
+    "  `caixilho_code` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,",
+    "  `caixilho_type` text COLLATE utf8mb4_unicode_ci NOT NULL,",
+    "  `quantity` int NOT NULL DEFAULT '1',",
+    "  `createdAt` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,",
+    "  `project_id` int NOT NULL,",
+    "  `planta_file_key` varchar(500) COLLATE utf8mb4_unicode_ci DEFAULT NULL,",
+    "  `planta_file_url` varchar(1000) COLLATE utf8mb4_unicode_ci DEFAULT NULL,",
+    "  `project_file_key` varchar(500) COLLATE utf8mb4_unicode_ci DEFAULT NULL,",
+    "  `project_file_url` varchar(1000) COLLATE utf8mb4_unicode_ci DEFAULT NULL,",
+    "  `start_date` date DEFAULT NULL,",
+    "  `end_date` date DEFAULT NULL,",
+    "  PRIMARY KEY (`id`) /*T![clustered_index] CLUSTERED */",
+    ") ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci AUTO_INCREMENT=210001"
+  ],
+  "stdout": "Table\tCreate Table\nenvironments\tCREATE TABLE `environments` (\n  `id` int NOT NULL AUTO_INCREMENT,\n  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,\n  `caixilho_code` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,\n  `caixilho_type` text COLLATE utf8mb4_unicode_ci NOT NULL,\n  `quantity` int NOT NULL DEFAULT '1',\n  `createdAt` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,\n  `project_id` int NOT NULL,\n  `planta_file_key` varchar(500) COLLATE utf8mb4_unicode_ci DEFAULT NULL,\n  `planta_file_url` varchar(1000) COLLATE utf8mb4_unicode_ci DEFAULT NULL,\n  `project_file_key` varchar(500) COLLATE utf8mb4_unicode_ci DEFAULT NULL,\n  `project_file_url` varchar(1000) COLLATE utf8mb4_unicode_ci DEFAULT NULL,\n  `start_date` date DEFAULT NULL,\n  `end_date` date DEFAULT NULL,\n  PRIMARY KEY (`id`) /*T![clustered_index] CLUSTERED */\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci AUTO_INCREMENT=210001\n",
+  "stderr": "",
+  "execution_time_ms": 53
+}
