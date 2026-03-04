@@ -18,6 +18,7 @@ import { ActivityTracker } from '@/components/ActivityTracker';
 import { PDFReportGenerator } from '@/components/PDFReportGenerator';
 import { AdvancedPDFReportGenerator } from '@/components/AdvancedPDFReportGenerator';
 import { PDFStructureImporter } from '@/components/PDFStructureImporter';
+import { SignedPDFReportGenerator } from '@/components/SignedPDFReportGenerator';
 
 export default function ObraDetail() {
   const [, params] = useRoute('/obra/:id');
@@ -349,12 +350,23 @@ export default function ObraDetail() {
           {/* Ambientes Tab */}
           <TabsContent value="ambientes" className="mt-6">
             {/* Botões de Ação */}
-            <div className="grid grid-cols-2 gap-4 mb-6">
+            <div className="grid grid-cols-3 gap-4 mb-6">
               <PDFStructureImporter
                 projectId={projectId}
                 onSuccess={() => refetchEnvironments()}
               />
               <AdvancedPDFReportGenerator
+                projectId={projectId}
+                projectName={project?.name || 'Projeto'}
+                projectAddress={project?.address || ''}
+                contractor={project?.contractor || ''}
+                technicalManager={project?.technicalManager || ''}
+                supplier={project?.supplier || ''}
+                environmentCount={totalEnvironments}
+                completedCount={completedEnvironments}
+                environments={environments}
+              />
+              <SignedPDFReportGenerator
                 projectId={projectId}
                 projectName={project?.name || 'Projeto'}
                 projectAddress={project?.address || ''}
