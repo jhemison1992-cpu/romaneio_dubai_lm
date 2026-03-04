@@ -12,6 +12,10 @@ import { Textarea } from '@/components/ui/textarea';
 import { trpc } from '@/lib/trpc';
 import { useLocation, useRoute } from 'wouter';
 import { toast } from 'sonner';
+import { GanttChart } from '@/components/GanttChart';
+import { ProjectSettingsModal } from '@/components/ProjectSettingsModal';
+import { ActivityTracker } from '@/components/ActivityTracker';
+import { PDFReportGenerator } from '@/components/PDFReportGenerator';
 
 export default function ObraDetail() {
   const [, params] = useRoute('/obra/:id');
@@ -19,6 +23,7 @@ export default function ObraDetail() {
   const projectId = params?.id ? parseInt(params.id) : 0;
   
   const [activeTab, setActiveTab] = useState('visao-geral');
+  const [isProjectSettingsOpen, setIsProjectSettingsOpen] = useState(false);
   const [isCreateEnvironmentDialogOpen, setIsCreateEnvironmentDialogOpen] = useState(false);
   const [isEditEnvironmentDialogOpen, setIsEditEnvironmentDialogOpen] = useState(false);
   const [editingEnvironment, setEditingEnvironment] = useState<any>(null);
@@ -206,7 +211,11 @@ export default function ObraDetail() {
               </div>
             </div>
             <div className="flex gap-2">
-              <Button variant="outline" className="bg-white/10 border-white/30 text-white hover:bg-white/20">
+              <Button
+                variant="outline"
+                className="bg-white/10 border-white/30 text-white hover:bg-white/20"
+                onClick={() => setIsProjectSettingsOpen(true)}
+              >
                 <Settings className="w-4 h-4 mr-2" />
                 Editar
               </Button>
@@ -252,12 +261,15 @@ export default function ObraDetail() {
       {/* Tabs */}
       <div className="max-w-7xl mx-auto px-8 py-6">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid w-full grid-cols-3 bg-white border-b border-gray-200 rounded-none">
+          <TabsList className="grid w-full grid-cols-4 bg-white border-b border-gray-200 rounded-none">
             <TabsTrigger value="visao-geral" className="rounded-none border-b-2 border-transparent data-[state=active]:border-teal-500">
               Visão Geral
             </TabsTrigger>
             <TabsTrigger value="ambientes" className="rounded-none border-b-2 border-transparent data-[state=active]:border-teal-500">
               Ambientes
+            </TabsTrigger>
+            <TabsTrigger value="cronograma" className="rounded-none border-b-2 border-transparent data-[state=active]:border-teal-500">
+              Cronograma
             </TabsTrigger>
             <TabsTrigger value="vistorias" className="rounded-none border-b-2 border-transparent data-[state=active]:border-teal-500">
               Vistorias
@@ -315,6 +327,21 @@ export default function ObraDetail() {
                 </div>
               </Card>
             </div>
+
+            {/* Activity Tracker */}
+            <ActivityTracker
+              activities={[
+                {
+                  id: 1,
+                  type: 'created',
+                  title: 'Projeto criado',
+                  description: 'O projeto foi criado com sucesso',
+                  timestamp: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000),
+                  user: 'Administrador',
+                },
+              ]}
+              maxItems={5}
+            />
           </TabsContent>
 
           {/* Ambientes Tab */}
@@ -560,8 +587,44 @@ export default function ObraDetail() {
               )}
             </Card>
           </TabsContent>
+
+          {/* Cronograma Tab */}
+          <TabsContent value="cronograma" className="mt-6">
+            {environments && environments.length > 0 ? (
+              <GanttChart
+                tasks={environments.map((env: any) => ({
+                  id: env.id,
+                  name: env.name,
+                  startDate: env.startDate ? new Date(env.startDate) : new Date(),
+                  endDate: env.endDate ? new Date(env.endDate) : new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
+                  progress: getEnvironmentStatus(env).status === 'Concluído' ? 100 : 
+                           getEnvironmentStatus(env).status === 'Em Andamento' ? 50 : 0,
+                  status: getEnvironmentStatus(env).status === 'Concluído' ? 'completed' :
+                         getEnvironmentStatus(env).status === 'Em Andamento' ? 'in-progress' : 'not-started',
+                }))
+              }
+                title="Cronograma de Instalação"
+              />
+            ) : (
+              <Card className="p-8">
+                <div className="text-center">
+                  <AlertCircle className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+                  <h4 className="text-lg font-semibold mb-2">Nenhum ambiente cadastrado</h4>
+                  <p className="text-muted-foreground">Adicione ambientes para visualizar o cronograma</p>
+                </div>
+              </Card>
+            )}
+          </TabsContent>
         </Tabs>
       </div>
+
+      {/* Project Settings Modal */}
+      <ProjectSettingsModal
+        isOpen={isProjectSettingsOpen}
+        onClose={() => setIsProjectSettingsOpen(false)}
+        projectId={projectId}
+        onSuccess={() => refetchEnvironments()}
+      />
     </div>
   );
 }
