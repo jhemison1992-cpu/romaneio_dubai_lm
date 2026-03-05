@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { Upload, Loader2, CheckCircle2, AlertCircle } from 'lucide-react';
+import { Upload, Loader2, CheckCircle2 } from 'lucide-react';
 import { toast } from 'sonner';
 import { trpc } from '@/lib/trpc';
 
@@ -19,6 +19,7 @@ export const PDFStructureImporter: React.FC<PDFStructureImporterProps> = ({
   const [file, setFile] = useState<File | null>(null);
   const [extractedData, setExtractedData] = useState<any>(null);
   const [step, setStep] = useState<'upload' | 'preview' | 'confirm'>('upload');
+  const [dragActive, setDragActive] = useState(false);
 
   const createEnvironments = trpc.environments.create.useMutation({
     onSuccess: () => {
@@ -34,10 +35,7 @@ export const PDFStructureImporter: React.FC<PDFStructureImporterProps> = ({
     },
   });
 
-  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const uploadedFile = e.target.files?.[0];
-    if (!uploadedFile) return;
-
+  const processFile = async (uploadedFile: File) => {
     if (!uploadedFile.name.toLowerCase().endsWith('.pdf')) {
       toast.error('Por favor, selecione um arquivo PDF');
       return;
@@ -48,7 +46,6 @@ export const PDFStructureImporter: React.FC<PDFStructureImporterProps> = ({
 
     try {
       // Simular extração de dados do PDF
-      // Em produção, você usaria uma biblioteca como pdfjs ou pdf-parse
       await new Promise(resolve => setTimeout(resolve, 2000));
 
       // Dados simulados extraídos do PDF
@@ -102,6 +99,34 @@ export const PDFStructureImporter: React.FC<PDFStructureImporterProps> = ({
     }
   };
 
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const uploadedFile = e.target.files?.[0];
+    if (uploadedFile) {
+      processFile(uploadedFile);
+    }
+  };
+
+  const handleDrag = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (e.type === 'dragenter' || e.type === 'dragover') {
+      setDragActive(true);
+    } else if (e.type === 'dragleave') {
+      setDragActive(false);
+    }
+  };
+
+  const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setDragActive(false);
+
+    const droppedFile = e.dataTransfer.files?.[0];
+    if (droppedFile) {
+      processFile(droppedFile);
+    }
+  };
+
   const handleConfirmImport = async () => {
     if (!extractedData) return;
 
@@ -152,34 +177,51 @@ export const PDFStructureImporter: React.FC<PDFStructureImporterProps> = ({
 
           {step === 'upload' && (
             <div className="space-y-4">
-              <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center">
+              <div
+                onDragEnter={handleDrag}
+                onDragLeave={handleDrag}
+                onDragOver={handleDrag}
+                onDrop={handleDrop}
+                className={`border-2 border-dashed rounded-lg p-8 text-center transition-colors ${
+                  dragActive
+                    ? 'border-teal-500 bg-teal-50'
+                    : 'border-gray-300 bg-white'
+                }`}
+              >
                 <Upload className="w-12 h-12 text-gray-400 mx-auto mb-4" />
                 <p className="text-gray-600 mb-2">Arraste um arquivo PDF aqui ou clique para selecionar</p>
                 <p className="text-sm text-gray-500 mb-4">Arquivo máximo: 50MB</p>
-                <input
-                  type="file"
-                  accept=".pdf"
-                  onChange={handleFileUpload}
-                  disabled={isLoading}
-                  className="hidden"
-                  id="pdf-upload"
-                />
-                <label htmlFor="pdf-upload" className="inline-block">
+                
+                <label htmlFor="pdf-file-input" className="inline-block">
                   <Button
                     disabled={isLoading}
-                    className="cursor-pointer"
-                    type="button"
+                    className="bg-gray-900 hover:bg-gray-800 cursor-pointer"
+                    asChild
                   >
-                    {isLoading ? (
-                      <>
-                        <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                        Processando...
-                      </>
-                    ) : (
-                      'Selecionar PDF'
-                    )}
+                    <span>
+                      {isLoading ? (
+                        <>
+                          <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                          Processando...
+                        </>
+                      ) : (
+                        <>
+                          <Upload className="w-4 h-4 mr-2" />
+                          Selecionar PDF
+                        </>
+                      )}
+                    </span>
                   </Button>
                 </label>
+                
+                <input
+                  id="pdf-file-input"
+                  type="file"
+                  accept=".pdf"
+                  onChange={handleFileChange}
+                  disabled={isLoading}
+                  className="hidden"
+                />
               </div>
 
               {file && (
