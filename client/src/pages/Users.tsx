@@ -144,7 +144,7 @@ export default function Users() {
 
   return (
     <DashboardLayout>
-      <div className="container py-8">
+      <div className="container py-4 md:py-8 px-3 md:px-4 w-full">
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 md:gap-0 mb-6 md:mb-8">
           <div>
             <h1 className="text-2xl md:text-4xl font-bold tracking-tight">Usuários</h1>
@@ -185,8 +185,8 @@ export default function Users() {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="overflow-x-auto">
-              <Table>
+              <div className="w-full overflow-x-auto">
+              <Table className="w-full text-xs md:text-sm">
                 <TableHeader>
                   <TableRow>
                     <TableHead className="text-xs md:text-sm">Nome</TableHead>
@@ -199,9 +199,9 @@ export default function Users() {
                 <TableBody>
                   {users.map((user) => (
                     <TableRow key={user.id}>
-                      <TableCell className="font-medium">{user.name}</TableCell>
-                      <TableCell>{user.username}</TableCell>
-                      <TableCell>
+                      <TableCell className="font-medium text-xs md:text-sm">{user.name}</TableCell>
+                      <TableCell className="hidden md:table-cell text-xs md:text-sm">{user.username}</TableCell>
+                      <TableCell className="text-xs md:text-sm">
                         <div className="flex items-center gap-2">
                           {user.role === "admin" ? (
                             <>

@@ -99,7 +99,8 @@ export default function Projects() {
   }
 
   return (
-    <div className="container py-4 md:py-8 max-w-7xl px-4 md:px-0">
+    <div className="w-full h-full overflow-auto">
+    <div className="container py-4 md:py-8 max-w-7xl px-3 md:px-4 mx-auto">
       <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 md:gap-0 mb-6 md:mb-8">
         <div>
           <h1 className="text-2xl md:text-4xl font-bold tracking-tight">Obras</h1>
@@ -197,7 +198,7 @@ export default function Projects() {
           </CardContent>
         </Card>
       ) : (
-        <div className="grid gap-4 md:gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3">
+        <div className="grid gap-3 md:gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 auto-rows-max">
           {projects.map((project) => (
             <Card key={project.id} className="hover:shadow-lg transition-all border-l-4 border-l-primary">
               <CardHeader className="pb-3">
@@ -215,8 +216,7 @@ export default function Projects() {
                     )}
                   </div>
                 </div>
-              </CardHeader>
-              <CardContent className="space-y-4">
+              </CardHeader>              <CardContent className="space-y-4">
                 <div className="space-y-3 text-sm">
                   {project.contractor && (
                     <div className="flex items-start gap-2">
@@ -365,6 +365,7 @@ export default function Projects() {
           </form>
         </DialogContent>
       </Dialog>
+    </div>
     </div>
   );
 }

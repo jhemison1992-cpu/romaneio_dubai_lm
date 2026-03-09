@@ -38,9 +38,9 @@ export default function AppLayout({ children, currentPage }: AppLayoutProps) {
   };
 
   return (
-    <div className="flex h-screen bg-gray-50 flex-col md:flex-row">
+    <div className="flex h-screen bg-gray-50 flex-col md:flex-row overflow-hidden">
       {/* Mobile Header */}
-      <div className="md:hidden bg-white border-b border-gray-200 px-4 py-3 flex items-center justify-between">
+      <div className="md:hidden bg-white border-b border-gray-200 px-3 py-2 flex items-center justify-between flex-shrink-0">
         <Link href="/dashboard">
           <div className="flex items-center gap-2 cursor-pointer">
             <div className="w-8 h-8 bg-orange-500 rounded-lg flex items-center justify-center">
@@ -68,7 +68,7 @@ export default function AppLayout({ children, currentPage }: AppLayoutProps) {
 
       {/* Mobile Menu */}
       {isMobileMenuOpen && (
-        <div className="md:hidden bg-white border-b border-gray-200 px-4 py-4 space-y-2">
+        <div className="md:hidden bg-white border-b border-gray-200 px-3 py-3 space-y-1 overflow-y-auto flex-shrink-0">
           {navItems.map((item) => {
             const Icon = item.icon;
             const isActive = currentPage === item.id;
@@ -194,8 +194,10 @@ export default function AppLayout({ children, currentPage }: AppLayoutProps) {
         </div>
 
         {/* Content */}
-        <div className="flex-1 overflow-auto">
-          {children}
+        <div className="flex-1 overflow-auto w-full">
+          <div className="h-full w-full overflow-auto">
+            {children}
+          </div>
         </div>
       </div>
     </div>

@@ -194,10 +194,10 @@ export default function ObraDetail() {
   const progressPercentage = totalEnvironments > 0 ? Math.round((completedEnvironments / totalEnvironments) * 100) : 0;
 
   return (
-    <div className="flex-1 overflow-auto bg-gray-50">
+    <div className="flex-1 overflow-auto bg-gray-50 w-full">
       {/* Header Banner */}
-      <div className="bg-gradient-to-r from-gray-800 to-gray-900 text-white p-4 md:p-8">
-        <div className="max-w-7xl mx-auto">
+      <div className="bg-gradient-to-r from-gray-800 to-gray-900 text-white p-3 md:p-8">
+        <div className="max-w-7xl mx-auto px-0 md:px-4">
           <div className="flex flex-col md:flex-row items-start justify-between gap-3 md:gap-0 mb-4 md:mb-6">
             <div className="flex items-center gap-4">
               <Button
@@ -262,7 +262,7 @@ export default function ObraDetail() {
       </div>
 
       {/* Tabs */}
-      <div className="max-w-7xl mx-auto px-4 md:px-8 py-4 md:py-6">
+      <div className="max-w-7xl mx-auto px-3 md:px-8 py-3 md:py-6 w-full">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
           <TabsList className="grid w-full grid-cols-2 md:grid-cols-4 bg-white border-b border-gray-200 rounded-none">
             <TabsTrigger value="visao-geral" className="rounded-none border-b-2 border-transparent data-[state=active]:border-teal-500 text-xs md:text-sm">
@@ -351,7 +351,7 @@ export default function ObraDetail() {
           {/* Ambientes Tab */}
           <TabsContent value="ambientes" className="mt-6">
             {/* Botões de Ação */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-2 md:gap-4 mb-6">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-2 md:gap-4 mb-4 md:mb-6 w-full">
               <PDFStructureImporter
                 projectId={projectId}
                 onSuccess={() => refetchEnvironments()}
