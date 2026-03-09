@@ -19,7 +19,7 @@ import { PDFReportGenerator } from '@/components/PDFReportGenerator';
 import { AdvancedPDFReportGenerator } from '@/components/AdvancedPDFReportGenerator';
 import { PDFStructureImporter } from '@/components/PDFStructureImporter';
 import { SignedPDFReportGenerator } from '@/components/SignedPDFReportGenerator';
-import WindowsControlPanel from '@/components/WindowsControlPanel';
+import HierarchicalWindowsControl from '@/components/HierarchicalWindowsControl';
 
 export default function ObraDetail() {
   const [, params] = useRoute('/obra/:id');
@@ -657,7 +657,7 @@ export default function ObraDetail() {
           {/* Controle de Caixilhos Tab */}
           <TabsContent value="controle" className="mt-6">
             {environments && environments.length > 0 ? (
-              <WindowsControlPanel
+              <HierarchicalWindowsControl
                 windows={environments.map((env: any) => ({
                   id: env.id,
                   name: env.name,
