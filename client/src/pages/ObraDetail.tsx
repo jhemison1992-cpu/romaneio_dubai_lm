@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { AlertCircle, CheckCircle2, Clock, Zap, BarChart3, Users, DollarSign, Settings, ArrowLeft, Plus, Check, Edit2, Trash2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
@@ -19,6 +19,7 @@ import { PDFReportGenerator } from '@/components/PDFReportGenerator';
 import { AdvancedPDFReportGenerator } from '@/components/AdvancedPDFReportGenerator';
 import { PDFStructureImporter } from '@/components/PDFStructureImporter';
 import { SignedPDFReportGenerator } from '@/components/SignedPDFReportGenerator';
+import WindowsControlPanel from '@/components/WindowsControlPanel';
 
 export default function ObraDetail() {
   const [, params] = useRoute('/obra/:id');
@@ -277,6 +278,9 @@ export default function ObraDetail() {
             </TabsTrigger>
             <TabsTrigger value="vistorias" className="rounded-none border-b-2 border-transparent data-[state=active]:border-teal-500 text-xs md:text-sm hidden md:block">
               Vistorias
+            </TabsTrigger>
+            <TabsTrigger value="controle" className="rounded-none border-b-2 border-transparent data-[state=active]:border-teal-500 text-xs md:text-sm hidden md:block">
+              Controle de Caixilhos
             </TabsTrigger>
           </TabsList>
 
@@ -645,6 +649,31 @@ export default function ObraDetail() {
                   <AlertCircle className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
                   <h4 className="text-lg font-semibold mb-2">Nenhum ambiente cadastrado</h4>
                   <p className="text-muted-foreground">Adicione ambientes para visualizar o cronograma</p>
+                </div>
+              </Card>
+            )}
+          </TabsContent>
+
+          {/* Controle de Caixilhos Tab */}
+          <TabsContent value="controle" className="mt-6">
+            {environments && environments.length > 0 ? (
+              <WindowsControlPanel
+                windows={environments.map((env: any) => ({
+                  id: env.id,
+                  name: env.name,
+                  caixilhoCode: env.caixilhoCode,
+                  caixilhoType: env.caixilhoType,
+                  quantity: env.quantity,
+                  floor: env.name.split('-').pop()?.trim(),
+                  status: 'pending' as const,
+                }))}
+              />
+            ) : (
+              <Card className="p-8">
+                <div className="text-center">
+                  <AlertCircle className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+                  <h4 className="text-lg font-semibold mb-2">Nenhum caixilho cadastrado</h4>
+                  <p className="text-muted-foreground">Importe um PDF de proposta ou adicione ambientes para visualizar o controle</p>
                 </div>
               </Card>
             )}
