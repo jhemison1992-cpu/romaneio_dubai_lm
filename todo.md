@@ -1451,3 +1451,42 @@
 - ✅ Servidor rodando sem erros
 - ✅ TODOS OS BOTÕES FUNCIONAIS
 - ✅ SITE 100% FUNCIONAL
+
+
+## Otimização para Dispositivos Móveis
+
+### Fase 1: Auditoria de Layout Mobile
+- [ ] Verificar layout em telas de 320px (mobile pequeno)
+- [ ] Verificar layout em telas de 768px (tablet)
+- [ ] Identificar problemas de responsividade
+- [ ] Verificar overflow de conteúdo
+
+### Fase 2: Otimização de Navegação
+- [ ] Converter sidebar em menu hambúrguer para mobile
+- [ ] Melhorar acessibilidade do menu mobile
+- [ ] Otimizar botões para toque (min 44px)
+- [ ] Melhorar espaçamento entre elementos
+
+### Fase 3: Layout das Páginas Principais
+- [ ] Otimizar página de Obras para mobile
+- [ ] Otimizar página de Detalhes de Obra para mobile
+- [ ] Otimizar página de Vistorias para mobile
+- [ ] Otimizar página de Usuários para mobile
+
+### Fase 4: Formulários e Modals
+- [ ] Melhorar layout de formulários em mobile
+- [ ] Otimizar tamanho de inputs para toque
+- [ ] Melhorar modals para telas pequenas
+- [ ] Adicionar scroll em modals longos
+
+### Fase 5: Mídia e Galeria
+- [ ] Otimizar galeria de fotos para mobile
+- [ ] Melhorar visualização de vídeos
+- [ ] Otimizar canvas de assinatura para mobile
+- [ ] Melhorar componentes de upload
+
+### Fase 6: Testes
+- [ ] Testar em iPhone (375px)
+- [ ] Testar em Android (360px)
+- [ ] Testar em tablet (768px)
+- [ ] Testar orientação landscape

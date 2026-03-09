@@ -196,9 +196,9 @@ export default function ObraDetail() {
   return (
     <div className="flex-1 overflow-auto bg-gray-50">
       {/* Header Banner */}
-      <div className="bg-gradient-to-r from-gray-800 to-gray-900 text-white p-8">
+      <div className="bg-gradient-to-r from-gray-800 to-gray-900 text-white p-4 md:p-8">
         <div className="max-w-7xl mx-auto">
-          <div className="flex items-start justify-between mb-6">
+          <div className="flex flex-col md:flex-row items-start justify-between gap-3 md:gap-0 mb-4 md:mb-6">
             <div className="flex items-center gap-4">
               <Button
                 variant="ghost"
@@ -240,7 +240,7 @@ export default function ObraDetail() {
           </div>
 
           {/* KPIs */}
-          <div className="grid grid-cols-4 gap-4">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-4">
             {kpis.map((kpi, idx) => {
               const Icon = kpi.icon;
               return (
@@ -262,19 +262,20 @@ export default function ObraDetail() {
       </div>
 
       {/* Tabs */}
-      <div className="max-w-7xl mx-auto px-8 py-6">
+      <div className="max-w-7xl mx-auto px-4 md:px-8 py-4 md:py-6">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid w-full grid-cols-4 bg-white border-b border-gray-200 rounded-none">
-            <TabsTrigger value="visao-geral" className="rounded-none border-b-2 border-transparent data-[state=active]:border-teal-500">
-              Visão Geral
+          <TabsList className="grid w-full grid-cols-2 md:grid-cols-4 bg-white border-b border-gray-200 rounded-none">
+            <TabsTrigger value="visao-geral" className="rounded-none border-b-2 border-transparent data-[state=active]:border-teal-500 text-xs md:text-sm">
+              <span className="hidden md:inline">Visão Geral</span>
+              <span className="md:hidden">Geral</span>
             </TabsTrigger>
-            <TabsTrigger value="ambientes" className="rounded-none border-b-2 border-transparent data-[state=active]:border-teal-500">
+            <TabsTrigger value="ambientes" className="rounded-none border-b-2 border-transparent data-[state=active]:border-teal-500 text-xs md:text-sm">
               Ambientes
             </TabsTrigger>
-            <TabsTrigger value="cronograma" className="rounded-none border-b-2 border-transparent data-[state=active]:border-teal-500">
+            <TabsTrigger value="cronograma" className="rounded-none border-b-2 border-transparent data-[state=active]:border-teal-500 text-xs md:text-sm hidden md:block">
               Cronograma
             </TabsTrigger>
-            <TabsTrigger value="vistorias" className="rounded-none border-b-2 border-transparent data-[state=active]:border-teal-500">
+            <TabsTrigger value="vistorias" className="rounded-none border-b-2 border-transparent data-[state=active]:border-teal-500 text-xs md:text-sm hidden md:block">
               Vistorias
             </TabsTrigger>
           </TabsList>
@@ -350,7 +351,7 @@ export default function ObraDetail() {
           {/* Ambientes Tab */}
           <TabsContent value="ambientes" className="mt-6">
             {/* Botões de Ação */}
-            <div className="grid grid-cols-3 gap-4 mb-6">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-2 md:gap-4 mb-6">
               <PDFStructureImporter
                 projectId={projectId}
                 onSuccess={() => refetchEnvironments()}

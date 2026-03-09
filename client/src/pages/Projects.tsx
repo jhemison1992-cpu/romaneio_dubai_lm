@@ -99,22 +99,22 @@ export default function Projects() {
   }
 
   return (
-    <div className="container py-8 max-w-7xl">
-      <div className="flex items-center justify-between mb-8">
+    <div className="container py-4 md:py-8 max-w-7xl px-4 md:px-0">
+      <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 md:gap-0 mb-6 md:mb-8">
         <div>
-          <h1 className="text-4xl font-bold tracking-tight">Obras</h1>
-          <p className="text-muted-foreground mt-2">
+          <h1 className="text-2xl md:text-4xl font-bold tracking-tight">Obras</h1>
+          <p className="text-muted-foreground mt-1 md:mt-2 text-sm md:text-base">
             Gerencie as obras e seus respectivos ambientes e caixilhos
           </p>
         </div>
         <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
           <DialogTrigger asChild>
-            <Button size="lg">
-              <Plus className="mr-2 h-5 w-5" />
+            <Button size="sm" className="w-full md:w-auto">
+              <Plus className="mr-2 h-4 w-4" />
               Nova Obra
             </Button>
           </DialogTrigger>
-          <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+          <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto w-[95vw] md:w-auto">
             <DialogHeader>
               <DialogTitle>Criar Nova Obra</DialogTitle>
               <DialogDescription>
@@ -197,7 +197,7 @@ export default function Projects() {
           </CardContent>
         </Card>
       ) : (
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3">
+        <div className="grid gap-4 md:gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3">
           {projects.map((project) => (
             <Card key={project.id} className="hover:shadow-lg transition-all border-l-4 border-l-primary">
               <CardHeader className="pb-3">

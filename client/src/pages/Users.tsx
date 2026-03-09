@@ -145,14 +145,14 @@ export default function Users() {
   return (
     <DashboardLayout>
       <div className="container py-8">
-        <div className="flex items-center justify-between mb-6">
+        <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 md:gap-0 mb-6 md:mb-8">
           <div>
-            <h1 className="text-3xl font-bold tracking-tight">Usuários</h1>
-            <p className="text-muted-foreground mt-2">
+            <h1 className="text-2xl md:text-4xl font-bold tracking-tight">Usuários</h1>
+            <p className="text-muted-foreground mt-1 md:mt-2 text-sm md:text-base">
               Gerencie os usuários do sistema e suas permissões
             </p>
           </div>
-          <Button onClick={() => setIsCreateDialogOpen(true)} size="lg">
+          <Button onClick={() => setIsCreateDialogOpen(true)} size="sm" className="w-full md:w-auto">
             <Plus className="mr-2 h-4 w-4" />
             Novo Usuário
           </Button>
@@ -185,14 +185,15 @@ export default function Users() {
               </CardDescription>
             </CardHeader>
             <CardContent>
+              <div className="overflow-x-auto">
               <Table>
                 <TableHeader>
                   <TableRow>
-                    <TableHead>Nome</TableHead>
-                    <TableHead>Username</TableHead>
-                    <TableHead>Tipo</TableHead>
-                    <TableHead>Status</TableHead>
-                    <TableHead className="text-right">Ações</TableHead>
+                    <TableHead className="text-xs md:text-sm">Nome</TableHead>
+                    <TableHead className="text-xs md:text-sm hidden md:table-cell">Username</TableHead>
+                    <TableHead className="text-xs md:text-sm">Tipo</TableHead>
+                    <TableHead className="text-xs md:text-sm hidden md:table-cell">Status</TableHead>
+                    <TableHead className="text-right text-xs md:text-sm">Ações</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -247,6 +248,7 @@ export default function Users() {
                   ))}
                 </TableBody>
               </Table>
+              </div>
             </CardContent>
           </Card>
         )}

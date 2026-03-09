@@ -1,6 +1,6 @@
-import { ReactNode } from 'react';
+import { ReactNode, useState } from 'react';
 import { Link } from 'wouter';
-import { Building2, FileText, Settings, Users, LogOut } from 'lucide-react';
+import { Building2, FileText, Settings, Users, LogOut, Menu, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 interface AppLayoutProps {
@@ -9,8 +9,9 @@ interface AppLayoutProps {
 }
 
 export default function AppLayout({ children, currentPage }: AppLayoutProps) {
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
   const handleLogout = () => {
-    // Logout logic will be implemented
     window.location.href = '/';
   };
 
@@ -21,10 +22,97 @@ export default function AppLayout({ children, currentPage }: AppLayoutProps) {
     { id: 'usuarios', label: 'Usuários', icon: Users },
   ];
 
+  const getPageTitle = () => {
+    switch (currentPage) {
+      case 'dashboard':
+        return 'Painel';
+      case 'obras':
+        return 'Obras';
+      case 'vistorias':
+        return 'Vistorias';
+      case 'usuarios':
+        return 'Usuários';
+      default:
+        return 'OBRAS FÁCIL';
+    }
+  };
+
   return (
-    <div className="flex h-screen bg-gray-50">
-      {/* Sidebar */}
-      <div className="w-64 bg-white border-r border-gray-200 flex flex-col">
+    <div className="flex h-screen bg-gray-50 flex-col md:flex-row">
+      {/* Mobile Header */}
+      <div className="md:hidden bg-white border-b border-gray-200 px-4 py-3 flex items-center justify-between">
+        <Link href="/dashboard">
+          <div className="flex items-center gap-2 cursor-pointer">
+            <div className="w-8 h-8 bg-orange-500 rounded-lg flex items-center justify-center">
+              <Building2 className="w-5 h-5 text-white" />
+            </div>
+            <div>
+              <p className="font-bold text-gray-900 text-sm">OBRAS</p>
+              <p className="text-xs text-gray-500">FÁCIL</p>
+            </div>
+          </div>
+        </Link>
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+          className="md:hidden"
+        >
+          {isMobileMenuOpen ? (
+            <X className="w-6 h-6" />
+          ) : (
+            <Menu className="w-6 h-6" />
+          )}
+        </Button>
+      </div>
+
+      {/* Mobile Menu */}
+      {isMobileMenuOpen && (
+        <div className="md:hidden bg-white border-b border-gray-200 px-4 py-4 space-y-2">
+          {navItems.map((item) => {
+            const Icon = item.icon;
+            const isActive = currentPage === item.id;
+            return (
+              <Link key={item.id} href={`/${item.id}`}>
+                <div
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${
+                    isActive
+                      ? 'bg-orange-50 text-orange-600 font-medium'
+                      : 'text-gray-700 hover:bg-gray-50'
+                  }`}
+                >
+                  <Icon className="w-5 h-5" />
+                  <span>{item.label}</span>
+                </div>
+              </Link>
+            );
+          })}
+          <div className="pt-4 border-t border-gray-200 space-y-2">
+            <div className="flex items-center gap-3 px-4 py-2">
+              <div className="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center flex-shrink-0">
+                <span className="text-xs font-bold text-gray-700">U</span>
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-medium text-gray-900 truncate">Usuário</p>
+                <p className="text-xs text-gray-500 truncate">user@example.com</p>
+              </div>
+            </div>
+            <Button
+              variant="outline"
+              size="sm"
+              className="w-full justify-start gap-2 text-xs"
+              onClick={handleLogout}
+            >
+              <LogOut className="w-4 h-4" />
+              Sair
+            </Button>
+          </div>
+        </div>
+      )}
+
+      {/* Desktop Sidebar */}
+      <div className="hidden md:flex w-64 bg-white border-r border-gray-200 flex-col">
         {/* Logo */}
         <div className="p-6 border-b border-gray-200">
           <Link href="/dashboard">
@@ -87,15 +175,10 @@ export default function AppLayout({ children, currentPage }: AppLayoutProps) {
 
       {/* Main Content */}
       <div className="flex-1 flex flex-col overflow-hidden">
-        {/* Header */}
-        <div className="bg-white border-b border-gray-200 px-8 py-4">
+        {/* Desktop Header */}
+        <div className="hidden md:block bg-white border-b border-gray-200 px-8 py-4">
           <div className="flex items-center justify-between">
-            <h1 className="text-2xl font-bold text-gray-900">
-              {currentPage === 'dashboard' && 'Painel'}
-              {currentPage === 'obras' && 'Obras'}
-              {currentPage === 'vistorias' && 'Vistorias'}
-              {currentPage === 'usuarios' && 'Usuários'}
-            </h1>
+            <h1 className="text-2xl font-bold text-gray-900">{getPageTitle()}</h1>
             <div className="flex items-center gap-4">
               <Button variant="outline" size="sm">
                 <Settings className="w-4 h-4 mr-2" />
@@ -103,6 +186,11 @@ export default function AppLayout({ children, currentPage }: AppLayoutProps) {
               </Button>
             </div>
           </div>
+        </div>
+
+        {/* Mobile Header (Content Area) */}
+        <div className="md:hidden bg-white border-b border-gray-200 px-4 py-3">
+          <h1 className="text-xl font-bold text-gray-900">{getPageTitle()}</h1>
         </div>
 
         {/* Content */}
