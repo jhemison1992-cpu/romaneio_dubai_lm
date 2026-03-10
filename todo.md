@@ -1548,3 +1548,11 @@
 - [x] Validar alinhamento em mobile e desktop
 - [x] Corrigir sobreposicao de nomes das abas
 - [x] Implementar min-w-max para evitar compressao
+
+## Otimizacao Mobile das Abas em Obras
+- [x] Reorganizar layout das abas para mobile com 2 linhas
+- [x] Otimizar espaçamento e padding para tela pequena
+- [x] Implementar ícones maiores em mobile
+- [x] Adicionar abreviações inteligentes de texto
+- [x] Testar layout mobile em diferentes tamanhos
+- [x] Validar sem sobreposição em telas pequenas

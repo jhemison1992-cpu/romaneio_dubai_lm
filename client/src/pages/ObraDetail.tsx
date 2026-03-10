@@ -269,39 +269,39 @@ export default function ObraDetail() {
       {/* Tabs */}
       <div className="max-w-7xl mx-auto px-3 md:px-8 py-3 md:py-6 w-full">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="flex w-full bg-white border-b border-gray-200 rounded-none h-auto p-0 overflow-x-auto md:overflow-x-visible justify-start md:justify-start">
-            <TabsTrigger value="visao-geral" className="rounded-none border-b-2 border-transparent data-[state=active]:border-orange-500 text-xs md:text-sm py-4 px-4 md:px-8 font-medium hover:bg-gray-50 flex items-center gap-2 whitespace-nowrap flex-shrink-0 border-r border-gray-200 min-w-max">
-              <AlertCircle className="h-4 w-4 flex-shrink-0" />
+          <TabsList className="flex flex-wrap w-full bg-white border-b border-gray-200 rounded-none h-auto p-0 gap-0 md:overflow-x-visible md:flex-nowrap md:overflow-x-auto justify-start">
+            <TabsTrigger value="visao-geral" className="rounded-none border-b-2 border-transparent data-[state=active]:border-orange-500 text-xs md:text-sm py-3 px-2 md:px-8 font-medium hover:bg-gray-50 flex flex-col md:flex-row items-center justify-center gap-1 md:gap-2 flex-shrink-0 border-r border-gray-200 md:border-r md:whitespace-nowrap w-1/4 md:w-auto md:min-w-max">
+              <AlertCircle className="h-5 w-5 md:h-4 md:w-4 flex-shrink-0" />
               <span className="hidden md:inline">Visão Geral</span>
               <span className="md:hidden">Geral</span>
             </TabsTrigger>
-            <TabsTrigger value="acompanhamento" className="rounded-none border-b-2 border-transparent data-[state=active]:border-orange-500 text-xs md:text-sm py-4 px-4 md:px-8 font-medium hover:bg-gray-50 flex items-center gap-2 whitespace-nowrap flex-shrink-0 border-r border-gray-200 min-w-max">
-              <BarChart3 className="h-4 w-4 flex-shrink-0" />
+            <TabsTrigger value="acompanhamento" className="rounded-none border-b-2 border-transparent data-[state=active]:border-orange-500 text-xs md:text-sm py-3 px-2 md:px-8 font-medium hover:bg-gray-50 flex flex-col md:flex-row items-center justify-center gap-1 md:gap-2 flex-shrink-0 border-r border-gray-200 md:border-r md:whitespace-nowrap w-1/4 md:w-auto md:min-w-max">
+              <BarChart3 className="h-5 w-5 md:h-4 md:w-4 flex-shrink-0" />
               <span className="hidden md:inline">Acompanhamento</span>
               <span className="md:hidden">Acomp.</span>
             </TabsTrigger>
-            <TabsTrigger value="ambientes" className="rounded-none border-b-2 border-transparent data-[state=active]:border-orange-500 text-xs md:text-sm py-4 px-4 md:px-8 font-medium hover:bg-gray-50 flex items-center gap-2 whitespace-nowrap flex-shrink-0 border-r border-gray-200 min-w-max">
-              <Zap className="h-4 w-4 flex-shrink-0" />
+            <TabsTrigger value="ambientes" className="rounded-none border-b-2 border-transparent data-[state=active]:border-orange-500 text-xs md:text-sm py-3 px-2 md:px-8 font-medium hover:bg-gray-50 flex flex-col md:flex-row items-center justify-center gap-1 md:gap-2 flex-shrink-0 border-r border-gray-200 md:border-r md:whitespace-nowrap w-1/4 md:w-auto md:min-w-max">
+              <Zap className="h-5 w-5 md:h-4 md:w-4 flex-shrink-0" />
               <span className="hidden md:inline">Ambientes</span>
               <span className="md:hidden">Amb.</span>
             </TabsTrigger>
-            <TabsTrigger value="cronograma" className="rounded-none border-b-2 border-transparent data-[state=active]:border-orange-500 text-xs md:text-sm py-4 px-4 md:px-8 font-medium hover:bg-gray-50 flex items-center gap-2 whitespace-nowrap flex-shrink-0 border-r border-gray-200 min-w-max">
-              <Clock className="h-4 w-4 flex-shrink-0" />
+            <TabsTrigger value="cronograma" className="rounded-none border-b-2 border-transparent data-[state=active]:border-orange-500 text-xs md:text-sm py-3 px-2 md:px-8 font-medium hover:bg-gray-50 flex flex-col md:flex-row items-center justify-center gap-1 md:gap-2 flex-shrink-0 border-r border-gray-200 md:border-r md:whitespace-nowrap w-1/4 md:w-auto md:min-w-max">
+              <Clock className="h-5 w-5 md:h-4 md:w-4 flex-shrink-0" />
               <span className="hidden md:inline">Cronograma</span>
               <span className="md:hidden">Cron.</span>
             </TabsTrigger>
-            <TabsTrigger value="vistorias" className="rounded-none border-b-2 border-transparent data-[state=active]:border-orange-500 text-xs md:text-sm py-4 px-4 md:px-8 font-medium hover:bg-gray-50 flex items-center gap-2 whitespace-nowrap flex-shrink-0 border-r border-gray-200 min-w-max">
-              <CheckCircle2 className="h-4 w-4 flex-shrink-0" />
+            <TabsTrigger value="vistorias" className="rounded-none border-b-2 border-transparent data-[state=active]:border-orange-500 text-xs md:text-sm py-3 px-2 md:px-8 font-medium hover:bg-gray-50 flex flex-col md:flex-row items-center justify-center gap-1 md:gap-2 flex-shrink-0 border-r border-gray-200 md:border-r md:whitespace-nowrap w-1/4 md:w-auto md:min-w-max">
+              <CheckCircle2 className="h-5 w-5 md:h-4 md:w-4 flex-shrink-0" />
               <span className="hidden md:inline">Vistorias</span>
               <span className="md:hidden">Vist.</span>
             </TabsTrigger>
-            <TabsTrigger value="controle" className="rounded-none border-b-2 border-transparent data-[state=active]:border-orange-500 text-xs md:text-sm py-4 px-4 md:px-8 font-medium hover:bg-gray-50 flex items-center gap-2 whitespace-nowrap flex-shrink-0 border-r border-gray-200 min-w-max">
-              <Users className="h-4 w-4 flex-shrink-0" />
+            <TabsTrigger value="controle" className="rounded-none border-b-2 border-transparent data-[state=active]:border-orange-500 text-xs md:text-sm py-3 px-2 md:px-8 font-medium hover:bg-gray-50 flex flex-col md:flex-row items-center justify-center gap-1 md:gap-2 flex-shrink-0 border-r border-gray-200 md:border-r md:whitespace-nowrap w-1/4 md:w-auto md:min-w-max">
+              <Users className="h-5 w-5 md:h-4 md:w-4 flex-shrink-0" />
               <span className="hidden md:inline">Controle</span>
               <span className="md:hidden">Ctrl.</span>
             </TabsTrigger>
             <TabsTrigger value="relatorio" className="rounded-none border-b-2 border-transparent data-[state=active]:border-orange-500 text-xs md:text-sm py-4 px-4 md:px-8 font-medium hover:bg-gray-50 flex items-center gap-2 whitespace-nowrap flex-shrink-0 min-w-max">
-              <DollarSign className="h-4 w-4 flex-shrink-0" />
+              <DollarSign className="h-5 w-5 md:h-4 md:w-4 flex-shrink-0" />
               <span className="hidden md:inline">Relatório</span>
               <span className="md:hidden">Rel.</span>
             </TabsTrigger>
