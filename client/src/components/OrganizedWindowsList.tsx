@@ -1,9 +1,9 @@
 import React, { useState, useMemo } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { ChevronDown, ChevronRight, Building2, Package, Search, Filter, X } from 'lucide-react';
+import { Search, X, Package } from 'lucide-react';
 
 interface Window {
   id: number;
@@ -20,44 +20,19 @@ interface OrganizedWindowsListProps {
   onWindowSelect?: (window: Window) => void;
 }
 
-interface FloorGroup {
+interface EnvironmentGroup {
+  name: string;
   floor: string;
-  environments: {
-    name: string;
-    windows: Window[];
-    totalQuantity: number;
-  }[];
-  totalWindows: number;
+  windows: Window[];
   totalQuantity: number;
 }
 
-// Mapeamento de pavimentos com cores e ordem
-const FLOOR_CONFIG: Record<string, { color: string; order: number; displayName: string }> = {
-  'ÁTRIO': { color: 'from-blue-50 to-blue-100', order: 0, displayName: 'Pavimento 1 - Sala de Estar' },
-  '1º AO 28º PAVIMENTO': { color: 'from-purple-50 to-purple-100', order: 1, displayName: 'Suítes - 1º ao 28º PAV' },
-  '29º PAVIMENTO': { color: 'from-pink-50 to-pink-100', order: 2, displayName: 'Suítes - 29º PAV' },
-};
-
-// Cores para ambientes
-const ENVIRONMENT_COLORS = [
-  'bg-emerald-100 border-emerald-300',
-  'bg-cyan-100 border-cyan-300',
-  'bg-amber-100 border-amber-300',
-  'bg-rose-100 border-rose-300',
-  'bg-indigo-100 border-indigo-300',
-  'bg-teal-100 border-teal-300',
-];
-
 export default function OrganizedWindowsList({ windows, onWindowSelect }: OrganizedWindowsListProps) {
-  const [expandedFloors, setExpandedFloors] = useState<Set<string>>(new Set(['ÁTRIO']));
-  const [expandedEnvironments, setExpandedEnvironments] = useState<Set<string>>(new Set());
-  const [searchCode, setSearchCode] = useState('');
-  const [searchEnvironment, setSearchEnvironment] = useState('');
-  const [filterFloor, setFilterFloor] = useState<string>('');
+  const [searchTerm, setSearchTerm] = useState('');
 
-  // Agrupar por pavimento e ambiente
-  const floorGroups = useMemo(() => {
-    const grouped: Record<string, Record<string, Window[]>> = {};
+  // Agrupar por ambiente
+  const environmentGroups = useMemo(() => {
+    const grouped: Record<string, EnvironmentGroup> = {};
 
     windows.forEach(w => {
       // Extrair pavimento do nome
@@ -68,331 +43,192 @@ export default function OrganizedWindowsList({ windows, onWindowSelect }: Organi
       const environmentMatch = w.name.match(/^(.*?)\s*-/);
       const environment = environmentMatch ? environmentMatch[1].trim() : w.name;
 
-      if (!grouped[floor]) {
-        grouped[floor] = {};
+      if (!grouped[environment]) {
+        grouped[environment] = {
+          name: environment,
+          floor: floor,
+          windows: [],
+          totalQuantity: 0,
+        };
       }
-      if (!grouped[floor][environment]) {
-        grouped[floor][environment] = [];
-      }
-      grouped[floor][environment].push(w);
+      
+      grouped[environment].windows.push(w);
+      grouped[environment].totalQuantity += w.quantity;
     });
 
-    // Converter para array e ordenar
-    const result: FloorGroup[] = Object.entries(grouped)
-      .sort(([a], [b]) => {
-        const orderA = FLOOR_CONFIG[a]?.order ?? 999;
-        const orderB = FLOOR_CONFIG[b]?.order ?? 999;
-        return orderA - orderB;
-      })
-      .map(([floor, envs]) => ({
-        floor,
-        environments: Object.entries(envs)
-          .sort(([a], [b]) => a.localeCompare(b))
-          .map(([name, wins]) => ({
-            name,
-            windows: wins,
-            totalQuantity: wins.reduce((sum, w) => sum + w.quantity, 0),
-          })),
-        totalWindows: Object.values(envs).flat().length,
-        totalQuantity: Object.values(envs).flat().reduce((sum, w) => sum + w.quantity, 0),
-      }));
-
-    return result;
+    // Converter para array e ordenar por nome
+    return Object.values(grouped).sort((a, b) => a.name.localeCompare(b.name));
   }, [windows]);
 
-  // Filtrar grupos
-  const filteredGroups = useMemo(() => {
-    return floorGroups
-      .filter(floor => !filterFloor || floor.floor === filterFloor)
-      .map(floor => ({
-        ...floor,
-        environments: floor.environments
-          .map(env => ({
-            ...env,
-            windows: env.windows.filter(w =>
-              w.caixilhoCode.toLowerCase().includes(searchCode.toLowerCase()) &&
-              env.name.toLowerCase().includes(searchEnvironment.toLowerCase())
-            ),
-          }))
-          .filter(env => env.windows.length > 0),
-      }))
-      .filter(floor => floor.environments.length > 0);
-  }, [floorGroups, searchCode, searchEnvironment, filterFloor]);
+  // Filtrar ambientes baseado na busca
+  const filteredEnvironments = useMemo(() => {
+    if (!searchTerm.trim()) {
+      return environmentGroups;
+    }
 
-  // Calcular estatísticas totais
-  const totalStats = useMemo(() => {
+    const term = searchTerm.toLowerCase();
+    return environmentGroups.filter(env =>
+      env.name.toLowerCase().includes(term) ||
+      env.windows.some(w => 
+        w.caixilhoCode.toLowerCase().includes(term) ||
+        w.caixilhoType.toLowerCase().includes(term)
+      )
+    );
+  }, [environmentGroups, searchTerm]);
+
+  // Calcular estatísticas
+  const stats = useMemo(() => {
     return {
-      totalWindows: filteredGroups.reduce((sum, f) => sum + f.totalWindows, 0),
-      totalQuantity: filteredGroups.reduce((sum, f) => sum + f.totalQuantity, 0),
-      totalFloors: filteredGroups.length,
-      totalEnvironments: filteredGroups.reduce((sum, f) => sum + f.environments.length, 0),
+      totalWindows: filteredEnvironments.reduce((sum, env) => sum + env.windows.length, 0),
+      totalQuantity: filteredEnvironments.reduce((sum, env) => sum + env.totalQuantity, 0),
+      totalEnvironments: filteredEnvironments.length,
     };
-  }, [filteredGroups]);
+  }, [filteredEnvironments]);
 
-  const toggleFloor = (floor: string) => {
-    const newSet = new Set(expandedFloors);
-    if (newSet.has(floor)) {
-      newSet.delete(floor);
-    } else {
-      newSet.add(floor);
-    }
-    setExpandedFloors(newSet);
-  };
-
-  const toggleEnvironment = (envKey: string) => {
-    const newSet = new Set(expandedEnvironments);
-    if (newSet.has(envKey)) {
-      newSet.delete(envKey);
-    } else {
-      newSet.add(envKey);
-    }
-    setExpandedEnvironments(newSet);
-  };
+  // Cores para ambientes
+  const ENVIRONMENT_COLORS = [
+    { bg: 'bg-blue-50', border: 'border-blue-300', text: 'text-blue-700', badge: 'bg-blue-100' },
+    { bg: 'bg-emerald-50', border: 'border-emerald-300', text: 'text-emerald-700', badge: 'bg-emerald-100' },
+    { bg: 'bg-amber-50', border: 'border-amber-300', text: 'text-amber-700', badge: 'bg-amber-100' },
+    { bg: 'bg-rose-50', border: 'border-rose-300', text: 'text-rose-700', badge: 'bg-rose-100' },
+    { bg: 'bg-purple-50', border: 'border-purple-300', text: 'text-purple-700', badge: 'bg-purple-100' },
+    { bg: 'bg-cyan-50', border: 'border-cyan-300', text: 'text-cyan-700', badge: 'bg-cyan-100' },
+    { bg: 'bg-pink-50', border: 'border-pink-300', text: 'text-pink-700', badge: 'bg-pink-100' },
+    { bg: 'bg-indigo-50', border: 'border-indigo-300', text: 'text-indigo-700', badge: 'bg-indigo-100' },
+  ];
 
   const getEnvironmentColor = (index: number) => {
     return ENVIRONMENT_COLORS[index % ENVIRONMENT_COLORS.length];
   };
 
-  const getFloorConfig = (floor: string) => {
-    return FLOOR_CONFIG[floor] || { color: 'from-gray-50 to-gray-100', order: 999, displayName: floor };
+  const clearSearch = () => {
+    setSearchTerm('');
   };
-
-  const clearFilters = () => {
-    setSearchCode('');
-    setSearchEnvironment('');
-    setFilterFloor('');
-  };
-
-  const hasActiveFilters = searchCode || searchEnvironment || filterFloor;
 
   return (
     <div className="w-full space-y-6">
-      {/* Header com Estatísticas */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <Card className="bg-gradient-to-br from-blue-50 to-blue-100 border-blue-200">
-          <CardContent className="pt-6">
-            <div className="text-center">
-              <div className="text-3xl font-bold text-blue-900">{totalStats.totalWindows}</div>
-              <div className="text-sm text-blue-700">Caixilhos</div>
-            </div>
-          </CardContent>
-        </Card>
-        <Card className="bg-gradient-to-br from-green-50 to-green-100 border-green-200">
-          <CardContent className="pt-6">
-            <div className="text-center">
-              <div className="text-3xl font-bold text-green-900">{totalStats.totalQuantity}</div>
-              <div className="text-sm text-green-700">Quantidade Total</div>
-            </div>
-          </CardContent>
-        </Card>
-        <Card className="bg-gradient-to-br from-purple-50 to-purple-100 border-purple-200">
-          <CardContent className="pt-6">
-            <div className="text-center">
-              <div className="text-3xl font-bold text-purple-900">{totalStats.totalFloors}</div>
-              <div className="text-sm text-purple-700">Pavimentos</div>
-            </div>
-          </CardContent>
-        </Card>
-        <Card className="bg-gradient-to-br from-orange-50 to-orange-100 border-orange-200">
-          <CardContent className="pt-6">
-            <div className="text-center">
-              <div className="text-3xl font-bold text-orange-900">{totalStats.totalEnvironments}</div>
-              <div className="text-sm text-orange-700">Ambientes</div>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
+      {/* Barra de Pesquisa */}
+      <div className="space-y-3">
+        <div className="relative">
+          <Search className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
+          <Input
+            placeholder="🔍 Pesquise por ambiente, código do caixilho ou tipo..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="pl-10 pr-10 py-6 text-base rounded-lg border-2 border-gray-300 focus:border-orange-500 focus:ring-orange-500"
+          />
+          {searchTerm && (
+            <button
+              onClick={clearSearch}
+              className="absolute right-3 top-3 text-gray-400 hover:text-gray-600"
+            >
+              <X className="h-5 w-5" />
+            </button>
+          )}
+        </div>
 
-      {/* Filtros */}
-      <Card>
-        <CardHeader className="pb-3">
-          <div className="flex items-center justify-between">
-            <CardTitle className="text-lg flex items-center gap-2">
-              <Filter className="h-5 w-5" />
-              Filtros e Busca
-            </CardTitle>
-            {hasActiveFilters && (
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={clearFilters}
-                className="text-xs"
-              >
-                <X className="h-4 w-4 mr-1" />
-                Limpar
-              </Button>
-            )}
-          </div>
-        </CardHeader>
-        <CardContent className="space-y-3">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-            <div className="space-y-2">
-              <label className="text-sm font-medium">Código do Caixilho</label>
-              <div className="relative">
-                <Search className="absolute left-2 top-2.5 h-4 w-4 text-gray-400" />
-                <Input
-                  placeholder="Ex: AL008, AL010..."
-                  value={searchCode}
-                  onChange={(e) => setSearchCode(e.target.value)}
-                  className="pl-8"
-                />
+        {/* Estatísticas */}
+        <div className="grid grid-cols-3 gap-3">
+          <Card className="bg-gradient-to-br from-blue-50 to-blue-100 border-blue-200">
+            <CardContent className="pt-4">
+              <div className="text-center">
+                <div className="text-2xl font-bold text-blue-900">{stats.totalWindows}</div>
+                <div className="text-xs text-blue-700">Caixilhos</div>
               </div>
-            </div>
-            <div className="space-y-2">
-              <label className="text-sm font-medium">Ambiente</label>
-              <div className="relative">
-                <Search className="absolute left-2 top-2.5 h-4 w-4 text-gray-400" />
-                <Input
-                  placeholder="Ex: Suítes, Piscina..."
-                  value={searchEnvironment}
-                  onChange={(e) => setSearchEnvironment(e.target.value)}
-                  className="pl-8"
-                />
-              </div>
-            </div>
-            <div className="space-y-2">
-              <label className="text-sm font-medium">Pavimento</label>
-              <select
-                value={filterFloor}
-                onChange={(e) => setFilterFloor(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
-              >
-                <option value="">Todos os pavimentos</option>
-                {floorGroups.map(floor => (
-                  <option key={floor.floor} value={floor.floor}>
-                    {getFloorConfig(floor.floor).displayName}
-                  </option>
-                ))}
-              </select>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* Lista de Pavimentos e Ambientes */}
-      <div className="space-y-4">
-        {filteredGroups.length === 0 ? (
-          <Card className="border-dashed">
-            <CardContent className="pt-6 text-center text-gray-500">
-              <Package className="h-12 w-12 mx-auto mb-2 opacity-50" />
-              <p>Nenhum caixilho encontrado com os filtros selecionados</p>
             </CardContent>
           </Card>
-        ) : (
-          filteredGroups.map((floorGroup) => {
-            const floorConfig = getFloorConfig(floorGroup.floor);
-            const isFloorExpanded = expandedFloors.has(floorGroup.floor);
+          <Card className="bg-gradient-to-br from-green-50 to-green-100 border-green-200">
+            <CardContent className="pt-4">
+              <div className="text-center">
+                <div className="text-2xl font-bold text-green-900">{stats.totalQuantity}</div>
+                <div className="text-xs text-green-700">Unidades</div>
+              </div>
+            </CardContent>
+          </Card>
+          <Card className="bg-gradient-to-br from-orange-50 to-orange-100 border-orange-200">
+            <CardContent className="pt-4">
+              <div className="text-center">
+                <div className="text-2xl font-bold text-orange-900">{stats.totalEnvironments}</div>
+                <div className="text-xs text-orange-700">Ambientes</div>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+
+      {/* Grid de Ambientes */}
+      {filteredEnvironments.length === 0 ? (
+        <Card className="border-dashed border-2 border-gray-300">
+          <CardContent className="pt-12 pb-12 text-center">
+            <Package className="h-16 w-16 mx-auto mb-4 text-gray-300" />
+            <p className="text-gray-500 text-lg font-medium">Nenhum ambiente encontrado</p>
+            <p className="text-gray-400 text-sm mt-2">Tente pesquisar por outro termo</p>
+          </CardContent>
+        </Card>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {filteredEnvironments.map((environment, index) => {
+            const colors = getEnvironmentColor(index);
 
             return (
               <Card
-                key={floorGroup.floor}
-                className={`bg-gradient-to-r ${floorConfig.color} border-2 border-gray-200 overflow-hidden`}
+                key={environment.name}
+                className={`${colors.bg} border-2 ${colors.border} overflow-hidden hover:shadow-lg transition-shadow`}
               >
-                <CardHeader
-                  className="pb-3 cursor-pointer hover:bg-black/5 transition-colors"
-                  onClick={() => toggleFloor(floorGroup.floor)}
-                >
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-3">
-                      {isFloorExpanded ? (
-                        <ChevronDown className="h-5 w-5 text-gray-600" />
-                      ) : (
-                        <ChevronRight className="h-5 w-5 text-gray-600" />
-                      )}
-                      <div>
-                        <CardTitle className="text-lg flex items-center gap-2">
-                          <Building2 className="h-5 w-5" />
-                          {floorConfig.displayName}
-                        </CardTitle>
-                        <CardDescription className="text-sm mt-1">
-                          {floorGroup.totalWindows} caixilhos • {floorGroup.totalQuantity} unidades
-                        </CardDescription>
+                <CardContent className="p-4">
+                  {/* Header do Ambiente */}
+                  <div className="mb-4 pb-4 border-b-2 border-gray-200">
+                    <h3 className={`text-lg font-bold ${colors.text} mb-2`}>
+                      {environment.name}
+                    </h3>
+                    <div className="flex items-center justify-between gap-2">
+                      <Badge variant="outline" className={`${colors.badge} border-0`}>
+                        {environment.floor}
+                      </Badge>
+                      <div className="text-right">
+                        <div className="text-sm font-semibold text-gray-900">
+                          {environment.totalQuantity} un.
+                        </div>
+                        <div className="text-xs text-gray-600">
+                          {environment.windows.length} caixilho{environment.windows.length !== 1 ? 's' : ''}
+                        </div>
                       </div>
                     </div>
-                    <div className="flex gap-2">
-                      <Badge variant="secondary">{floorGroup.environments.length} ambientes</Badge>
-                    </div>
                   </div>
-                </CardHeader>
 
-                {isFloorExpanded && (
-                  <CardContent className="space-y-3 border-t pt-4">
-                    {floorGroup.environments.map((environment, envIndex) => {
-                      const envKey = `${floorGroup.floor}-${environment.name}`;
-                      const isEnvExpanded = expandedEnvironments.has(envKey);
-                      const envColor = getEnvironmentColor(envIndex);
-
-                      return (
-                        <div key={envKey} className="space-y-2">
-                          {/* Header do Ambiente */}
-                          <div
-                            className={`${envColor} border-2 rounded-lg p-3 cursor-pointer hover:shadow-md transition-all`}
-                            onClick={() => toggleEnvironment(envKey)}
-                          >
-                            <div className="flex items-center justify-between">
-                              <div className="flex items-center gap-2">
-                                {isEnvExpanded ? (
-                                  <ChevronDown className="h-4 w-4" />
-                                ) : (
-                                  <ChevronRight className="h-4 w-4" />
-                                )}
-                                <span className="font-semibold text-gray-900">
-                                  {environment.name}
-                                </span>
-                              </div>
-                              <div className="flex gap-2 text-sm">
-                                <Badge variant="outline">
-                                  {environment.windows.length} caixilhos
-                                </Badge>
-                                <Badge variant="outline">
-                                  {environment.totalQuantity} un.
-                                </Badge>
-                              </div>
+                  {/* Lista de Caixilhos */}
+                  <div className="space-y-2">
+                    {environment.windows.map((window) => (
+                      <div
+                        key={window.id}
+                        className="bg-white rounded-lg p-3 border border-gray-200 hover:shadow-md transition-all cursor-pointer"
+                        onClick={() => onWindowSelect?.(window)}
+                      >
+                        <div className="flex items-start justify-between gap-2">
+                          <div className="flex-1 min-w-0">
+                            <div className="font-mono font-bold text-orange-600 text-sm">
+                              {window.caixilhoCode}
                             </div>
+                            <p className="text-xs text-gray-600 line-clamp-2 mt-1">
+                              {window.caixilhoType}
+                            </p>
                           </div>
-
-                          {/* Lista de Caixilhos */}
-                          {isEnvExpanded && (
-                            <div className="ml-4 space-y-2">
-                              {environment.windows.map((window) => (
-                                <div
-                                  key={window.id}
-                                  className="bg-white border border-gray-200 rounded-lg p-3 hover:shadow-md transition-shadow cursor-pointer"
-                                  onClick={() => onWindowSelect?.(window)}
-                                >
-                                  <div className="flex items-start justify-between">
-                                    <div className="flex-1">
-                                      <div className="flex items-center gap-2 mb-1">
-                                        <span className="font-mono font-bold text-orange-600">
-                                          {window.caixilhoCode}
-                                        </span>
-                                        <Badge variant="outline" className="text-xs">
-                                          {window.caixilhoType}
-                                        </Badge>
-                                      </div>
-                                      <p className="text-sm text-gray-600">{window.name}</p>
-                                    </div>
-                                    <div className="text-right">
-                                      <div className="text-lg font-bold text-gray-900">
-                                        {window.quantity}
-                                      </div>
-                                      <div className="text-xs text-gray-500">unidades</div>
-                                    </div>
-                                  </div>
-                                </div>
-                              ))}
+                          <div className="text-right flex-shrink-0">
+                            <div className="text-base font-bold text-gray-900">
+                              {window.quantity}
                             </div>
-                          )}
+                            <div className="text-xs text-gray-500">un.</div>
+                          </div>
                         </div>
-                      );
-                    })}
-                  </CardContent>
-                )}
+                      </div>
+                    ))}
+                  </div>
+                </CardContent>
               </Card>
             );
-          })
-        )}
-      </div>
+          })}
+        </div>
+      )}
     </div>
   );
 }

@@ -274,6 +274,7 @@
 - [x] Implementar agrupamento por pavimento com cards visuais
 - [x] Adicionar filtros e busca avançada
 - [x] Testar nova organização
+- [x] Reorganizar com barra de pesquisa no topo
 
 ## Correção Urgente: Campos de assinatura faltando no INSERT
 - [x] Adicionar campos signature_construction e signature_supplier na função upsertInspectionItem
