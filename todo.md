@@ -1566,3 +1566,11 @@
 - [x] Testar fluxos completos
 - [x] Verificar responsividade mobile
 - [x] Testar em diferentes navegadores
+
+## Correcao de Ambientes em Vistorias
+- [x] Analisar lista de ambientes em Vistorias
+- [x] Remover duplicatas de ambientes
+- [x] Organizar ambientes alfabeticamente
+- [x] Implementar barra de pesquisa de ambientes em Vistorias
+- [x] Sincronizar lista com Obras
+- [x] Testar pesquisa e filtros

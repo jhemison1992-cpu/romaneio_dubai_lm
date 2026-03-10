@@ -98,6 +98,7 @@ export default function InspectionDetail() {
   const [formData, setFormData] = useState<Record<number, InspectionItemData>>({});
   const [activeTab, setActiveTab] = useState<string>("0");
   const [statusValue, setStatusValue] = useState<string>(inspection?.status || "draft");
+  const [searchEnvironment, setSearchEnvironment] = useState<string>("");
   
   // Sincronizar statusValue quando inspection muda
   useEffect(() => {
@@ -200,12 +201,29 @@ export default function InspectionDetail() {
     },
   });
   
-  // Mesclar ambientes da obra + ambientes da vistoria - MEMOIZADO
-  const allEnvironments = useMemo(() => [
-    ...(environments || []),
-    ...(inspectionEnvs || []),
-  ], [environments, inspectionEnvs]);
-  
+  // Mesclar ambientes da obra + ambientes da vistoria - MEMOIZA
+  const allEnvironments = useMemo(
+    () => {
+      const envMap = new Map();
+      // Adicionar ambientes da obra
+      (environments || []).forEach(env => {
+        envMap.set(env.id, env);
+      });
+      // Adicionar ambientes da vistoria (não sobrescrever)
+      (inspectionEnvs || []).forEach(env => {
+        if (!envMap.has(env.id)) {
+          envMap.set(env.id, env);
+        }
+      });
+      // Converter para array e ordenar alfabeticamente
+      return Array.from(envMap.values()).sort((a, b) => a.name.localeCompare(b.name));
+    }, [environments, inspectionEnvs]);
+
+  const filteredEnvironments = useMemo(
+    () => allEnvironments.filter(env => 
+      env.name.toLowerCase().includes(searchEnvironment.toLowerCase())
+    ), [allEnvironments, searchEnvironment]);
+
   useEffect(() => {
     if (!allEnvironments || allEnvironments.length === 0 || !items) return;
     
@@ -423,8 +441,16 @@ export default function InspectionDetail() {
       </div>
 
       <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-        <TabsList className="grid grid-cols-3 lg:grid-cols-6 gap-2 h-auto bg-muted/50 p-2">
-                  {allEnvironments.map((env: any, index: number) => (
+        <div className="space-y-4">
+          <Input
+            placeholder="🔍 Pesquise por ambiente..."
+            value={searchEnvironment}
+            onChange={(e) => setSearchEnvironment(e.target.value)}
+            className="w-full"
+          />
+        </div>
+        <TabsList className="grid grid-cols-3 lg:grid-cols-6 gap-2 h-auto bg-muted/50 p-2 overflow-x-auto">
+                  {filteredEnvironments.map((env: any, index: number) => (
             <TabsTrigger 
               key={env.id} 
               value={index.toString()}
