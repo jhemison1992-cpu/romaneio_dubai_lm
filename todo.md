@@ -1519,3 +1519,15 @@
 - [x] Adicionar filtro de Ambiente em lista suspensa
 - [x] Adicionar filtro de Status em lista suspensa
 - [x] Testar versao profissional completa
+
+## Limpeza de Interface - Obras e Vistorias
+- [x] Organizar botoes de controle em Obras
+- [x] Excluir botoes sem funcionalidades (Configuracoes, Simplificado, etc)
+- [x] Deixar apenas botoes funcionais em Obras
+- [x] Remover campo Mao de Obra em Vistorias
+- [x] Remover campo Equipamentos em Vistorias
+- [x] Remover campo Materiais Recebidos em Vistorias
+- [x] Remover campo Materiais Utilizados em Vistorias
+- [x] Deixar apenas Atividades, Ocorrencias e Comentarios em Vistorias
+- [x] Testar alteracoes em Obras
+- [x] Testar alteracoes em Vistorias
