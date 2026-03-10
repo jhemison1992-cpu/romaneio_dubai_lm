@@ -269,6 +269,12 @@
 - [x] Incluir exemplos visuais e dicas práticas
 - [ ] Testar usabilidade do guia
 
+## Reorganização de Caixilhos e Ambientes
+- [x] Criar componente de visualização hierárquica melhorada
+- [x] Implementar agrupamento por pavimento com cards visuais
+- [x] Adicionar filtros e busca avançada
+- [x] Testar nova organização
+
 ## Correção Urgente: Campos de assinatura faltando no INSERT
 - [x] Adicionar campos signature_construction e signature_supplier na função upsertInspectionItem
 - [x] Atualizar router para incluir campos de assinatura no salvamento

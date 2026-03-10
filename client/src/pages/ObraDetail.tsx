@@ -19,7 +19,7 @@ import { PDFReportGenerator } from '@/components/PDFReportGenerator';
 import { AdvancedPDFReportGenerator } from '@/components/AdvancedPDFReportGenerator';
 import { PDFStructureImporter } from '@/components/PDFStructureImporter';
 import { SignedPDFReportGenerator } from '@/components/SignedPDFReportGenerator';
-import TableWindowsControl from '@/components/TableWindowsControl';
+import OrganizedWindowsList from '@/components/OrganizedWindowsList';
 import ProfessionalReportTemplate from '@/components/ProfessionalReportTemplate';
 
 export default function ObraDetail() {
@@ -668,7 +668,7 @@ export default function ObraDetail() {
           {/* Controle de Caixilhos Tab */}
           <TabsContent value="controle" className="mt-6">
             {environments && environments.length > 0 ? (
-              <TableWindowsControl
+              <OrganizedWindowsList
                 windows={environments.map((env: any) => ({
                   id: env.id,
                   name: env.name,
