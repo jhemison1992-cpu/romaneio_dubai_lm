@@ -1546,3 +1546,5 @@
 - [x] Aumentar padding das abas
 - [x] Testar novo layout das abas
 - [x] Validar alinhamento em mobile e desktop
+- [x] Corrigir sobreposicao de nomes das abas
+- [x] Implementar min-w-max para evitar compressao
