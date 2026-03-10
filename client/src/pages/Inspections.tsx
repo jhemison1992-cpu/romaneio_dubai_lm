@@ -315,11 +315,9 @@ export default function Inspections() {
                     {getStatusLabel(inspection.status)}
                   </span>
                 </div>
-                <Link href={`/inspection/${inspection.id}`}>
-                  <Button className="w-full">
-                    Abrir Vistoria
-                  </Button>
-                </Link>
+                <Button className="w-full" onClick={() => window.location.href = `/inspection/${inspection.id}`}>
+                  Abrir Vistoria
+                </Button>
               </CardContent>
             </Card>
           ))}
