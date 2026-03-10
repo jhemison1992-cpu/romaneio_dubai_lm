@@ -1539,3 +1539,10 @@
 - [x] Melhorar espacamento e alinhamento das abas
 - [x] Testar novo layout das abas
 - [x] Validar responsividade do layout
+
+## Correcao de Espacamento de Abas em Obras
+- [x] Melhorar espacamento entre abas
+- [x] Adicionar separadores visuais entre abas
+- [x] Aumentar padding das abas
+- [x] Testar novo layout das abas
+- [x] Validar alinhamento em mobile e desktop
