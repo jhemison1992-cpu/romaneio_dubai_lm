@@ -270,31 +270,38 @@ export default function ObraDetail() {
       <div className="max-w-7xl mx-auto px-3 md:px-8 py-3 md:py-6 w-full">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
           <TabsList className="grid w-full grid-cols-2 md:grid-cols-7 gap-0 bg-white border-b border-gray-200 rounded-none h-auto p-0">
-            <TabsTrigger value="visao-geral" className="rounded-none border-b-2 border-transparent data-[state=active]:border-orange-500 text-xs md:text-sm py-3 px-2 md:px-3 font-medium hover:bg-gray-50">
+            <TabsTrigger value="visao-geral" className="rounded-none border-b-2 border-transparent data-[state=active]:border-orange-500 text-xs md:text-sm py-3 px-2 md:px-3 font-medium hover:bg-gray-50 flex items-center gap-2">
+              <AlertCircle className="h-4 w-4" />
               <span className="hidden md:inline">Visão Geral</span>
               <span className="md:hidden">Geral</span>
             </TabsTrigger>
-            <TabsTrigger value="acompanhamento" className="rounded-none border-b-2 border-transparent data-[state=active]:border-orange-500 text-xs md:text-sm py-3 px-2 md:px-3 font-medium hover:bg-gray-50">
+            <TabsTrigger value="acompanhamento" className="rounded-none border-b-2 border-transparent data-[state=active]:border-orange-500 text-xs md:text-sm py-3 px-2 md:px-3 font-medium hover:bg-gray-50 flex items-center gap-2">
+              <BarChart3 className="h-4 w-4" />
               <span className="hidden md:inline">Acompanhamento</span>
               <span className="md:hidden">Acomp.</span>
             </TabsTrigger>
-            <TabsTrigger value="ambientes" className="rounded-none border-b-2 border-transparent data-[state=active]:border-orange-500 text-xs md:text-sm py-3 px-2 md:px-3 font-medium hover:bg-gray-50">
+            <TabsTrigger value="ambientes" className="rounded-none border-b-2 border-transparent data-[state=active]:border-orange-500 text-xs md:text-sm py-3 px-2 md:px-3 font-medium hover:bg-gray-50 flex items-center gap-2">
+              <Zap className="h-4 w-4" />
               <span className="hidden md:inline">Ambientes</span>
               <span className="md:hidden">Amb.</span>
             </TabsTrigger>
-            <TabsTrigger value="cronograma" className="rounded-none border-b-2 border-transparent data-[state=active]:border-orange-500 text-xs md:text-sm py-3 px-2 md:px-3 font-medium hover:bg-gray-50">
+            <TabsTrigger value="cronograma" className="rounded-none border-b-2 border-transparent data-[state=active]:border-orange-500 text-xs md:text-sm py-3 px-2 md:px-3 font-medium hover:bg-gray-50 flex items-center gap-2">
+              <Clock className="h-4 w-4" />
               <span className="hidden md:inline">Cronograma</span>
               <span className="md:hidden">Cron.</span>
             </TabsTrigger>
-            <TabsTrigger value="vistorias" className="rounded-none border-b-2 border-transparent data-[state=active]:border-orange-500 text-xs md:text-sm py-3 px-2 md:px-3 font-medium hover:bg-gray-50">
+            <TabsTrigger value="vistorias" className="rounded-none border-b-2 border-transparent data-[state=active]:border-orange-500 text-xs md:text-sm py-3 px-2 md:px-3 font-medium hover:bg-gray-50 flex items-center gap-2">
+              <CheckCircle2 className="h-4 w-4" />
               <span className="hidden md:inline">Vistorias</span>
               <span className="md:hidden">Vist.</span>
             </TabsTrigger>
-            <TabsTrigger value="controle" className="rounded-none border-b-2 border-transparent data-[state=active]:border-orange-500 text-xs md:text-sm py-3 px-2 md:px-3 font-medium hover:bg-gray-50">
+            <TabsTrigger value="controle" className="rounded-none border-b-2 border-transparent data-[state=active]:border-orange-500 text-xs md:text-sm py-3 px-2 md:px-3 font-medium hover:bg-gray-50 flex items-center gap-2">
+              <Users className="h-4 w-4" />
               <span className="hidden md:inline">Controle</span>
               <span className="md:hidden">Ctrl.</span>
             </TabsTrigger>
-            <TabsTrigger value="relatorio" className="rounded-none border-b-2 border-transparent data-[state=active]:border-orange-500 text-xs md:text-sm py-3 px-2 md:px-3 font-medium hover:bg-gray-50">
+            <TabsTrigger value="relatorio" className="rounded-none border-b-2 border-transparent data-[state=active]:border-orange-500 text-xs md:text-sm py-3 px-2 md:px-3 font-medium hover:bg-gray-50 flex items-center gap-2">
+              <DollarSign className="h-4 w-4" />
               <span className="hidden md:inline">Relatório</span>
               <span className="md:hidden">Rel.</span>
             </TabsTrigger>

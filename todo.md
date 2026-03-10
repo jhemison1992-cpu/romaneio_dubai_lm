@@ -1531,3 +1531,11 @@
 - [x] Deixar apenas Atividades, Ocorrencias e Comentarios em Vistorias
 - [x] Testar alteracoes em Obras
 - [x] Testar alteracoes em Vistorias
+
+## Organizacao de Abas em Obras
+- [x] Analisar estrutura atual das abas em ObraDetail.tsx
+- [x] Reorganizar layout das abas com design profissional
+- [x] Adicionar icones nas abas para melhor visualizacao
+- [x] Melhorar espacamento e alinhamento das abas
+- [x] Testar novo layout das abas
+- [x] Validar responsividade do layout
