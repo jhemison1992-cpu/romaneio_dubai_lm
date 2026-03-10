@@ -1581,3 +1581,11 @@
 - [x] Remover abas duplicadas mantendo apenas 1 por ambiente
 - [x] Testar Vistorias com ambientes únicos
 - [x] Validar pesquisa sem duplicatas
+
+## Reorganizacao de Abas em Colunas - Vistorias
+- [x] Reorganizar TabsList com grid responsivo
+- [x] Usar grid-cols-2 para mobile e grid-cols-4 para desktop
+- [x] Adicionar padding e espaçamento entre abas
+- [x] Remover overflow-x-auto e usar wrap
+- [x] Testar layout em diferentes tamanhos
+- [x] Validar sem sobreposição

@@ -453,12 +453,12 @@ export default function InspectionDetail() {
             className="w-full"
           />
         </div>
-        <TabsList className="grid grid-cols-3 lg:grid-cols-6 gap-2 h-auto bg-muted/50 p-2 overflow-x-auto">
+        <TabsList className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 h-auto bg-muted/50 p-4 w-full">
                   {filteredEnvironments.map((env: any, index: number) => (
             <TabsTrigger 
               key={env.id} 
               value={index.toString()}
-              className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground text-xs lg:text-sm"
+              className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground text-xs lg:text-sm px-3 py-2 min-w-0 truncate"
             >
               {env.name}
             </TabsTrigger>
