@@ -1503,3 +1503,9 @@
 - [x] Integrar filtro com busca por texto existente
 - [x] Testar dropdown com todos os ambientes
 - [x] Validar funcionamento do filtro combinado
+
+## Converter Filtro para Barra de Pesquisa com Autocomplete
+- [x] Implementar barra de pesquisa com autocomplete para Ambiente
+- [x] Integrar sugestoes em tempo real
+- [x] Testar barra de pesquisa com todos os ambientes
+- [x] Validar funcionamento do autocomplete

@@ -3,7 +3,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { Search, X, Package, ChevronDown } from 'lucide-react';
+import { Search, X, Package } from 'lucide-react';
 
 interface Window {
   id: number;
@@ -29,8 +29,8 @@ interface EnvironmentGroup {
 
 export default function OrganizedWindowsList({ windows, onWindowSelect }: OrganizedWindowsListProps) {
   const [searchTerm, setSearchTerm] = useState('');
-  const [selectedEnvironment, setSelectedEnvironment] = useState<string>('');
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [environmentSearchTerm, setEnvironmentSearchTerm] = useState('');
+  const [showEnvironmentSuggestions, setShowEnvironmentSuggestions] = useState(false);
 
   // Agrupar por ambiente
   const environmentGroups = useMemo(() => {
@@ -62,25 +62,37 @@ export default function OrganizedWindowsList({ windows, onWindowSelect }: Organi
     return Object.values(grouped).sort((a, b) => a.name.localeCompare(b.name));
   }, [windows]);
 
-  // Obter lista de ambientes únicos para o dropdown
+  // Obter lista de ambientes únicos para sugestões
   const uniqueEnvironments = useMemo(() => {
     return environmentGroups.map(env => env.name).sort();
   }, [environmentGroups]);
+
+  // Sugestões de ambiente baseadas no termo de busca
+  const environmentSuggestions = useMemo(() => {
+    if (!environmentSearchTerm.trim()) return [];
+    
+    const term = environmentSearchTerm.toLowerCase();
+    return uniqueEnvironments.filter(env => 
+      env.toLowerCase().includes(term)
+    );
+  }, [environmentSearchTerm, uniqueEnvironments]);
 
   // Filtrar ambientes baseado na busca e seleção
   const filteredEnvironments = useMemo(() => {
     let filtered = environmentGroups;
 
-    // Filtrar por ambiente selecionado
-    if (selectedEnvironment) {
-      filtered = filtered.filter(env => env.name === selectedEnvironment);
+    // Filtrar por ambiente selecionado (busca)
+    if (environmentSearchTerm.trim()) {
+      const term = environmentSearchTerm.toLowerCase();
+      filtered = filtered.filter(env => 
+        env.name.toLowerCase().includes(term)
+      );
     }
 
-    // Filtrar por termo de busca
+    // Filtrar por termo de busca de caixilho
     if (searchTerm.trim()) {
       const term = searchTerm.toLowerCase();
       filtered = filtered.filter(env =>
-        env.name.toLowerCase().includes(term) ||
         env.windows.some(w => 
           w.caixilhoCode.toLowerCase().includes(term) ||
           w.caixilhoType.toLowerCase().includes(term)
@@ -89,7 +101,7 @@ export default function OrganizedWindowsList({ windows, onWindowSelect }: Organi
     }
 
     return filtered;
-  }, [environmentGroups, searchTerm, selectedEnvironment]);
+  }, [environmentGroups, searchTerm, environmentSearchTerm]);
 
   // Calcular estatísticas
   const stats = useMemo(() => {
@@ -120,16 +132,27 @@ export default function OrganizedWindowsList({ windows, onWindowSelect }: Organi
     setSearchTerm('');
   };
 
-  const clearFilters = () => {
+  const clearEnvironmentSearch = () => {
+    setEnvironmentSearchTerm('');
+    setShowEnvironmentSuggestions(false);
+  };
+
+  const selectEnvironment = (env: string) => {
+    setEnvironmentSearchTerm(env);
+    setShowEnvironmentSuggestions(false);
+  };
+
+  const clearAllFilters = () => {
     setSearchTerm('');
-    setSelectedEnvironment('');
+    setEnvironmentSearchTerm('');
+    setShowEnvironmentSuggestions(false);
   };
 
   return (
     <div className="w-full space-y-6">
-      {/* Barra de Pesquisa e Filtros */}
+      {/* Barras de Pesquisa */}
       <div className="space-y-3">
-        {/* Barra de Pesquisa */}
+        {/* Barra de Pesquisa de Caixilho */}
         <div className="relative">
           <Search className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
           <Input
@@ -148,40 +171,38 @@ export default function OrganizedWindowsList({ windows, onWindowSelect }: Organi
           )}
         </div>
 
-        {/* Filtro de Ambiente com Dropdown */}
+        {/* Barra de Pesquisa de Ambiente com Autocomplete */}
         <div className="relative">
-          <button
-            onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-            className="w-full flex items-center justify-between px-4 py-3 bg-white border-2 border-gray-300 rounded-lg hover:border-orange-500 transition-colors text-left"
-          >
-            <span className="text-gray-700 font-medium">
-              {selectedEnvironment ? `Ambiente: ${selectedEnvironment}` : '📍 Selecione um Ambiente'}
-            </span>
-            <ChevronDown className={`h-5 w-5 text-gray-400 transition-transform ${isDropdownOpen ? 'rotate-180' : ''}`} />
-          </button>
+          <Search className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
+          <Input
+            placeholder="📍 Pesquise por ambiente..."
+            value={environmentSearchTerm}
+            onChange={(e) => {
+              setEnvironmentSearchTerm(e.target.value);
+              setShowEnvironmentSuggestions(true);
+            }}
+            onFocus={() => setShowEnvironmentSuggestions(true)}
+            className="pl-10 pr-10 py-6 text-base rounded-lg border-2 border-gray-300 focus:border-orange-500 focus:ring-orange-500"
+          />
+          {environmentSearchTerm && (
+            <button
+              onClick={clearEnvironmentSearch}
+              className="absolute right-3 top-3 text-gray-400 hover:text-gray-600"
+            >
+              <X className="h-5 w-5" />
+            </button>
+          )}
 
-          {/* Dropdown Menu */}
-          {isDropdownOpen && (
+          {/* Sugestões de Ambiente */}
+          {showEnvironmentSuggestions && environmentSuggestions.length > 0 && (
             <div className="absolute top-full left-0 right-0 mt-2 bg-white border-2 border-gray-300 rounded-lg shadow-lg z-10 max-h-64 overflow-y-auto">
-              <button
-                onClick={() => {
-                  setSelectedEnvironment('');
-                  setIsDropdownOpen(false);
-                }}
-                className={`w-full text-left px-4 py-3 hover:bg-gray-100 transition-colors ${!selectedEnvironment ? 'bg-orange-50 text-orange-700 font-medium' : ''}`}
-              >
-                ✓ Todos os Ambientes
-              </button>
-              {uniqueEnvironments.map((env) => (
+              {environmentSuggestions.map((env) => (
                 <button
                   key={env}
-                  onClick={() => {
-                    setSelectedEnvironment(env);
-                    setIsDropdownOpen(false);
-                  }}
-                  className={`w-full text-left px-4 py-3 hover:bg-gray-100 transition-colors border-t border-gray-200 ${selectedEnvironment === env ? 'bg-orange-50 text-orange-700 font-medium' : ''}`}
+                  onClick={() => selectEnvironment(env)}
+                  className="w-full text-left px-4 py-3 hover:bg-orange-50 transition-colors border-b border-gray-200 last:border-b-0 text-gray-700 hover:text-orange-700"
                 >
-                  {selectedEnvironment === env && '✓ '}{env}
+                  {env}
                 </button>
               ))}
             </div>
@@ -217,9 +238,9 @@ export default function OrganizedWindowsList({ windows, onWindowSelect }: Organi
         </div>
 
         {/* Botão Limpar Filtros */}
-        {(searchTerm || selectedEnvironment) && (
+        {(searchTerm || environmentSearchTerm) && (
           <Button
-            onClick={clearFilters}
+            onClick={clearAllFilters}
             variant="outline"
             className="w-full text-orange-600 border-orange-300 hover:bg-orange-50"
           >
