@@ -1497,3 +1497,9 @@
 - [ ] Testar em Android (360px)
 - [ ] Testar em tablet (768px)
 - [ ] Testar orientação landscape
+
+## Filtro de Ambiente com Dropdown
+- [x] Implementar dropdown de seleção de Ambiente na barra de pesquisa
+- [x] Integrar filtro com busca por texto existente
+- [x] Testar dropdown com todos os ambientes
+- [x] Validar funcionamento do filtro combinado

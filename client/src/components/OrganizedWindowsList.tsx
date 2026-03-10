@@ -3,7 +3,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { Search, X, Package } from 'lucide-react';
+import { Search, X, Package, ChevronDown } from 'lucide-react';
 
 interface Window {
   id: number;
@@ -29,6 +29,8 @@ interface EnvironmentGroup {
 
 export default function OrganizedWindowsList({ windows, onWindowSelect }: OrganizedWindowsListProps) {
   const [searchTerm, setSearchTerm] = useState('');
+  const [selectedEnvironment, setSelectedEnvironment] = useState<string>('');
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   // Agrupar por ambiente
   const environmentGroups = useMemo(() => {
@@ -60,21 +62,34 @@ export default function OrganizedWindowsList({ windows, onWindowSelect }: Organi
     return Object.values(grouped).sort((a, b) => a.name.localeCompare(b.name));
   }, [windows]);
 
-  // Filtrar ambientes baseado na busca
+  // Obter lista de ambientes únicos para o dropdown
+  const uniqueEnvironments = useMemo(() => {
+    return environmentGroups.map(env => env.name).sort();
+  }, [environmentGroups]);
+
+  // Filtrar ambientes baseado na busca e seleção
   const filteredEnvironments = useMemo(() => {
-    if (!searchTerm.trim()) {
-      return environmentGroups;
+    let filtered = environmentGroups;
+
+    // Filtrar por ambiente selecionado
+    if (selectedEnvironment) {
+      filtered = filtered.filter(env => env.name === selectedEnvironment);
     }
 
-    const term = searchTerm.toLowerCase();
-    return environmentGroups.filter(env =>
-      env.name.toLowerCase().includes(term) ||
-      env.windows.some(w => 
-        w.caixilhoCode.toLowerCase().includes(term) ||
-        w.caixilhoType.toLowerCase().includes(term)
-      )
-    );
-  }, [environmentGroups, searchTerm]);
+    // Filtrar por termo de busca
+    if (searchTerm.trim()) {
+      const term = searchTerm.toLowerCase();
+      filtered = filtered.filter(env =>
+        env.name.toLowerCase().includes(term) ||
+        env.windows.some(w => 
+          w.caixilhoCode.toLowerCase().includes(term) ||
+          w.caixilhoType.toLowerCase().includes(term)
+        )
+      );
+    }
+
+    return filtered;
+  }, [environmentGroups, searchTerm, selectedEnvironment]);
 
   // Calcular estatísticas
   const stats = useMemo(() => {
@@ -105,14 +120,20 @@ export default function OrganizedWindowsList({ windows, onWindowSelect }: Organi
     setSearchTerm('');
   };
 
+  const clearFilters = () => {
+    setSearchTerm('');
+    setSelectedEnvironment('');
+  };
+
   return (
     <div className="w-full space-y-6">
-      {/* Barra de Pesquisa */}
+      {/* Barra de Pesquisa e Filtros */}
       <div className="space-y-3">
+        {/* Barra de Pesquisa */}
         <div className="relative">
           <Search className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
           <Input
-            placeholder="🔍 Pesquise por ambiente, código do caixilho ou tipo..."
+            placeholder="🔍 Pesquise por código do caixilho ou tipo..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             className="pl-10 pr-10 py-6 text-base rounded-lg border-2 border-gray-300 focus:border-orange-500 focus:ring-orange-500"
@@ -124,6 +145,46 @@ export default function OrganizedWindowsList({ windows, onWindowSelect }: Organi
             >
               <X className="h-5 w-5" />
             </button>
+          )}
+        </div>
+
+        {/* Filtro de Ambiente com Dropdown */}
+        <div className="relative">
+          <button
+            onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+            className="w-full flex items-center justify-between px-4 py-3 bg-white border-2 border-gray-300 rounded-lg hover:border-orange-500 transition-colors text-left"
+          >
+            <span className="text-gray-700 font-medium">
+              {selectedEnvironment ? `Ambiente: ${selectedEnvironment}` : '📍 Selecione um Ambiente'}
+            </span>
+            <ChevronDown className={`h-5 w-5 text-gray-400 transition-transform ${isDropdownOpen ? 'rotate-180' : ''}`} />
+          </button>
+
+          {/* Dropdown Menu */}
+          {isDropdownOpen && (
+            <div className="absolute top-full left-0 right-0 mt-2 bg-white border-2 border-gray-300 rounded-lg shadow-lg z-10 max-h-64 overflow-y-auto">
+              <button
+                onClick={() => {
+                  setSelectedEnvironment('');
+                  setIsDropdownOpen(false);
+                }}
+                className={`w-full text-left px-4 py-3 hover:bg-gray-100 transition-colors ${!selectedEnvironment ? 'bg-orange-50 text-orange-700 font-medium' : ''}`}
+              >
+                ✓ Todos os Ambientes
+              </button>
+              {uniqueEnvironments.map((env) => (
+                <button
+                  key={env}
+                  onClick={() => {
+                    setSelectedEnvironment(env);
+                    setIsDropdownOpen(false);
+                  }}
+                  className={`w-full text-left px-4 py-3 hover:bg-gray-100 transition-colors border-t border-gray-200 ${selectedEnvironment === env ? 'bg-orange-50 text-orange-700 font-medium' : ''}`}
+                >
+                  {selectedEnvironment === env && '✓ '}{env}
+                </button>
+              ))}
+            </div>
           )}
         </div>
 
@@ -154,6 +215,17 @@ export default function OrganizedWindowsList({ windows, onWindowSelect }: Organi
             </CardContent>
           </Card>
         </div>
+
+        {/* Botão Limpar Filtros */}
+        {(searchTerm || selectedEnvironment) && (
+          <Button
+            onClick={clearFilters}
+            variant="outline"
+            className="w-full text-orange-600 border-orange-300 hover:bg-orange-50"
+          >
+            Limpar Filtros
+          </Button>
+        )}
       </div>
 
       {/* Grid de Ambientes */}
@@ -162,7 +234,7 @@ export default function OrganizedWindowsList({ windows, onWindowSelect }: Organi
           <CardContent className="pt-12 pb-12 text-center">
             <Package className="h-16 w-16 mx-auto mb-4 text-gray-300" />
             <p className="text-gray-500 text-lg font-medium">Nenhum ambiente encontrado</p>
-            <p className="text-gray-400 text-sm mt-2">Tente pesquisar por outro termo</p>
+            <p className="text-gray-400 text-sm mt-2">Tente pesquisar por outro termo ou ambiente</p>
           </CardContent>
         </Card>
       ) : (
