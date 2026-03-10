@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useRef } from 'react';
 import { AlertCircle, CheckCircle2, Clock, Zap, BarChart3, Users, DollarSign, Settings, ArrowLeft, Plus, Check, Edit2, Trash2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
@@ -20,6 +20,7 @@ import { AdvancedPDFReportGenerator } from '@/components/AdvancedPDFReportGenera
 import { PDFStructureImporter } from '@/components/PDFStructureImporter';
 import { SignedPDFReportGenerator } from '@/components/SignedPDFReportGenerator';
 import TableWindowsControl from '@/components/TableWindowsControl';
+import ProfessionalReportTemplate from '@/components/ProfessionalReportTemplate';
 
 export default function ObraDetail() {
   const [, params] = useRoute('/obra/:id');
@@ -27,6 +28,8 @@ export default function ObraDetail() {
   const projectId = params?.id ? parseInt(params.id) : 0;
   
   const [activeTab, setActiveTab] = useState('visao-geral');
+  const [showReportTemplate, setShowReportTemplate] = useState(false);
+  const reportRef = useRef<HTMLDivElement>(null);
   const [isProjectSettingsOpen, setIsProjectSettingsOpen] = useState(false);
   const [isCreateEnvironmentDialogOpen, setIsCreateEnvironmentDialogOpen] = useState(false);
   const [isEditEnvironmentDialogOpen, setIsEditEnvironmentDialogOpen] = useState(false);
@@ -281,6 +284,9 @@ export default function ObraDetail() {
             </TabsTrigger>
             <TabsTrigger value="controle" className="rounded-none border-b-2 border-transparent data-[state=active]:border-teal-500 text-xs md:text-sm hidden md:block">
               Controle de Caixilhos
+            </TabsTrigger>
+            <TabsTrigger value="relatorio" className="rounded-none border-b-2 border-transparent data-[state=active]:border-teal-500 text-xs md:text-sm hidden md:block">
+              Relatório
             </TabsTrigger>
           </TabsList>
 
@@ -677,6 +683,35 @@ export default function ObraDetail() {
                 </div>
               </Card>
             )}
+          </TabsContent>
+
+          {/* Relatório Profissional Tab */}
+          <TabsContent value="relatorio" className="mt-6">
+            <div ref={reportRef}>
+              {project && environments && (
+                <ProfessionalReportTemplate
+                  projectInfo={{
+                    name: project.name,
+                    address: project.address || '',
+                    contractor: project.contractor || '',
+                    supplier: project.supplier || '',
+                    technicalManager: project.technicalManager || '',
+                    startDate: project.createdAt ? new Date(project.createdAt).toLocaleDateString('pt-BR') : 'N/A',
+                    endDate: project.updatedAt ? new Date(project.updatedAt).toLocaleDateString('pt-BR') : 'N/A',
+                  }}
+                  windows={environments.map((env: any) => ({
+                    id: env.id,
+                    name: env.name,
+                    caixilhoCode: env.caixilhoCode,
+                    quantity: env.quantity,
+                    status: 'pending',
+                  }))}
+                  onGeneratePDF={() => {
+                    window.print();
+                  }}
+                />
+              )}
+            </div>
           </TabsContent>
         </Tabs>
       </div>
