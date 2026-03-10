@@ -268,25 +268,30 @@ export default function ObraDetail() {
       {/* Tabs */}
       <div className="max-w-7xl mx-auto px-3 md:px-8 py-3 md:py-6 w-full">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid w-full grid-cols-2 md:grid-cols-4 bg-white border-b border-gray-200 rounded-none">
-            <TabsTrigger value="visao-geral" className="rounded-none border-b-2 border-transparent data-[state=active]:border-teal-500 text-xs md:text-sm">
+          <TabsList className="grid w-full grid-cols-2 md:grid-cols-6 gap-0 bg-white border-b border-gray-200 rounded-none h-auto p-0">
+            <TabsTrigger value="visao-geral" className="rounded-none border-b-2 border-transparent data-[state=active]:border-orange-500 text-xs md:text-sm py-3 px-2 md:px-3 font-medium hover:bg-gray-50">
               <span className="hidden md:inline">Visão Geral</span>
               <span className="md:hidden">Geral</span>
             </TabsTrigger>
-            <TabsTrigger value="ambientes" className="rounded-none border-b-2 border-transparent data-[state=active]:border-teal-500 text-xs md:text-sm">
-              Ambientes
+            <TabsTrigger value="ambientes" className="rounded-none border-b-2 border-transparent data-[state=active]:border-orange-500 text-xs md:text-sm py-3 px-2 md:px-3 font-medium hover:bg-gray-50">
+              <span className="hidden md:inline">Ambientes</span>
+              <span className="md:hidden">Amb.</span>
             </TabsTrigger>
-            <TabsTrigger value="cronograma" className="rounded-none border-b-2 border-transparent data-[state=active]:border-teal-500 text-xs md:text-sm hidden md:block">
-              Cronograma
+            <TabsTrigger value="cronograma" className="rounded-none border-b-2 border-transparent data-[state=active]:border-orange-500 text-xs md:text-sm py-3 px-2 md:px-3 font-medium hover:bg-gray-50">
+              <span className="hidden md:inline">Cronograma</span>
+              <span className="md:hidden">Cron.</span>
             </TabsTrigger>
-            <TabsTrigger value="vistorias" className="rounded-none border-b-2 border-transparent data-[state=active]:border-teal-500 text-xs md:text-sm hidden md:block">
-              Vistorias
+            <TabsTrigger value="vistorias" className="rounded-none border-b-2 border-transparent data-[state=active]:border-orange-500 text-xs md:text-sm py-3 px-2 md:px-3 font-medium hover:bg-gray-50">
+              <span className="hidden md:inline">Vistorias</span>
+              <span className="md:hidden">Vist.</span>
             </TabsTrigger>
-            <TabsTrigger value="controle" className="rounded-none border-b-2 border-transparent data-[state=active]:border-teal-500 text-xs md:text-sm hidden md:block">
-              Controle de Caixilhos
+            <TabsTrigger value="controle" className="rounded-none border-b-2 border-transparent data-[state=active]:border-orange-500 text-xs md:text-sm py-3 px-2 md:px-3 font-medium hover:bg-gray-50">
+              <span className="hidden md:inline">Controle</span>
+              <span className="md:hidden">Ctrl.</span>
             </TabsTrigger>
-            <TabsTrigger value="relatorio" className="rounded-none border-b-2 border-transparent data-[state=active]:border-teal-500 text-xs md:text-sm hidden md:block">
-              Relatório
+            <TabsTrigger value="relatorio" className="rounded-none border-b-2 border-transparent data-[state=active]:border-orange-500 text-xs md:text-sm py-3 px-2 md:px-3 font-medium hover:bg-gray-50">
+              <span className="hidden md:inline">Relatório</span>
+              <span className="md:hidden">Rel.</span>
             </TabsTrigger>
           </TabsList>
 
