@@ -1509,3 +1509,13 @@
 - [x] Integrar sugestoes em tempo real
 - [x] Testar barra de pesquisa com todos os ambientes
 - [x] Validar funcionamento do autocomplete
+
+## Versao Profissional para Construtoras
+- [x] Reorganizar abas - remover Mao de obra, Equipamentos, etc
+- [x] Deixar apenas Atividades, Ocorrencias e Comentarios
+- [x] Implementar sistema de Status (Concluido / Pendente / Em execucao)
+- [x] Adicionar cores automaticas por status (Verde/Amarelo/Vermelho)
+- [x] Criar dashboard com % de progresso da obra
+- [x] Adicionar filtro de Ambiente em lista suspensa
+- [x] Adicionar filtro de Status em lista suspensa
+- [x] Testar versao profissional completa

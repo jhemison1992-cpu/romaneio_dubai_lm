@@ -21,6 +21,7 @@ import { PDFStructureImporter } from '@/components/PDFStructureImporter';
 import { SignedPDFReportGenerator } from '@/components/SignedPDFReportGenerator';
 import OrganizedWindowsList from '@/components/OrganizedWindowsList';
 import ProfessionalReportTemplate from '@/components/ProfessionalReportTemplate';
+import ProfessionalProgressDashboard from '@/components/ProfessionalProgressDashboard';
 
 export default function ObraDetail() {
   const [, params] = useRoute('/obra/:id');
@@ -268,10 +269,14 @@ export default function ObraDetail() {
       {/* Tabs */}
       <div className="max-w-7xl mx-auto px-3 md:px-8 py-3 md:py-6 w-full">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid w-full grid-cols-2 md:grid-cols-6 gap-0 bg-white border-b border-gray-200 rounded-none h-auto p-0">
+          <TabsList className="grid w-full grid-cols-2 md:grid-cols-7 gap-0 bg-white border-b border-gray-200 rounded-none h-auto p-0">
             <TabsTrigger value="visao-geral" className="rounded-none border-b-2 border-transparent data-[state=active]:border-orange-500 text-xs md:text-sm py-3 px-2 md:px-3 font-medium hover:bg-gray-50">
               <span className="hidden md:inline">Visão Geral</span>
               <span className="md:hidden">Geral</span>
+            </TabsTrigger>
+            <TabsTrigger value="acompanhamento" className="rounded-none border-b-2 border-transparent data-[state=active]:border-orange-500 text-xs md:text-sm py-3 px-2 md:px-3 font-medium hover:bg-gray-50">
+              <span className="hidden md:inline">Acompanhamento</span>
+              <span className="md:hidden">Acomp.</span>
             </TabsTrigger>
             <TabsTrigger value="ambientes" className="rounded-none border-b-2 border-transparent data-[state=active]:border-orange-500 text-xs md:text-sm py-3 px-2 md:px-3 font-medium hover:bg-gray-50">
               <span className="hidden md:inline">Ambientes</span>
@@ -360,6 +365,16 @@ export default function ObraDetail() {
                 },
               ]}
               maxItems={5}
+            />
+          </TabsContent>
+
+          {/* Acompanhamento Tab */}
+          <TabsContent value="acompanhamento" className="mt-6">
+            <ProfessionalProgressDashboard
+              windows={environments || []}
+              onWindowSelect={(window) => {
+                console.log('Window selected:', window);
+              }}
             />
           </TabsContent>
 
