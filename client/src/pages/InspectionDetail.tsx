@@ -205,14 +205,18 @@ export default function InspectionDetail() {
   const allEnvironments = useMemo(
     () => {
       const envMap = new Map();
-      // Adicionar ambientes da obra
+      // Adicionar ambientes da obra - usar nome como chave para remover duplicatas
       (environments || []).forEach(env => {
-        envMap.set(env.id, env);
+        const key = env.name.toLowerCase().trim();
+        if (!envMap.has(key)) {
+          envMap.set(key, env);
+        }
       });
-      // Adicionar ambientes da vistoria (não sobrescrever)
+      // Adicionar ambientes da vistoria (não sobrescrever duplicatas)
       (inspectionEnvs || []).forEach(env => {
-        if (!envMap.has(env.id)) {
-          envMap.set(env.id, env);
+        const key = env.name.toLowerCase().trim();
+        if (!envMap.has(key)) {
+          envMap.set(key, env);
         }
       });
       // Converter para array e ordenar alfabeticamente

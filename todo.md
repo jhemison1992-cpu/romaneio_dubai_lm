@@ -1574,3 +1574,10 @@
 - [x] Implementar barra de pesquisa de ambientes em Vistorias
 - [x] Sincronizar lista com Obras
 - [x] Testar pesquisa e filtros
+
+## Remocao de Duplicatas em Vistorias
+- [x] Identificar todas as duplicatas de ambientes
+- [x] Consolidar dados de ambientes duplicados
+- [x] Remover abas duplicadas mantendo apenas 1 por ambiente
+- [x] Testar Vistorias com ambientes únicos
+- [x] Validar pesquisa sem duplicatas
